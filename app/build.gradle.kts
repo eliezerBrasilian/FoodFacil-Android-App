@@ -50,6 +50,15 @@ android {
 }
 
 dependencies {
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
+    implementation("com.google.accompanist:accompanist-permissions:0.31.1-alpha")
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.0-alpha05")
+    implementation ("androidx.navigation:navigation-compose:2.7.6")
+    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation ("com.github.eliezerBrasilian:jetpack-compose-simple-text:v1.0.4")
+    implementation ("com.github.azmiradi:CircleImageCompose:0.1.0")
+    implementation("br.com.devsrsouza.compose.icons:font-awesome:1.1.0")
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -59,6 +68,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
