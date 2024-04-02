@@ -7,7 +7,6 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -29,9 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.carrousel.Carrousel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.foodfacil.R
 import com.foodfacil.ui.theme.MainRed
@@ -73,10 +71,14 @@ fun OnAuth(
             verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.salgados_img_on_auth),
-                contentDescription = null
-            )
+            Carrousel(imagesResources = listOf(
+                R.drawable.salgados_img_on_auth,
+                R.drawable.salgados_img_on_auth,
+                R.drawable.salgados_img_on_auth),
+                imageActiveColor = MainYellow,
+                imageInactiveColor = Color.White
+                )
+
             Spacer(md.height(20.dp))
             SimpleText(
                 "Os salgados mais gostosos",
