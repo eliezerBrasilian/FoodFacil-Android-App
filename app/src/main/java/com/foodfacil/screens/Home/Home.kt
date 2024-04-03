@@ -11,7 +11,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.UserViewModel
@@ -19,16 +18,13 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 @SuppressLint("InlinedApi")
 @RequiresApi(Build.VERSION_CODES.O)
-@OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalFoundationApi::class,
-    ExperimentalPermissionsApi::class
-)
 @Composable
 fun Home(
-    navController: NavHostController, authViewModel: AuthViewModel, userViewModel: UserViewModel
+    navController: NavHostController,
+    authViewModel: AuthViewModel,
+    userViewModel: UserViewModel
 ) {
-    val userAuth: AuthViewModel = viewModel()
+    //val userAuth: AuthViewModel = viewModel()
     val context = LocalContext.current
 
     val md = Modifier

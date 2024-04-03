@@ -42,11 +42,9 @@ import com.simpletext.SimpleText
 import kotlinx.coroutines.delay
 
 
-
-@SuppressLint("ResourceAsColor")
 @Composable
 fun Splash(nav: NavHostController) {
-    val authViewModel: AuthViewModel = viewModel()
+   // val authViewModel: AuthViewModel = viewModel()
 
     val scale by remember {
         mutableStateOf(Animatable(0f))
@@ -65,13 +63,14 @@ fun Splash(nav: NavHostController) {
         }))
 
         delay(1500L)
-        if (authViewModel.isLogged()) {
+        // if (authViewModel.isLogged()) {
+        val isLogged = false
+        if (isLogged) {
             nav.navigate(NavigationScreens.HOME)
         } else {
             nav.navigate(NavigationScreens.ON_AUTH)
         }
     })
-
 
 
 

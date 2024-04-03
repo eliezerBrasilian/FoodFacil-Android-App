@@ -77,12 +77,9 @@ fun Login(
 
     val context = LocalContext.current
 
-    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
-    var backPressHandled by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
 
     val handleLogin: () -> Unit = {
-        scope.launch {
+       /* scope.launch {
             try {
                 authViewModel.login(emailInput, passwordInput, context) {
                     navController.navigate(NavigationScreens.HOME)
@@ -91,7 +88,7 @@ fun Login(
                 // Lidar com exceções, se necessário
                 Log.e(TAG, "Erro durante o login: ${e.message}")
             }
-        }
+        }*/
     }
 
     Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {

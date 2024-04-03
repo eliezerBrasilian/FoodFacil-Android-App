@@ -1,3 +1,9 @@
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.Instrumentation
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,11 +17,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -23,11 +32,42 @@ import com.foodfacil.R
 import com.foodfacil.components.TopBarOnAuth
 import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.ui.theme.MainYellow
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.simpletext.SimpleText
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun OnAuthSignUp(navController: NavHostController) {
     val md = Modifier
+
+    val TAG = "ONAUTHSIGNUP"
+    val  clientId = "191389897644-f2qqgp4g23jsbu5f4sapr8o9n74f8gb7.apps.googleusercontent.com"
+
+    //val googleSignInClient = getGoogleLoginAuth(clientId, LocalContext.current)
+
+    val startForResult =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+                if (result.data != null) {
+                    val task =
+                        GoogleSignIn.getSignedInAccountFromIntent(intent)
+
+                    Log.e(TAG, "task: " + task.toString())
+                    Log.e(TAG, "id: " + task.result.id)
+                    Log.e(TAG, "complete: " +  task.isComplete)
+                    Log.e(TAG, "displayName: " +  task.result.displayName)
+
+                    //handleSignInResult(task)
+                }
+            }
+        }
+
+    val handleGoogleSign: ()->Unit = {
+        //startForResult.launch(googleSignInClient.signInIntent)
+    }
+
+
     Surface(
         md
             .fillMaxSize()
@@ -54,7 +94,7 @@ fun OnAuthSignUp(navController: NavHostController) {
                 Spacer(md.height(20.dp))
                 ButtonWithLeftIcon(imageResource = R.drawable.google_icon, text = "Cadastrar com Google", textColor = MainRed ,
                     padding = 5.dp, isOutline = true, background = Color.White, borderColor = MainRed,
-                    marginHorizontal = 20.dp
+                    marginHorizontal = 20.dp, onClick = handleGoogleSign
                     )
             }
 

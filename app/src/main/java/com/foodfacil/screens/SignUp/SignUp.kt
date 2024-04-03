@@ -45,7 +45,9 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("CoroutineCreationDuringComposition")//para o meu metodo animateScroll funcionar
 @Composable
-fun Signup(navController: NavHostController, authViewModel: AuthViewModel) {
+fun Signup(navController: NavHostController,
+           authViewModel: AuthViewModel
+    ) {
     var emailInput by remember {
         mutableStateOf("")
     }
@@ -78,7 +80,7 @@ val isLoading = false
     val context = LocalContext.current
 
     val handleSignUp: ()->Unit = {
-        scope.launch {
+        /*scope.launch {
             try {
                 authViewModel.createUserWithEmailAndPassword(emailInput, passwordInput,nameInput , context) {
                     navController.navigate(NavigationScreens.HOME)
@@ -87,7 +89,7 @@ val isLoading = false
                 // Lidar com exceções, se necessário
                 Log.e(TAG, "Erro durante o cadastro: ${e.message}")
             }
-        }
+        }*/
     }
 
 

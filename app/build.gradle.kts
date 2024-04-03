@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("com.google.gms.google-services")
+
 }
 
 android {
@@ -50,6 +52,11 @@ android {
 }
 
 dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+    implementation("com.google.firebase:firebase-analytics")
+
+    //google signin
+    implementation ("com.google.android.gms:play-services-auth:19.2.0")
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
     implementation("com.google.accompanist:accompanist-permissions:0.31.1-alpha")
     implementation("androidx.compose.runtime:runtime-livedata:1.7.0-alpha05")
@@ -58,7 +65,6 @@ dependencies {
     implementation ("com.github.eliezerBrasilian:jetpack-compose-simple-text:v1.0.4")
     implementation ("com.github.azmiradi:CircleImageCompose:0.1.0")
     implementation("br.com.devsrsouza.compose.icons:font-awesome:1.1.0")
-//    implementation("br.com.devsrsouza.compose.icons:feather:4.28.0")
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation(libs.androidx.core.ktx)
@@ -70,6 +76,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
