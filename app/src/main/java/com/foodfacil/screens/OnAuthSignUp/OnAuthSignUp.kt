@@ -1,6 +1,5 @@
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Instrumentation
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,11 +16,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -32,18 +30,22 @@ import com.foodfacil.R
 import com.foodfacil.components.TopBarOnAuth
 import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.ui.theme.MainYellow
+import com.foodfacil.viewModel.AuthViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.simpletext.SimpleText
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun OnAuthSignUp(navController: NavHostController) {
+fun OnAuthSignUp(navController: NavHostController, authViewModel: AuthViewModel) {
     val md = Modifier
 
     val TAG = "ONAUTHSIGNUP"
     val  clientId = "191389897644-f2qqgp4g23jsbu5f4sapr8o9n74f8gb7.apps.googleusercontent.com"
 
-    //val googleSignInClient = getGoogleLoginAuth(clientId, LocalContext.current)
+    val isLoading by authViewModel.loading.observeAsState(false)
+
+    val googleSignInClient = getGoogleLoginAuth(clientId, LocalContext.current)
 
     val startForResult =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -58,13 +60,13 @@ fun OnAuthSignUp(navController: NavHostController) {
                     Log.e(TAG, "complete: " +  task.isComplete)
                     Log.e(TAG, "displayName: " +  task.result.displayName)
 
-                    //handleSignInResult(task)
+                    handleGoogleSign(task.result,authViewModel)
                 }
             }
         }
 
-    val handleGoogleSign: ()->Unit = {
-        //startForResult.launch(googleSignInClient.signInIntent)
+    val onClickGoogleSignIn = {
+        startForResult.launch(googleSignInClient.signInIntent)
     }
 
 
@@ -94,10 +96,18 @@ fun OnAuthSignUp(navController: NavHostController) {
                 Spacer(md.height(20.dp))
                 ButtonWithLeftIcon(imageResource = R.drawable.google_icon, text = "Cadastrar com Google", textColor = MainRed ,
                     padding = 5.dp, isOutline = true, background = Color.White, borderColor = MainRed,
-                    marginHorizontal = 20.dp, onClick = handleGoogleSign
+                    marginHorizontal = 20.dp, onClick = onClickGoogleSignIn, isLoading = isLoading
                     )
             }
-
     }
 }
 
+fun handleGoogleSign(result: GoogleSignInAccount, authViewModel: AuthViewModel) {
+    authViewModel.createUserAfterGoogleSignIn(
+        userUid = result.id!!,
+        userToken = result.idToken!!,
+        email = result.email!!,
+        name = result.displayName!!,
+        profilePicture = result.photoUrl
+    )
+}

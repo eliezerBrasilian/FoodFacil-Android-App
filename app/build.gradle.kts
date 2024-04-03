@@ -52,6 +52,9 @@ android {
 }
 
 dependencies {
+    //livedata
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.0-alpha05")
+
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics")
 

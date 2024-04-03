@@ -41,10 +41,10 @@ fun AppNavigation(
             OnAuth(navController)
         }
         composable(NavigationScreens.ON_AUTH_LOGIN) {
-            OnAuthLogin(navController)
+            OnAuthLogin(navController,authViewModel)
         }
         composable(NavigationScreens.ON_AUTH_SIGN_UP) {
-            OnAuthSignUp(navController)
+            OnAuthSignUp(navController,authViewModel)
         }
 
     /*    composable(NavigationScreens.PROFILE) {

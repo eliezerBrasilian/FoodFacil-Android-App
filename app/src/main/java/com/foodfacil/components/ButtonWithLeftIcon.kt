@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,30 +33,33 @@ fun ButtonWithLeftIcon(
     borderColor: Color = Color.Black,
     borderWidth:Dp = 1.dp,
     marginHorizontal:Dp = 0.dp,
+    isLoading:Boolean = false,
+    progressIndicatorColor:Color = Color.Magenta,
+    progressIndicatorSize:Dp = 23.dp,
     onClick: () -> Unit = {}
 ){
     val md = Modifier
 
     if(!isOutline)
     Box(md.fillMaxWidth().padding(horizontal = marginHorizontal)){
-        Button(onClick = onClick, colors = ButtonDefaults.buttonColors(background), modifier = md.fillMaxWidth()){
+        Button(onClick = onClick, colors = ButtonDefaults.buttonColors(background), enabled = !isLoading,
+            modifier = md.fillMaxWidth()){
             Box(contentAlignment = Alignment.Center){
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically, modifier = md.padding(padding)) {
+                if(isLoading) CircularProgressIndicator(md.size(progressIndicatorSize), color = progressIndicatorColor) else Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically, modifier = md.padding(padding)) {
                     Image(painter = painterResource(id = imageResource), contentDescription = null, modifier = md.size(20.dp))
                     Text(text = text,fontSize = fontSize, color = textColor )
                 }
             }
-
         }
     }
 
     else{
         Box(md.fillMaxWidth().padding(horizontal = marginHorizontal)){
-            Button(onClick = onClick, colors = ButtonDefaults.buttonColors(background),
-                modifier = md.fillMaxWidth(), border = BorderStroke(width = borderWidth, color = borderColor)
+            Button(onClick = onClick, colors = ButtonDefaults.buttonColors(background), enabled = !isLoading,
+                modifier = md.fillMaxWidth(), border = BorderStroke(width = borderWidth, color = borderColor,)
             ){
                 Box(contentAlignment = Alignment.Center){
-                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically, modifier = md.padding(padding)) {
+                    if(isLoading) CircularProgressIndicator(md.size(progressIndicatorSize), color = progressIndicatorColor) else Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically, modifier = md.padding(padding)) {
                         Image(painter = painterResource(id = imageResource), contentDescription = null, modifier = md.size(20.dp))
                         Text(text = text,fontSize = fontSize, color = textColor )
                     }

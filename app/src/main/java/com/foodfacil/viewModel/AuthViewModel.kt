@@ -2,7 +2,10 @@ package com.foodfacil.viewModel
 
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gamestate.enums.Collections.Companion.USERS
@@ -16,6 +19,8 @@ class AuthViewModel : ViewModel(){
     private val firestore = Firebase.firestore
     private val TAG = "AUTHVIEWMODEL"
 
+    private val _loading = MutableLiveData(false)
+    val loading: LiveData<Boolean> = _loading
 
     fun isLogged():Boolean{
         return false;
@@ -29,8 +34,15 @@ class AuthViewModel : ViewModel(){
 
     }
 
-    fun createUserAfterGoogleSignIn(userUid:String,userToken:String,name:String, email:String, profilePicture:String?) = viewModelScope.launch{
+    fun createUserAfterGoogleSignIn(
+        userUid: String,
+        userToken:String,
+        name:String, email:String, profilePicture: Uri?
+    ) = viewModelScope.launch{
+        print("userUid",userUid)
+        _loading.value = true
        val userExists = userExistsOnFirebase(userUid)
+        print("user exists",userExists)
 
         val newUserData = mapOf("name" to name, "email" to email, "address" to null,
             "profilePicture" to profilePicture, "uid" to userUid, "userToken" to userToken,
@@ -38,21 +50,30 @@ class AuthViewModel : ViewModel(){
             "amountOfCouponsUsed" to 0)
 
         if(!userExists){
-            firestore.collection(USERS).add(newUserData).
-            await()
+            firestore.collection(USERS).add(newUserData).addOnSuccessListener { docRef->
+                print("user added",docRef.id)
+            }
         }
+        else print("logado com sucesso")
     }
     private suspend fun userExistsOnFirebase(userUid: String):Boolean{
         try {
             val documentFounded = firestore.collection(USERS).whereEqualTo("uid", userUid)
                 .get().await()
-            return true;
+            print("documentFounded",documentFounded.size())
+            _loading.value = false
+            return documentFounded.size() > 0
         }
         catch (e:Exception){
             Log.e(TAG, "error: ${e.message}")
+            _loading.value = false
             return false;
         }
     }
 
-
+    private fun print(title:String, message: Any? = null){
+        if(message == null)Log.e(TAG, title)
+        else Log.e(TAG,"$title : ${message.toString()}")
+    }
 }
+

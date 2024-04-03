@@ -22,10 +22,11 @@ import com.foodfacil.R
 import com.foodfacil.components.TopBarOnAuth
 import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.ui.theme.MainYellow
+import com.foodfacil.viewModel.AuthViewModel
 import com.simpletext.SimpleText
 
 @Composable
-fun OnAuthLogin(navController: NavHostController) {
+fun OnAuthLogin(navController: NavHostController, authViewModel: AuthViewModel) {
     val md = Modifier
     Surface(
         md
