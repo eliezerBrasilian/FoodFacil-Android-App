@@ -7,6 +7,7 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,16 +36,12 @@ import com.foodfacil.R
 import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.ui.theme.MainYellow
 import com.foodfacil.ui.theme.YellowText
+import com.gamestate.enums.NavigationScreens
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.simpletext.SimpleText
 
 @SuppressLint("InlinedApi", "SuspiciousIndentation")
 @RequiresApi(Build.VERSION_CODES.O)
-@OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalFoundationApi::class,
-    ExperimentalPermissionsApi::class
-)
 @Composable
 fun OnAuth(
     navController: NavHostController
@@ -71,13 +68,15 @@ fun OnAuth(
             verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Carrousel(imagesResources = listOf(
-                R.drawable.salgados_img_on_auth,
-                R.drawable.salgados_img_on_auth,
-                R.drawable.salgados_img_on_auth),
+            Carrousel(
+                imagesResources = listOf(
+                    R.drawable.salgados_img_on_auth,
+                    R.drawable.salgados_img_on_auth,
+                    R.drawable.salgados_img_on_auth
+                ),
                 imageActiveColor = MainYellow,
                 imageInactiveColor = Color.White
-                )
+            )
 
             Spacer(md.height(20.dp))
             SimpleText(
@@ -91,16 +90,28 @@ fun OnAuth(
                 fontSize = 16,
                 color = Color.White
             )
-            Box(md.fillMaxWidth().padding(horizontal = 20.dp)){
-                Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(MainYellow),
-                    modifier = md.fillMaxWidth()) {
-                    Box(md.padding(vertical = 5.dp)){
+            Box(
+                md
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            ) {
+                Button(
+                    onClick = { navController.navigate(NavigationScreens.ON_AUTH_SIGN_UP) },
+                    colors = ButtonDefaults.buttonColors(MainYellow),
+                    modifier = md.fillMaxWidth()
+                ) {
+                    Box(
+                        md
+                            .padding(vertical = 5.dp)
+                    ) {
                         SimpleText("Criar uma conta", color = Color.White, fontSize = 17)
                     }
                 }
             }
+            Box(md.clickable { navController.navigate(NavigationScreens.ON_AUTH_LOGIN) }) {
+                SimpleText("Fazer login", fontSize = 17, fontWeight = "bold", color = YellowText)
+            }
 
-            SimpleText("Fazer login", fontSize = 17, fontWeight = "bold", color = YellowText)
         }
     }
 

@@ -9,6 +9,8 @@ package com.gamestate.enums
         val SPLASH = Screens.SPLASH.name
         val GAME_SELECTED = Screens.GAME_SELECTED.name
         val ON_AUTH = "OnAuth"
+        val ON_AUTH_LOGIN = "OnAuthLogin"
+        val ON_AUTH_SIGN_UP = "OnAuthSignUp"
     }
 
       enum class Screens {

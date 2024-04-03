@@ -1,5 +1,7 @@
 package com.gamestate.navigation
 
+import OnAuthLogin
+import OnAuthSignUp
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.UserViewModel
 import android.os.Build
@@ -12,7 +14,6 @@ import com.gamestate.enums.NavigationScreens
 import com.gamestate.screens.Home.Home
 import com.foodfacil.screens.Login.Login
 import com.foodfacil.screens.OnAuth.OnAuth
-import com.gamestate.screens.Profile.Profile
 import com.gamestate.screens.SignUp.Signup
 import com.foodfacil.screens.Splash.Splash
 
@@ -39,7 +40,12 @@ fun AppNavigation(
         composable(NavigationScreens.ON_AUTH) {
             OnAuth(navController)
         }
-
+        composable(NavigationScreens.ON_AUTH_LOGIN) {
+            OnAuthLogin(navController)
+        }
+        composable(NavigationScreens.ON_AUTH_SIGN_UP) {
+            OnAuthSignUp(navController)
+        }
 
     /*    composable(NavigationScreens.PROFILE) {
             Profile(

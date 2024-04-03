@@ -58,6 +58,7 @@ dependencies {
     implementation ("com.github.eliezerBrasilian:jetpack-compose-simple-text:v1.0.4")
     implementation ("com.github.azmiradi:CircleImageCompose:0.1.0")
     implementation("br.com.devsrsouza.compose.icons:font-awesome:1.1.0")
+//    implementation("br.com.devsrsouza.compose.icons:feather:4.28.0")
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation(libs.androidx.core.ktx)
