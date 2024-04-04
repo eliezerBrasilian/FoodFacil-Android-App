@@ -1,4 +1,4 @@
-package com.gamestate.screens.Home
+package com.foodfacil.screens.Home
 
 import android.annotation.SuppressLint
 import android.os.Build

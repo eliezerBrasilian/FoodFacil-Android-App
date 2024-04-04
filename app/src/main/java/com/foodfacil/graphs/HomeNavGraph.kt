@@ -12,8 +12,7 @@ import com.foodfacil.enums.BottomBarScreen
 import com.foodfacil.enums.Graph
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.UserViewModel
-import com.gamestate.enums.NavigationScreens
-import com.gamestate.screens.Home.Home
+import com.foodfacil.screens.Home.Home
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -23,9 +22,9 @@ fun HomeNavGraph(navController: NavHostController,
     NavHost(
         navController = navController,
         route = Graph.HOME,
-        startDestination = NavigationScreens.HOME
+        startDestination = BottomBarScreen.Home.route
     ) {
-        composable(NavigationScreens.HOME) {
+        composable(BottomBarScreen.Home.route) {
             Home(navController, authViewModel, userViewModel)
         }
         /*
