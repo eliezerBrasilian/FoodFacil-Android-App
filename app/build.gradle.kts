@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.foodfacil"
-        minSdk = 24
+        minSdk = 25
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -52,6 +52,10 @@ android {
 }
 
 dependencies {
+    // Navigation Compose
+    implementation ("androidx.compose.material:material:1.4.2")
+    implementation("androidx.navigation:navigation-compose:2.5.0-rc01")
+
     //livedata
     implementation("androidx.compose.runtime:runtime-livedata:1.7.0-alpha05")
 
@@ -81,6 +85,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.firebase.firestore)
+    implementation(libs.androidx.compose.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

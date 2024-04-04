@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.UserViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.simpletext.SimpleText
 
 @SuppressLint("InlinedApi")
 @RequiresApi(Build.VERSION_CODES.O)
@@ -30,7 +31,7 @@ fun Home(
     val md = Modifier
     Scaffold { paddingValues ->
         Surface(modifier = md.padding(paddingValues)) {
-
+            SimpleText("ESTAMOS NA HOME")
         }
     }
 }

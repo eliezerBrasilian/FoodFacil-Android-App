@@ -1,6 +1,5 @@
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -28,9 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.foodfacil.R
 import com.foodfacil.components.TopBarOnAuth
+import com.foodfacil.enums.Graph
+import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.ui.theme.MainYellow
 import com.foodfacil.viewModel.AuthViewModel
+import com.gamestate.enums.NavigationScreens
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.simpletext.SimpleText
@@ -46,6 +48,7 @@ fun OnAuthSignUp(navController: NavHostController, authViewModel: AuthViewModel)
     val isLoading by authViewModel.loading.observeAsState(false)
 
     val googleSignInClient = getGoogleLoginAuth(clientId, LocalContext.current)
+    val print = Print(TAG)
 
     val startForResult =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -55,20 +58,17 @@ fun OnAuthSignUp(navController: NavHostController, authViewModel: AuthViewModel)
                     val task =
                         GoogleSignIn.getSignedInAccountFromIntent(intent)
 
-                    Log.e(TAG, "task: " + task.toString())
-                    Log.e(TAG, "id: " + task.result.id)
-                    Log.e(TAG, "complete: " +  task.isComplete)
-                    Log.e(TAG, "displayName: " +  task.result.displayName)
-
-                    handleGoogleSign(task.result,authViewModel)
+                    print.log("Task", task)
+                    print.log("Id", task.result.id)
+                    handleGoogleSign(task.result,authViewModel, navController)
                 }
             }
         }
 
+
     val onClickGoogleSignIn = {
         startForResult.launch(googleSignInClient.signInIntent)
     }
-
 
     Surface(
         md
@@ -102,12 +102,20 @@ fun OnAuthSignUp(navController: NavHostController, authViewModel: AuthViewModel)
     }
 }
 
-fun handleGoogleSign(result: GoogleSignInAccount, authViewModel: AuthViewModel) {
+fun handleGoogleSign(
+    result: GoogleSignInAccount,
+    authViewModel: AuthViewModel,
+    navController: NavHostController
+) {
+    val navigateToHome = {
+        navController.navigate(Graph.HOME)
+    }
     authViewModel.createUserAfterGoogleSignIn(
         userUid = result.id!!,
         userToken = result.idToken!!,
         email = result.email!!,
         name = result.displayName!!,
-        profilePicture = result.photoUrl
+        profilePicture = result.photoUrl,
+        onSuccess = navigateToHome
     )
 }
