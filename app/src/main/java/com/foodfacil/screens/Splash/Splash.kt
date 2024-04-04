@@ -50,9 +50,6 @@ fun Splash(nav: NavHostController) {
         mutableStateOf(Animatable(0f))
     }
 
-
-    // Remember a SystemUiController
-
     val context = LocalContext.current as ComponentActivity
     LaunchedEffect(key1 = true, block = {
         //status bar
@@ -77,7 +74,6 @@ fun Splash(nav: NavHostController) {
 
 
     Surface(modifier = Modifier.fillMaxSize(), color = MainRed) {
-        //status bar
 
         Column(
             modifier = Modifier.fillMaxSize(),
