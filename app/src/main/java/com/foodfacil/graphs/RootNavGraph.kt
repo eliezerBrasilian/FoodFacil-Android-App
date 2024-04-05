@@ -8,13 +8,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.foodfacil.enums.Graph
 import com.foodfacil.navigation.MainAppNavigation
+import com.foodfacil.viewModel.AcompanhamentosViewModel
 import com.foodfacil.viewModel.AuthViewModel
+import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.viewModel.UserViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RootNavigationGraph(navController: NavHostController, authViewModel: AuthViewModel,
-                        userViewModel: UserViewModel,) {
+fun RootNavigationGraph(
+    navController: NavHostController, authViewModel: AuthViewModel,
+    userViewModel: UserViewModel,
+    salgadosViewModel: SalgadosViewModel,
+    acompanhamentosViewModel: AcompanhamentosViewModel,) {
     NavHost(
         navController = navController,
         route = Graph.ROOT,
@@ -22,7 +27,7 @@ fun RootNavigationGraph(navController: NavHostController, authViewModel: AuthVie
     ) {
         authNavGraph(navController = navController, authViewModel, userViewModel)
         composable(route = Graph.HOME) {
-            MainAppNavigation(authViewModel = authViewModel, userViewModel = userViewModel)
+            MainAppNavigation(authViewModel = authViewModel, userViewModel = userViewModel, salgadosViewModel = salgadosViewModel, acompanhamentosViewModel = acompanhamentosViewModel)
         }
     }
 }

@@ -2,7 +2,7 @@ package com.foodfacil.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,12 +16,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.foodfacil.dataClass.Salgado
+import com.foodfacil.graphs.DetailsScreen
 import com.simpletext.SimpleText
 
 @Composable
-fun SalgadoItem(md: Modifier, salgado: Salgado){
-   Box(modifier = md.background(Color(0xffF1F1F1), shape = RoundedCornerShape(12.dp)).padding(15.dp)){
+fun SalgadoItem(md: Modifier, salgado: Salgado, navController: NavHostController){
+   Box(modifier = md.background(Color(0xffF1F1F1), shape = RoundedCornerShape(12.dp)).padding(15.dp).clickable{
+       navController.navigate(DetailsScreen.Information.route + "/${salgado.id}")
+   }){
        Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
            Column(verticalArrangement = Arrangement.spacedBy(15.dp)) {
                Title(salgado.title)

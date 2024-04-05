@@ -2,32 +2,91 @@ package com.foodfacil.graphs
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.foodfacil.components.SalgadoSelected
 import com.foodfacil.enums.BottomBarScreen
 import com.foodfacil.enums.Graph
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.UserViewModel
 import com.foodfacil.screens.Home.Home
+import com.foodfacil.viewModel.AcompanhamentosViewModel
+import com.foodfacil.viewModel.SalgadosViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeNavGraph(navController: NavHostController,
-                 authViewModel: AuthViewModel,
-                 userViewModel: UserViewModel,) {
+fun HomeNavGraph(
+    navController: NavHostController,
+    authViewModel: AuthViewModel,
+    userViewModel: UserViewModel,
+    salgadosViewModel: SalgadosViewModel,
+    acompanhamentosViewModel: AcompanhamentosViewModel,
+    paddingValues: PaddingValues,) {
     NavHost(
         navController = navController,
         route = Graph.HOME,
-        startDestination = BottomBarScreen.Home.route
-    ) {
-        composable(BottomBarScreen.Home.route) {
-            Home(navController, authViewModel, userViewModel)
+        startDestination = BottomBarScreen.Home.route,
+        modifier = Modifier.padding(0.dp).background(Color.White),
+        builder = {
+            composable(BottomBarScreen.Home.route) {
+                Home(navController, authViewModel, userViewModel, salgadosViewModel, paddingValues)
+            }
+            detailsNavGraph(navController = navController, salgadosViewModel, acompanhamentosViewModel, paddingValues)
         }
-        /*
+    )
+}
+
+
+fun NavGraphBuilder.detailsNavGraph(
+    navController: NavHostController,
+    salgadosViewModel: SalgadosViewModel,
+    acompanhamentosViewModel: AcompanhamentosViewModel,
+    paddingValues: PaddingValues
+) {
+    navigation(
+        route = Graph.DETAILS,
+        startDestination = DetailsScreen.Information.route + "/{id}",
+    ) {
+
+        composable(route = DetailsScreen.Information.route + "/{id}",
+            arguments = listOf(navArgument(name = "id"){type = NavType.StringType},)
+        ) {route->
+            val id = route.arguments?.getString("id")
+
+            SalgadoSelected(navController, id,salgadosViewModel, acompanhamentosViewModel,paddingValues)
+        }
+
+        /*composable(route = DetailsScreen.Overview.route) {
+            ScreenContent(name = DetailsScreen.Overview.route) {
+                navController.popBackStack(
+                    route = DetailsScreen.Information.route,
+                    inclusive = false
+                )
+            }
+        }*/
+    }
+}
+
+
+sealed class DetailsScreen(val route: String) {
+    object Information : DetailsScreen(route = "INFORMATION")
+    object Overview : DetailsScreen(route = "OVERVIEW")
+}
+
+
+/*
         composable(route = BottomBarScreen.Home.route) {
             ScreenContent(
                 name = BottomBarScreen.Home.route,
@@ -47,33 +106,13 @@ fun HomeNavGraph(navController: NavHostController,
                 name = BottomBarScreen.Settings.route,
                 onClick = { }
             )
-        }*/
-        detailsNavGraph(navController = navController)
-    }
-}
-
-fun NavGraphBuilder.detailsNavGraph(navController: NavHostController) {
-    navigation(
-        route = Graph.DETAILS,
-        startDestination = DetailsScreen.Information.route
-    ) {
-       /* composable(route = DetailsScreen.Information.route) {
-            ScreenContent(name = DetailsScreen.Information.route) {
-                navController.navigate(DetailsScreen.Overview.route)
-            }
         }
-        composable(route = DetailsScreen.Overview.route) {
-            ScreenContent(name = DetailsScreen.Overview.route) {
-                navController.popBackStack(
-                    route = DetailsScreen.Information.route,
-                    inclusive = false
-                )
-            }
-        }*/
+
+
     }
 }
 
-sealed class DetailsScreen(val route: String) {
-    object Information : DetailsScreen(route = "INFORMATION")
-    object Overview : DetailsScreen(route = "OVERVIEW")
-}
+
+
+
+*/

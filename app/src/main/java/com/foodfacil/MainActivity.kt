@@ -7,7 +7,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,6 +14,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.foodfacil.graphs.RootNavigationGraph
 import com.foodfacil.ui.theme.FoodFacilTheme
+import com.foodfacil.viewModel.AcompanhamentosViewModel
+import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.viewModel.UserViewModel
 
 class MainActivity : ComponentActivity() {
@@ -30,7 +31,9 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val authViewModel: AuthViewModel = viewModel()
                     val userViewModel: UserViewModel = viewModel()
-                    RootNavigationGraph(rememberNavController(), authViewModel, userViewModel)
+                    val salgadosViewModel: SalgadosViewModel = viewModel()
+                    val acompanhamentosViewModel: AcompanhamentosViewModel = viewModel()
+                    RootNavigationGraph(rememberNavController(), authViewModel, userViewModel, salgadosViewModel, acompanhamentosViewModel)
                 }
             }
         }

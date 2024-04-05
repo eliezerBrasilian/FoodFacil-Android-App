@@ -21,7 +21,7 @@ import com.simpletext.SimpleText
 
 @Composable
 fun HomeHeader(md:Modifier){
-    Row(modifier = md.fillMaxWidth().padding(top = 50.dp, start = 20.dp, end = 20.dp), verticalAlignment = Alignment.CenterVertically,
+    Row(modifier = md.fillMaxWidth().padding(top = 30.dp, start = 20.dp, end = 20.dp), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Absolute.SpaceBetween) {
        Logo(md)
         FuncionamentoColumn(md)
