@@ -55,12 +55,17 @@ fun SalgadoSelected(
     val salgadoSelected = remember {
         mutableStateOf<Salgado?>(null)
     }
+
     val acompanhamentos = remember {
         mutableStateListOf<String>()
     }
 
     val priceFormated = remember {
         mutableStateOf("")
+    }
+
+    val checkboxesStates = remember{
+        mutableStateListOf<String>()
     }
 
     LaunchedEffect(null) {
@@ -80,27 +85,38 @@ fun SalgadoSelected(
 
     }
 
+    val esteItemJaEstaMarcado: (acompanhamento:String)->Boolean = {acompanhamento->
+        val existe =  checkboxesStates.contains(acompanhamento)
+        print.log("checkboxesStates",checkboxesStates.contains(acompanhamento))
+        print.log("existe",existe)
+        existe
+    }
+
+
     Scaffold(md.padding(paddingValues)) { pv ->
         Surface(md.padding(pv), color = PinkSalgadoSelected
         ) {
             Column(
-                md.padding(top = 20.dp).background(Color.White)) {
+                md
+                    .padding(top = 20.dp)
+                    .background(Color.White)) {
                 Top(md, navController, salgadoSelected)
                 CurrentSalgadoDetails(md, salgadoSelected, priceFormated)
                 MonteSeuPedido(md = md)
                 Spacer(md.height(15.dp))
-                LazyColumn(md
+                LazyColumn(
+                    md
                         .weight(1f)
-                        .fillMaxWidth().padding(horizontal = 15.dp, vertical = 10.dp),
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp, vertical = 10.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    items(acompanhamentos){
-                        ItemWithCheckBox(text = it, onClick = {isActive->
+                    items(acompanhamentos){acompanhamento->
+                        ItemWithCheckBox(text = acompanhamento, onClick = {isActive->
                             print.log("clicked",isActive)
-                        })
+                            checkboxesStates.add(acompanhamento)
+                        }, isActive = esteItemJaEstaMarcado(acompanhamento))
                     }
                 }
-              //  Box(md.height(50.dp).background(Color.Yellow).fillMaxWidth().navigationBarsPadding())
-
             }
         }
     }
@@ -146,6 +162,7 @@ fun BackIcon(md: Modifier, navController: NavHostController){
             modifier = md.clickable { navController.popBackStack() })
     }
 }
+
 @Composable
 fun MonteSeuPedido(md: Modifier) {
     Box(

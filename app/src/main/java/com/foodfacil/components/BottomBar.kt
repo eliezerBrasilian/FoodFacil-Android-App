@@ -35,8 +35,9 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
         BottomBarScreen.Home,
-        BottomBarScreen.Profile,
-        BottomBarScreen.Settings,
+        BottomBarScreen.Combos,
+        BottomBarScreen.Pedidos,
+        BottomBarScreen.Perfil,
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination

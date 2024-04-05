@@ -36,21 +36,21 @@ fun ItemWithCheckBox(
     icon: ImageVector = FontAwesomeIcons.Solid.ChevronDown,
     onClick:(isActive:Boolean)->Unit = {}
 ){
-    val (isChecked, setChecked) = remember { mutableStateOf(isActive) }
+    val isChecked = remember { mutableStateOf(isActive) }
 
     val md = Modifier
     Row(modifier = md.fillMaxWidth(), horizontalArrangement = Arrangement.Absolute.SpaceBetween) {
         SimpleText(title = text, fontSize = fontSize, fontWeight = fontWeight, color = fontColor)
-        if(!isChecked)
+        if(!isChecked.value)
             NonActiveSquare(checkBoxSize, checkBoxBorderWidth, checkBoxBorderColor = checkBoxBorderColor,
             checkBoxBorderRadius = checkBoxBorderRadius,
                 onCLick = {
-                    setChecked(true)
+                   isChecked.value = true
                     onClick(true)
                 })
         else
             ActiveSquare(checkBoxSize = checkBoxSize, icon = icon, onCLick = {
-                setChecked(false)
+               isChecked.value = false
                 onClick(false)
             })
     }

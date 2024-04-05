@@ -22,6 +22,7 @@ import com.foodfacil.enums.Graph
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.UserViewModel
 import com.foodfacil.screens.Home.Home
+import com.foodfacil.screens.Pedidos
 import com.foodfacil.viewModel.AcompanhamentosViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 
@@ -44,6 +45,9 @@ fun HomeNavGraph(
                 Home(navController, authViewModel, userViewModel, salgadosViewModel, paddingValues)
             }
             detailsNavGraph(navController = navController, salgadosViewModel, acompanhamentosViewModel, paddingValues)
+            composable(BottomBarScreen.Pedidos.route) {
+                Pedidos(navController, salgadosViewModel, paddingValues)
+            }
         }
     )
 }

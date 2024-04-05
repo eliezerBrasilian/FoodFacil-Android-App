@@ -30,4 +30,7 @@ class SalgadosViewModel : ViewModel(){
         return salgados.find { it.id == id }
     }
 
+    fun getPedidos():List<Any>{
+        return emptyList()
+    }
 }
