@@ -1,6 +1,7 @@
 package com.foodfacil.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,14 +23,14 @@ import com.foodfacil.ui.theme.MainRed
 import com.simpletext.SimpleText
 
 @Composable
-fun HomeHeader(md: Modifier, totalSalgadosNoCarrinho: Int){
+fun HomeHeader(md: Modifier, totalSalgadosNoCarrinho: Int, onClickOnChartIcon:()->Unit = {}){
     Row(modifier = md
         .fillMaxWidth()
         .padding(top = 30.dp, start = 20.dp, end = 20.dp), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Absolute.SpaceBetween) {
        Logo(md)
         FuncionamentoColumn(md)
-        Cart(md,totalSalgadosNoCarrinho)
+        Cart(md,totalSalgadosNoCarrinho,onClickOnChartIcon)
     }
 }
 
@@ -60,13 +61,13 @@ fun Dot(md: Modifier) {
 }
 
 @Composable
-fun Cart(md: Modifier, totalSalgadosNoCarrinho: Int) {
-    Box(modifier = md){
+fun Cart(md: Modifier, totalSalgadosNoCarrinho: Int, onClickOnChartIcon: () -> Unit) {
+    Box(modifier = md.clickable(onClick = onClickOnChartIcon)){
         Image(painter = painterResource(id = R.drawable.top_carrinho),
             contentDescription = null, md.size(25.dp))
-        Circle(color = MainRed,size = 20.dp) {
+        Circle(color = MainRed, size = 20.dp, onClick = onClickOnChartIcon, child = {
             SimpleText(totalSalgadosNoCarrinho.toString(), Color.White, fontSize = 13)
-        }
+        }, hasElevation = true)
     }
 }
 

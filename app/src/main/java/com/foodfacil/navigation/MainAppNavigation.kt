@@ -34,17 +34,6 @@ fun MainAppNavigation(
     navController: NavHostController = rememberNavController(),
 ) {
 
-    //val systemUiController = rememberSystemUiController()
-  /*  //val useDarkIcons = MaterialTheme.colors.isLight
-
-    LaunchedEffect(true) {
-        //systemUiController.setNavigationBarColor(Color.White,darkIcons = false)
-        systemUiController.navigationBarDarkContentEnabled = false
-
-    }*/
-
-
-
     Scaffold(
         modifier = Modifier.background(Color.White),
 

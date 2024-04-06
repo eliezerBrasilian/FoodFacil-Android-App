@@ -19,6 +19,7 @@ import androidx.navigation.navigation
 import com.foodfacil.components.SalgadoSelected
 import com.foodfacil.enums.BottomBarScreen
 import com.foodfacil.enums.Graph
+import com.foodfacil.screens.Chart.ChartScreen
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.UserViewModel
 import com.foodfacil.screens.Home.Home
@@ -27,6 +28,7 @@ import com.foodfacil.viewModel.AcompanhamentosViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.screens.Profile.Profile
 import com.foodfacil.viewModel.ChartViewModel
+import com.gamestate.enums.NavigationScreens
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -47,8 +49,16 @@ fun HomeNavGraph(
             composable(BottomBarScreen.Home.route) {
                 Home(navController, authViewModel, userViewModel, salgadosViewModel,chartViewModel ,paddingValues)
             }
+
             detailsNavGraph(navController = navController, salgadosViewModel, acompanhamentosViewModel,
                 paddingValues,chartViewModel)
+
+            composable(route = NavigationScreens.CHART){
+                ChartScreen(navController,salgadosViewModel, acompanhamentosViewModel,
+                    paddingValues,chartViewModel)
+            }
+           // chartNavGraph(navController,salgadosViewModel,acompanhamentosViewModel,paddingValues, chartViewModel)
+
             composable(BottomBarScreen.Pedidos.route) {
                 Pedidos(navController, salgadosViewModel, paddingValues)
             }
@@ -58,7 +68,6 @@ fun HomeNavGraph(
         }
     )
 }
-
 
 fun NavGraphBuilder.detailsNavGraph(
     navController: NavHostController,
@@ -70,10 +79,11 @@ fun NavGraphBuilder.detailsNavGraph(
     navigation(
         route = Graph.DETAILS,
         startDestination = DetailsScreen.Information.route + "/{id}",
+        //DetailsScreen.Information.route
     ) {
 
         composable(route = DetailsScreen.Information.route + "/{id}",
-            arguments = listOf(navArgument(name = "id"){type = NavType.StringType},)
+            arguments = listOf(navArgument(name = "id"){type = NavType.StringType})
         ) {route->
             val id = route.arguments?.getString("id")
 
@@ -89,6 +99,25 @@ fun NavGraphBuilder.detailsNavGraph(
                 )
             }
         }*/
+    }
+}
+
+fun NavGraphBuilder.chartNavGraph(
+    navController: NavHostController,
+    salgadosViewModel: SalgadosViewModel,
+    acompanhamentosViewModel: AcompanhamentosViewModel,
+    paddingValues: PaddingValues,
+    chartViewModel: ChartViewModel
+) {
+    navigation(
+        route = Graph.DETAILS,
+        startDestination = NavigationScreens.CHART
+    ) {
+
+        composable(route = NavigationScreens.CHART){
+            ChartScreen(navController,salgadosViewModel, acompanhamentosViewModel,
+                paddingValues,chartViewModel)
+        }
     }
 }
 
@@ -120,12 +149,7 @@ sealed class DetailsScreen(val route: String) {
                 onClick = { }
             )
         }
-
-
     }
 }
-
-
-
 
 */

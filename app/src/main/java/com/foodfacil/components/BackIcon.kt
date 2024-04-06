@@ -17,11 +17,7 @@ import com.foodfacil.ui.theme.PinkSalgadoSelected
 
 @Composable
 fun BackIcon(md: Modifier, navController: NavHostController){
-    Box(
-        md
-            .fillMaxWidth()
-            .background(color = PinkSalgadoSelected)
-            .padding(start = 15.dp)
+    Box(md.padding(start = 15.dp)
     ) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,

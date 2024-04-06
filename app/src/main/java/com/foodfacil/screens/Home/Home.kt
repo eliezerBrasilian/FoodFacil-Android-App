@@ -41,6 +41,7 @@ import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.viewModel.UserViewModel
+import com.gamestate.enums.NavigationScreens
 import com.simpletext.SimpleText
 
 @SuppressLint("InlinedApi")
@@ -71,7 +72,9 @@ fun Home(
     })*/
 
     val md = Modifier
-    Scaffold(md.padding(paddingValues), topBar = { HomeHeader(md = md, totalSalgadosNoCarrinho)},
+    Scaffold(md.padding(paddingValues), topBar = { HomeHeader(md = md, totalSalgadosNoCarrinho, onClickOnChartIcon = {
+        navController.navigate(NavigationScreens.CHART)
+    })},
         bottomBar = {Box(
             md
                 .fillMaxWidth()

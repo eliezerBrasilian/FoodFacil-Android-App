@@ -158,7 +158,10 @@ fun SalgadoSelected(
 private fun Top(md: Modifier, navController: NavHostController, salgadoSelected: MutableState<Salgado?>) {
     Column(modifier = md.fillMaxWidth()
     ) {
-       BackIcon(md,navController)
+        Box(md.fillMaxWidth().background(PinkSalgadoSelected), contentAlignment = Alignment.BottomStart){
+            BackIcon(md.background(PinkSalgadoSelected),navController)
+        }
+
         Box(
             md
                 .height(240.dp)

@@ -11,6 +11,7 @@ package com.gamestate.enums
         val ON_AUTH = "OnAuth"
         val ON_AUTH_LOGIN = "OnAuthLogin"
         val ON_AUTH_SIGN_UP = "OnAuthSignUp"
+        val CHART = "Chart"
     }
 
       enum class Screens {
