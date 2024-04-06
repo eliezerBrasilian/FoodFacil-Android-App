@@ -1,60 +1,93 @@
-package com.gamestate.screens.Profile
+package com.foodfacil.screens.Profile
 
 import android.annotation.SuppressLint
-import android.net.Uri
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Surface
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import com.foodfacil.R
-import com.gamestate.components.TopBar
-import com.gamestate.enums.NavigationScreens
+import com.azmithabet.circleimageviewcompose.CircleImage
 import com.foodfacil.viewModel.AuthViewModel
+import com.foodfacil.R
+import com.foodfacil.components.Line
 import com.foodfacil.viewModel.UserViewModel
 import com.simpletext.SimpleText
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Profile(){
+fun Profile(
+    navController: NavHostController,
+    authViewModel: AuthViewModel,
+    userViewModel: UserViewModel,
+    paddingValues: PaddingValues
+) {
+    val md = Modifier
 
+    Column(modifier = md
+        .padding(paddingValues)
+        .fillMaxSize()
+        .background(Color.White)) {
+        Top(md = md, userViewModel.user.value.name)
+        Line()
+
+        ProfileMenuItem(md = md, title = "Dados da conta")
+        Line()
+
+        ProfileMenuItem(md = md, title = "Pagamentos")
+        Line()
+
+        ProfileMenuItem(md = md, title = "Endereços")
+        Line()
+    }
 }
 
+@Composable
+private fun Top(md: Modifier, user: String){
+    Box(modifier = md
+        .height(180.dp)
+        .fillMaxWidth()
+        .padding(horizontal = 20.dp)
+       ,contentAlignment = Alignment.Center){
+        Row(horizontalArrangement = Arrangement.spacedBy(15.dp), verticalAlignment = Alignment.CenterVertically) {
+            CircleImage(
+                painter = painterResource(id = R.drawable.combo_g),
+                contentDescription = null, size = 70.dp
+            )
+            SimpleText(user, fontSize = 17)
+        }
+    }
+}
 
-
+ @Composable
+ private fun ProfileMenuItem(md:Modifier, title:String){
+    Box(
+        md
+            .height(80.dp)
+            .fillMaxWidth()
+            .padding(start = 20.dp), contentAlignment = Alignment.CenterStart) {
+        Row(horizontalArrangement = Arrangement.spacedBy(15.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(imageVector = Icons.Default.Person, contentDescription = null, md.size(25.dp))
+            SimpleText(title, fontSize = 17)
+        }
+    }
+}
 
 

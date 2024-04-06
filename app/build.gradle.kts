@@ -52,6 +52,9 @@ android {
 }
 
 dependencies {
+    //circle image
+    implementation("com.github.azmiradi:CircleImageCompose:0.1.0")
+
     // Navigation Compose
     implementation ("androidx.compose.material:material:1.4.2")
     implementation("androidx.navigation:navigation-compose:2.5.0-rc01")

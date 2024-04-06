@@ -25,6 +25,7 @@ import com.foodfacil.screens.Home.Home
 import com.foodfacil.screens.Pedidos
 import com.foodfacil.viewModel.AcompanhamentosViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
+import com.foodfacil.screens.Profile.Profile
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -47,6 +48,9 @@ fun HomeNavGraph(
             detailsNavGraph(navController = navController, salgadosViewModel, acompanhamentosViewModel, paddingValues)
             composable(BottomBarScreen.Pedidos.route) {
                 Pedidos(navController, salgadosViewModel, paddingValues)
+            }
+            composable(BottomBarScreen.Perfil.route) {
+                Profile(navController, authViewModel,userViewModel, paddingValues)
             }
         }
     )
