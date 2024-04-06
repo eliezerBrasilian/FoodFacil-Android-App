@@ -13,19 +13,23 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.foodfacil.R
 import com.foodfacil.ui.theme.GreenDot
+import com.foodfacil.ui.theme.MainRed
 import com.simpletext.SimpleText
 
 @Composable
-fun HomeHeader(md:Modifier){
-    Row(modifier = md.fillMaxWidth().padding(top = 30.dp, start = 20.dp, end = 20.dp), verticalAlignment = Alignment.CenterVertically,
+fun HomeHeader(md: Modifier, totalSalgadosNoCarrinho: Int){
+    Row(modifier = md
+        .fillMaxWidth()
+        .padding(top = 30.dp, start = 20.dp, end = 20.dp), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Absolute.SpaceBetween) {
        Logo(md)
         FuncionamentoColumn(md)
-        Cart(md)
+        Cart(md,totalSalgadosNoCarrinho)
     }
 }
 
@@ -56,7 +60,13 @@ fun Dot(md: Modifier) {
 }
 
 @Composable
-fun Cart(md: Modifier) {
-    Image(painter = painterResource(id = R.drawable.top_carrinho),
-        contentDescription = null, md.size(25.dp))
+fun Cart(md: Modifier, totalSalgadosNoCarrinho: Int) {
+    Box(modifier = md){
+        Image(painter = painterResource(id = R.drawable.top_carrinho),
+            contentDescription = null, md.size(25.dp))
+        Circle(color = MainRed,size = 20.dp) {
+            SimpleText(totalSalgadosNoCarrinho.toString(), Color.White, fontSize = 13)
+        }
+    }
 }
+

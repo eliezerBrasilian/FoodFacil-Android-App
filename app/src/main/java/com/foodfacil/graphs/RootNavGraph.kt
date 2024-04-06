@@ -10,6 +10,7 @@ import com.foodfacil.enums.Graph
 import com.foodfacil.navigation.MainAppNavigation
 import com.foodfacil.viewModel.AcompanhamentosViewModel
 import com.foodfacil.viewModel.AuthViewModel
+import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.viewModel.UserViewModel
 
@@ -19,7 +20,8 @@ fun RootNavigationGraph(
     navController: NavHostController, authViewModel: AuthViewModel,
     userViewModel: UserViewModel,
     salgadosViewModel: SalgadosViewModel,
-    acompanhamentosViewModel: AcompanhamentosViewModel,) {
+    acompanhamentosViewModel: AcompanhamentosViewModel,
+    chartViewModel: ChartViewModel,) {
     NavHost(
         navController = navController,
         route = Graph.ROOT,
@@ -27,7 +29,10 @@ fun RootNavigationGraph(
     ) {
         authNavGraph(navController = navController, authViewModel, userViewModel)
         composable(route = Graph.HOME) {
-            MainAppNavigation(authViewModel = authViewModel, userViewModel = userViewModel, salgadosViewModel = salgadosViewModel, acompanhamentosViewModel = acompanhamentosViewModel)
+            MainAppNavigation(authViewModel = authViewModel, userViewModel = userViewModel,
+                salgadosViewModel = salgadosViewModel,
+                acompanhamentosViewModel = acompanhamentosViewModel,
+                chartViewModel = chartViewModel)
         }
     }
 }

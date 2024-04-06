@@ -26,6 +26,7 @@ import com.foodfacil.screens.Pedidos
 import com.foodfacil.viewModel.AcompanhamentosViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.screens.Profile.Profile
+import com.foodfacil.viewModel.ChartViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -35,6 +36,7 @@ fun HomeNavGraph(
     userViewModel: UserViewModel,
     salgadosViewModel: SalgadosViewModel,
     acompanhamentosViewModel: AcompanhamentosViewModel,
+    chartViewModel: ChartViewModel,
     paddingValues: PaddingValues,) {
     NavHost(
         navController = navController,
@@ -43,9 +45,10 @@ fun HomeNavGraph(
         modifier = Modifier.padding(0.dp).background(Color.White),
         builder = {
             composable(BottomBarScreen.Home.route) {
-                Home(navController, authViewModel, userViewModel, salgadosViewModel, paddingValues)
+                Home(navController, authViewModel, userViewModel, salgadosViewModel,chartViewModel ,paddingValues)
             }
-            detailsNavGraph(navController = navController, salgadosViewModel, acompanhamentosViewModel, paddingValues)
+            detailsNavGraph(navController = navController, salgadosViewModel, acompanhamentosViewModel,
+                paddingValues,chartViewModel)
             composable(BottomBarScreen.Pedidos.route) {
                 Pedidos(navController, salgadosViewModel, paddingValues)
             }
@@ -61,7 +64,8 @@ fun NavGraphBuilder.detailsNavGraph(
     navController: NavHostController,
     salgadosViewModel: SalgadosViewModel,
     acompanhamentosViewModel: AcompanhamentosViewModel,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    chartViewModel: ChartViewModel
 ) {
     navigation(
         route = Graph.DETAILS,
@@ -73,7 +77,8 @@ fun NavGraphBuilder.detailsNavGraph(
         ) {route->
             val id = route.arguments?.getString("id")
 
-            SalgadoSelected(navController, id,salgadosViewModel, acompanhamentosViewModel,paddingValues)
+            SalgadoSelected(navController, id,salgadosViewModel, acompanhamentosViewModel,
+                paddingValues,chartViewModel)
         }
 
         /*composable(route = DetailsScreen.Overview.route) {

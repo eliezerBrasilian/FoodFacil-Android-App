@@ -33,6 +33,7 @@ import com.foodfacil.dataClass.Salgado
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.PinkSalgadoSelected
 import com.foodfacil.viewModel.AcompanhamentosViewModel
+import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 @Composable
 fun SalgadoSelected(
@@ -40,7 +41,8 @@ fun SalgadoSelected(
     id: String?,
     salgadosViewModel: SalgadosViewModel,
     acompanhamentosViewModel: AcompanhamentosViewModel,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    chartViewModel: ChartViewModel
 ) {
     val md = Modifier
     val print = Print("SALGADOSELECTED")
@@ -53,7 +55,7 @@ fun SalgadoSelected(
         mutableStateOf<Salgado?>(null)
     }
 
-    val acompanhamentos = remember {
+    val acompanhamentosReceived = remember {
         mutableStateListOf<Acompanhamento>()
     }
 
@@ -66,6 +68,7 @@ fun SalgadoSelected(
     }
 
     LaunchedEffect(null) {
+        //busca salgados
         print.log("id", id)
         val founded = salgadosViewModel.findSalgado(id)
 
@@ -75,15 +78,14 @@ fun SalgadoSelected(
 
         total.value += founded.priceInOffer
 
+        //busca acompanhamentos
         val acompanhamentosList = acompanhamentosViewModel.getAcompanhamentosList()
+        print.log("acompanhamentos carregados", acompanhamentosList)
 
-        print.log("acompanhamentos", acompanhamentosList)
-
-        acompanhamentos.clear()
-        acompanhamentos.addAll(acompanhamentosList)
+        acompanhamentosReceived.clear()
+        acompanhamentosReceived.addAll(acompanhamentosList)
         checkboxesStates.add("Salgados Sortidos")
         total.value += 1f
-
     }
 
     val esteItemJaEstaMarcado: (acompanhamento:String)->Boolean = {acompanhamento->
@@ -92,6 +94,23 @@ fun SalgadoSelected(
         print.log("existe",existe)
         existe
     }
+
+    val addSalgadoIntoChart = {
+        val acompanhamentosSelecionados = checkboxesStates.toList()
+        print.log("acompanhamentos",acompanhamentosSelecionados)
+
+        salgadoSelected.value?.let { salgado->
+            salgadoSelected.value = salgado.copy(
+                acompanhamentos = (acompanhamentosSelecionados) as List<Acompanhamento>,
+                price = total.value,
+                amount = 1
+            )
+        }
+
+        print.log("salgadoSelected",salgadoSelected.value)
+        chartViewModel.addSalgadoToChart(salgadoSelected.value)
+    }
+
 
     Scaffold(md.padding(paddingValues)) { pv ->
         Surface(md.padding(pv), color = PinkSalgadoSelected
@@ -110,23 +129,30 @@ fun SalgadoSelected(
                         .fillMaxWidth()
                         .padding(horizontal = 15.dp, vertical = 10.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    items(acompanhamentos){acompanhamento->
+                    items(acompanhamentosReceived){ acompanhamento->
                         ItemWithCheckBox(text = acompanhamento.name, onClick = {isActive->
                             print.log("clicked",isActive)
-                            checkboxesStates.add(acompanhamento.name)
-                            if(isActive)
+
+                            if(isActive) {
                                 total.value += acompanhamento.precoPorUnidade
-                            else
+                                checkboxesStates.add(acompanhamento.name)
+                            }
+                            else {
+                                //desmarcou
                                 total.value -= acompanhamento.precoPorUnidade
+                                checkboxesStates.remove(acompanhamento.name)
+
+                            }
                             print.log("total",total.value)
                         }, isActive = esteItemJaEstaMarcado(acompanhamento.name))
                     }
                 }
-                ButtonAddItemWithPrice(total = total.value)
+                ButtonAddItemWithPrice(total = total.value, addSalgadoIntoChart)
             }
         }
     }
 }
+
 
 @Composable
 private fun Top(md: Modifier, navController: NavHostController, salgadoSelected: MutableState<Salgado?>) {

@@ -19,7 +19,7 @@ import com.foodfacil.ui.theme.MainRed
 import com.simpletext.SimpleText
 
 @Composable
-fun ButtonAddItemWithPrice(total: Float) {
+fun ButtonAddItemWithPrice(total: Float, onClick:()->Unit = {}) {
     val md = Modifier
     Box(
         md
@@ -27,7 +27,7 @@ fun ButtonAddItemWithPrice(total: Float) {
             .padding(horizontal = 20.dp), contentAlignment = Alignment.BottomEnd
     ) {
         Button(
-            onClick = { /*TODO*/ },
+            onClick = onClick,
             colors = ButtonDefaults.buttonColors(MainRed),
             contentPadding = PaddingValues(15.dp),
             shape = MaterialTheme.shapes.large,

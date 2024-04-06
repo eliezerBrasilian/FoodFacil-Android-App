@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.foodfacil.graphs.RootNavigationGraph
 import com.foodfacil.ui.theme.FoodFacilTheme
 import com.foodfacil.viewModel.AcompanhamentosViewModel
+import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.viewModel.UserViewModel
 
@@ -33,7 +34,10 @@ class MainActivity : ComponentActivity() {
                     val userViewModel: UserViewModel = viewModel()
                     val salgadosViewModel: SalgadosViewModel = viewModel()
                     val acompanhamentosViewModel: AcompanhamentosViewModel = viewModel()
-                    RootNavigationGraph(rememberNavController(), authViewModel, userViewModel, salgadosViewModel, acompanhamentosViewModel)
+                    val chartViewModel:ChartViewModel = viewModel()
+                    RootNavigationGraph(rememberNavController(),
+                        authViewModel, userViewModel, salgadosViewModel, acompanhamentosViewModel,
+                        chartViewModel)
                 }
             }
         }
