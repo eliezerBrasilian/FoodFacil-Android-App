@@ -1,5 +1,6 @@
 package com.foodfacil.navigation
 
+import NavigationBarColor
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import com.foodfacil.components.BottomBar
+import com.foodfacil.ui.theme.MainYellow
 import com.foodfacil.viewModel.AcompanhamentosViewModel
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.ChartViewModel
@@ -32,13 +34,16 @@ fun MainAppNavigation(
     navController: NavHostController = rememberNavController(),
 ) {
 
-    val systemUiController = rememberSystemUiController()
-    //val useDarkIcons = MaterialTheme.colors.isLight
+    //val systemUiController = rememberSystemUiController()
+  /*  //val useDarkIcons = MaterialTheme.colors.isLight
 
     LaunchedEffect(true) {
-        systemUiController.setNavigationBarColor(Color.White)
-        systemUiController.navigationBarDarkContentEnabled = true
-    }
+        //systemUiController.setNavigationBarColor(Color.White,darkIcons = false)
+        systemUiController.navigationBarDarkContentEnabled = false
+
+    }*/
+
+
 
     Scaffold(
         modifier = Modifier.background(Color.White),

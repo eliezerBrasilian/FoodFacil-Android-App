@@ -1,5 +1,6 @@
 package com.foodfacil.screens.Home
 
+import NavigationBarColor
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.activity.ComponentActivity
@@ -35,6 +36,7 @@ import androidx.navigation.NavHostController
 import com.foodfacil.components.HomeHeader
 import com.foodfacil.components.SalgadoItem
 import com.foodfacil.ui.theme.MainRed
+import com.foodfacil.ui.theme.MainYellow
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
@@ -57,10 +59,16 @@ fun Home(
     val cvm by chartViewModel.chartList.observeAsState(emptyList())
     val totalSalgadosNoCarrinho = chartViewModel.getTotalSalgados()
 
-    LaunchedEffect(key1 = true, block = {
+    NavigationBarColor(color = MainYellow)
+
+/*    LaunchedEffect(key1 = true, block = {
         //status bar
-        cA.enableEdgeToEdge(statusBarStyle = SystemBarStyle.light(MainRed.toArgb(), MainRed.toArgb()))
-    })
+        cA.enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.light(Color.White.toArgb(), MainRed.toArgb()),
+            //navigationBarStyle = SystemBarStyle.auto(Color.White.toArgb(), MainRed.toArgb())
+            )
+
+    })*/
 
     val md = Modifier
     Scaffold(md.padding(paddingValues), topBar = { HomeHeader(md = md, totalSalgadosNoCarrinho)},
