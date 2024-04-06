@@ -2,7 +2,6 @@ package com.foodfacil.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,16 +9,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -33,14 +28,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.foodfacil.dataClass.Acompanhamento
 import com.foodfacil.dataClass.Salgado
 import com.foodfacil.services.Print
-import com.foodfacil.ui.theme.MainYellow
 import com.foodfacil.ui.theme.PinkSalgadoSelected
 import com.foodfacil.viewModel.AcompanhamentosViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
-import com.simpletext.SimpleText
-
 @Composable
 fun SalgadoSelected(
     navController: NavHostController,
@@ -52,12 +45,16 @@ fun SalgadoSelected(
     val md = Modifier
     val print = Print("SALGADOSELECTED")
 
+    val total = remember {
+        mutableStateOf(0f)
+    }
+
     val salgadoSelected = remember {
         mutableStateOf<Salgado?>(null)
     }
 
     val acompanhamentos = remember {
-        mutableStateListOf<String>()
+        mutableStateListOf<Acompanhamento>()
     }
 
     val priceFormated = remember {
@@ -76,12 +73,16 @@ fun SalgadoSelected(
         salgadoSelected.value = founded
         priceFormated.value = "R$ ${founded!!.priceInOffer}"
 
+        total.value += founded.priceInOffer
+
         val acompanhamentosList = acompanhamentosViewModel.getAcompanhamentosList()
 
         print.log("acompanhamentos", acompanhamentosList)
 
         acompanhamentos.clear()
         acompanhamentos.addAll(acompanhamentosList)
+        checkboxesStates.add("Salgados Sortidos")
+        total.value += 1f
 
     }
 
@@ -91,7 +92,6 @@ fun SalgadoSelected(
         print.log("existe",existe)
         existe
     }
-
 
     Scaffold(md.padding(paddingValues)) { pv ->
         Surface(md.padding(pv), color = PinkSalgadoSelected
@@ -111,12 +111,18 @@ fun SalgadoSelected(
                         .padding(horizontal = 15.dp, vertical = 10.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     items(acompanhamentos){acompanhamento->
-                        ItemWithCheckBox(text = acompanhamento, onClick = {isActive->
+                        ItemWithCheckBox(text = acompanhamento.name, onClick = {isActive->
                             print.log("clicked",isActive)
-                            checkboxesStates.add(acompanhamento)
-                        }, isActive = esteItemJaEstaMarcado(acompanhamento))
+                            checkboxesStates.add(acompanhamento.name)
+                            if(isActive)
+                                total.value += acompanhamento.precoPorUnidade
+                            else
+                                total.value -= acompanhamento.precoPorUnidade
+                            print.log("total",total.value)
+                        }, isActive = esteItemJaEstaMarcado(acompanhamento.name))
                     }
                 }
+                ButtonAddItemWithPrice(total = total.value)
             }
         }
     }
@@ -147,38 +153,4 @@ private fun Top(md: Modifier, navController: NavHostController, salgadoSelected:
     }
 }
 
-@Composable
-fun BackIcon(md: Modifier, navController: NavHostController){
-    Box(
-        md
-            .fillMaxWidth()
-            .background(color = PinkSalgadoSelected)
-            .padding(start = 15.dp)
-    ) {
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-            contentDescription = null,
-            tint = MainYellow,
-            modifier = md.clickable { navController.popBackStack() })
-    }
-}
 
-@Composable
-fun MonteSeuPedido(md: Modifier) {
-    Box(
-        md
-            .background(Color(0xffF1F1F1))
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 10.dp)
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            SimpleText("Monte seu pedido:", fontWeight = "bold", fontSize = 15)
-            SimpleText(
-                "Escolha de 1 até 5 opções",
-                fontSize = 15,
-                color = Color((0xff555353))
-            )
-        }
-    }
-
-}
