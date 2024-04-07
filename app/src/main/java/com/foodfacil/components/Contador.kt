@@ -1,6 +1,7 @@
 package com.foodfacil.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -22,11 +23,15 @@ import compose.icons.fontawesomeicons.solid.Minus
 import compose.icons.fontawesomeicons.solid.Plus
 
 @Composable
-fun Contador(modifier: Modifier = Modifier,
-             iconColor: Color = Color.Red,
-             iconSize:Int = 40,
-             value: Int = 0,
-             backgroundColor: Color = Color.Green
+fun Contador(
+    modifier: Modifier = Modifier,
+    iconColor: Color = Color.Red,
+    iconSize: Int = 40,
+    value: Int = 0,
+    backgroundColor: Color = Color.Green,
+    increment: (salgadoId: String) -> Unit = { s: String -> },
+    decrement: (salgadoId: String) -> Unit = { s: String -> },
+    salgadoId: String,
 ) {
     Box(
         modifier = modifier.background(backgroundColor, RoundedCornerShape(10.dp))
@@ -41,14 +46,14 @@ fun Contador(modifier: Modifier = Modifier,
                 imageVector = FontAwesomeIcons.Solid.Minus,
                 contentDescription = null,
                 tint = iconColor,
-                modifier = modifier.size(iconSize.dp)
+                modifier = modifier.size(iconSize.dp).clickable(onClick = { decrement(salgadoId) })
             )
             SimpleText(value.toString(), fontWeight = "400", fontSize = 17)
             Icon(
                 imageVector = FontAwesomeIcons.Solid.Plus,
                 contentDescription = null,
                 tint = iconColor,
-                modifier = modifier.size(iconSize.dp)
+                modifier = modifier.size(iconSize.dp).clickable(onClick = { increment(salgadoId) })
             )
         }
     }

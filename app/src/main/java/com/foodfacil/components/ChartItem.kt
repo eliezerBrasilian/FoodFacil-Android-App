@@ -15,10 +15,15 @@ import androidx.compose.ui.unit.sp
 import com.foodfacil.R
 import com.foodfacil.dataClass.Salgado
 import com.foodfacil.ui.theme.MainYellow
+import com.foodfacil.viewModel.ChartViewModel
 import com.simpletext.SimpleText
 
 @Composable
- fun ChartItem(salgado: Salgado, modifier: Modifier = Modifier) {
+ fun ChartItem(
+    salgado: Salgado, modifier: Modifier = Modifier,
+    increment: (salgadoId: String) -> Unit = { s: String -> },
+    decrement: (salgadoId: String) -> Unit = { s: String -> }
+) {
     Row(
         modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -39,17 +44,25 @@ import com.simpletext.SimpleText
                 maxLength = 11
             )
             Text(
-                text = "R$ " + salgado.priceInOffer.toString(),
+                text = "R$ " +  salgado.newPriceAux,
                 color = Color.Black,
                 fontWeight = FontWeight.Medium,
                 fontSize = 17.sp
             )
         }
-        Right(salgado)
+        Right(salgado, increment, decrement)
     }
 }
 
 @Composable
-fun Right(salgado: Salgado) {
-    Contador(iconColor = MainYellow, backgroundColor = Color(0xffF6F6F6), iconSize = 20, value = salgado.amount)
+fun Right(
+    salgado: Salgado,
+    increment: (salgadoId: String) -> Unit = { s: String -> },
+    decrement: (salgadoId: String) -> Unit = { s: String -> }) {
+    Contador(
+        iconColor = MainYellow,
+        backgroundColor = Color(0xffF6F6F6), iconSize = 20,
+        value = salgado.amount,
+        salgadoId = salgado.id,
+        increment = increment, decrement = decrement)
 }

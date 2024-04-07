@@ -3,7 +3,9 @@ package com.foodfacil.dataClass
 data class Salgado(val id:String, val title:String,
                    val description:String,
                    val price:Float, val image: Int,
-                   val inOffer:Boolean = false, val priceInOffer:Float = price,
+                   val inOffer:Boolean = false,
+                   val priceInOffer:Float = price,
+                   var newPriceAux:Float = price,
                    val isSalgadoNoCopo:Boolean = false,
                    var amount:Int = 0,
                    val acompanhamentos:List<Acompanhamento> = emptyList(),
@@ -13,7 +15,7 @@ data class Salgado(val id:String, val title:String,
             id == other.id && title == other.title && description == other.description &&
                     price == other.price && image == other.image && inOffer == other.inOffer &&
                     priceInOffer == other.priceInOffer && isSalgadoNoCopo == other.isSalgadoNoCopo &&
-                    acompanhamentos == other.acompanhamentos
+                    acompanhamentos == other.acompanhamentos && newPriceAux == other.newPriceAux
         } else {
             false
         }

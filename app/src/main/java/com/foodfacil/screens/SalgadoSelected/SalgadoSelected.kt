@@ -95,7 +95,7 @@ fun SalgadoSelected(
         existe
     }
 
-    val addSalgadoIntoChart = {
+    val addSalgadoIntoChart:()->Unit = {
         val acompanhamentosSelecionados = checkboxesStates.toList()
         print.log("acompanhamentos",acompanhamentosSelecionados)
 
@@ -109,6 +109,7 @@ fun SalgadoSelected(
 
         print.log("salgadoSelected",salgadoSelected.value)
         chartViewModel.addSalgadoToChart(salgadoSelected.value)
+        navController.popBackStack()
     }
 
 

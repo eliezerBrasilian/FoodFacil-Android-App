@@ -10,6 +10,84 @@ class ChartViewModel : ViewModel(){
     private val _chartList = MutableLiveData<List<Salgado>>(emptyList())
     val chartList:LiveData<List<Salgado>> = _chartList
     val print = Print("CHARTVIEWMODEL")
+
+    fun increment(salgadoId: String){
+        val salgadoFounded = _chartList.value?.find { salgado -> salgadoId == salgado.id }
+        print.log("---encontrado",salgadoFounded)
+
+        val atualChartList = (_chartList.value?: emptyList()).toMutableList()
+        val index = atualChartList.indexOf(salgadoFounded)
+
+        val atualAmount = atualChartList[index].amount
+        var atualPrice: Float;
+
+        atualPrice = if(salgadoFounded?.inOffer == true){
+            atualChartList[index].priceInOffer
+        }else{
+            atualChartList[index].newPriceAux
+        }
+
+        val newAmount = atualAmount + 1
+        val newPrice = atualPrice * newAmount
+
+        val atualSalgadoAlterado =  atualChartList[index].copy(
+            amount =  newAmount,
+            newPriceAux = newPrice
+            )
+
+         atualChartList[index] = atualSalgadoAlterado
+        _chartList.value = atualChartList //lista atual + o salgado
+
+        print.log("salgado alterado",atualChartList[index])
+    }
+
+    fun decrement(salgadoId: String){
+        val salgadoFounded = _chartList.value?.find { salgado -> salgadoId == salgado.id }
+        print.log("---encontrado",salgadoFounded)
+
+        val atualChartList = (_chartList.value?: emptyList()).toMutableList()
+        val index = atualChartList.indexOf(salgadoFounded)
+
+        val atualAmount = atualChartList[index].amount
+        var atualPrice: Float;
+
+        atualPrice = if(salgadoFounded?.inOffer == true){
+            atualChartList[index].priceInOffer
+        }else{
+            atualChartList[index].newPriceAux
+        }
+        var newAmount = 1
+        var newPrice = atualPrice
+
+        if(atualAmount > 1){
+             newAmount = atualAmount - 1
+             newPrice = atualPrice * newAmount
+        }
+
+        val atualSalgadoAlterado =  atualChartList[index].copy(
+            amount =  newAmount,
+            newPriceAux = newPrice
+        )
+
+        atualChartList[index] = atualSalgadoAlterado
+        _chartList.value = atualChartList //lista atual + o salgado
+
+        print.log("salgado alterado",atualChartList[index])
+    }
+
+    fun findPrice(salgadoId:String): Float {
+        print.log("id recebido",salgadoId)
+        //encontrar o salgado
+        val salgadoFounded = _chartList.value?.find { salgado -> salgadoId == salgado.id }
+        print.log("---encontrado",salgadoFounded)
+
+        val atualCharList = (_chartList.value?: emptyList()).toMutableList()
+        val index = atualCharList.indexOf(salgadoFounded)
+        print.log("index: ", index)
+
+        return atualCharList[index].newPriceAux
+    }
+
     fun addSalgadoToChart(salgado: Salgado?){
         if(salgado == null){
             print.log("não pode adicionar nulo")
@@ -47,6 +125,14 @@ class ChartViewModel : ViewModel(){
         var total = 0
         _chartList.value?.forEach { salgado ->
             total += salgado.amount
+        }
+
+        return total;
+    }
+    fun getTotalPrice():Float{
+         var total = 0F
+        _chartList.value?.forEach { salgado ->
+            total += salgado.priceInOffer
         }
 
         return total;

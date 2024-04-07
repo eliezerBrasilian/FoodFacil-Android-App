@@ -1,8 +1,6 @@
 package com.foodfacil.screens.Chart
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,13 +23,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -46,11 +41,13 @@ import com.foodfacil.components.Centralize
 import com.foodfacil.dataClass.Salgado
 import com.foodfacil.components.ChartItem
 import com.foodfacil.components.Circle
-import com.foodfacil.ui.theme.MainRed
+import com.foodfacil.components.Rectangle
+import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainYellow
 import com.foodfacil.ui.theme.PinkSalgadoSelected
 
 data class Adicional(val id:String,val imagem:Int, val titulo:String,val descricao:String)
+
 @Composable
 fun ChartScreen(
     navController: NavHostController,
@@ -60,7 +57,14 @@ fun ChartScreen(
     chartViewModel: ChartViewModel
 ) {
 
+    val tag = "CHART"
+    val print = Print(tag)
+
     val cvm by chartViewModel.chartList.observeAsState()
+    print.log("cvm",cvm)
+
+
+    val totalPrice = chartViewModel.getTotalPrice()
 
     val adicionais = listOf(
         Adicional("1", R.drawable.refrigerente,"Cola-cola","1 litro"),
@@ -68,10 +72,12 @@ fun ChartScreen(
         Adicional("3", R.drawable.refrigerente,"Guaraná Antártica","1 litro")
     )
 
-    LaunchedEffect(true) {
-        //busca salgados
-        val list = chartViewModel.chartList.value
-
+    val incrementOnClick:(salgadoId:String)->Unit = {salgadoId->
+        print.log("cvm",cvm)
+        chartViewModel.increment(salgadoId)
+    }
+    val decrementOnClick:(salgadoId:String)->Unit = {salgadoId->
+        chartViewModel.decrement(salgadoId)
     }
 
     val md = Modifier
@@ -93,7 +99,7 @@ fun ChartScreen(
                 if (cvm.isNullOrEmpty()) {
                     SimpleText("Seu carrinho está vazio")
                 } else {
-                    Top(navController = navController, cvm)
+                    Top(navController = navController, cvm, incrementOnClick, decrementOnClick )
                     Line()
                     MainContent(adicionais)
                 }
@@ -103,7 +109,11 @@ fun ChartScreen(
 }
 
 @Composable
-private fun Top(navController: NavHostController, cvm: List<Salgado>?) {
+private fun Top(
+    navController: NavHostController, cvm: List<Salgado>?,
+    incrementOnClick: (salgadoId: String) -> Unit = { s: String -> },
+    decrementOnClick: (salgadoId: String) -> Unit = { s: String -> }
+) {
     Column(
         modifier = Modifier.padding(horizontal = 15.dp)
     ) {
@@ -116,7 +126,8 @@ private fun Top(navController: NavHostController, cvm: List<Salgado>?) {
                     .height(270.dp),
             ) {
                 items(cvm) { salgado ->
-                    ChartItem(salgado)
+                    ChartItem(salgado,
+                        increment = incrementOnClick, decrement = decrementOnClick)
                 }
             }
 
@@ -171,15 +182,52 @@ fun ItemAdicional(adicional: Adicional) {
     }
 }
 
+/*
 @Composable
-fun Rectangle(imagem: Int) {
-    val md = Modifier
-    Box(modifier = md
-        .padding(15.dp)
-        .width(90.dp)
-        .background(Color.White, RoundedCornerShape(12.dp))
-        .border(width = 1.dp, color = MainRed, RoundedCornerShape(12.dp)),
-        contentAlignment = Alignment.Center){
-        Image(painter = painterResource(id = imagem), contentDescription = null, md.size(50.dp))
+fun ChartScreen(chartViewModel: ChartViewModel){
+    val cvm by chartViewModel.chartList.observeAsState()
+
+    val incrementOnClick:(salgadoId:String)->Unit = {salgadoId->
+        print.log("cvm",cvm)
+        chartViewModel.increment(salgadoId)
+    }
+
+    if (!cvm.isNullOrEmpty()) {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(270.dp),
+        ) {
+            items(cvm) { salgado ->
+                ChartItem(
+                    salgado,
+                    increment = incrementOnClick
+                )
+            }
+        }
     }
 }
+
+@Composable
+fun ChartItem(
+    salgado: Salgado, modifier: Modifier = Modifier,
+    increment: (salgadoId: String) -> Unit = { s: String -> },
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+        Text(
+            text = "R$ " +  salgado.newPriceAux,
+            color = Color.Black,
+            fontWeight = FontWeight.Medium,
+            fontSize = 17.sp
+        )
+    }
+
+    Icon(
+        imageVector = FontAwesomeIcons.Solid.Plus,
+        contentDescription = null,
+        tint = Color.Black,
+        modifier = modifier.size(50.dp).clickable(onClick = { increment(salgado.id) })
+    )
+}
+ */
