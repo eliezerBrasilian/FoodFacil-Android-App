@@ -1,14 +1,20 @@
 package com.foodfacil.screens.Chart
 
+import android.view.animation.OvershootInterpolator
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -22,10 +28,17 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,6 +56,7 @@ import com.foodfacil.components.ChartItem
 import com.foodfacil.components.Circle
 import com.foodfacil.components.Rectangle
 import com.foodfacil.services.Print
+import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.ui.theme.MainYellow
 import com.foodfacil.ui.theme.PinkSalgadoSelected
 
@@ -62,7 +76,6 @@ fun ChartScreen(
 
     val cvm by chartViewModel.chartList.observeAsState()
     print.log("cvm",cvm)
-
 
     val totalPrice = chartViewModel.getTotalPrice()
 
@@ -89,13 +102,12 @@ fun ChartScreen(
                 navController = navController,
                 title = "Carrinho de compras"
             )
-        }) { pv ->
+        }, bottomBar = { RowVerCarrinho(totalPrice = totalPrice)}) { pv ->
         Surface(md.padding(pv), color = Color.White) {
             Column(
                 modifier = md
                     .padding(pv)
             ) {
-
                 if (cvm.isNullOrEmpty()) {
                     SimpleText("Seu carrinho está vazio")
                 } else {
@@ -115,7 +127,7 @@ private fun Top(
     decrementOnClick: (salgadoId: String) -> Unit = { s: String -> }
 ) {
     Column(
-        modifier = Modifier.padding(horizontal = 15.dp)
+        modifier = Modifier.padding(horizontal = 15.dp).heightIn(max = 250.dp)
     ) {
         //lazycolumn
         if (!cvm.isNullOrEmpty()) {
@@ -123,18 +135,12 @@ private fun Top(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(270.dp),
             ) {
                 items(cvm) { salgado ->
                     ChartItem(salgado,
                         increment = incrementOnClick, decrement = decrementOnClick)
                 }
             }
-
-            /*Spacer(modifier = Modifier.height(60.dp))
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                SimpleText("Adicionar mais itens", color = MainRed, fontWeight = "400")
-            }*/
             Spacer(modifier = Modifier.height(20.dp))
         }
     }
@@ -142,8 +148,7 @@ private fun Top(
 
 @Composable
 private fun MainContent(adicionais: List<Adicional>) {
-    Column {
-
+    Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(1f)) {
         Spacer(modifier = Modifier.height(30.dp))
         SimpleText("Compre também", fontWeight = "bold", fontSize = 18, marginLeft = 20)
 
@@ -156,6 +161,33 @@ private fun MainContent(adicionais: List<Adicional>) {
     }
 }
 
+@Composable
+fun RowVerCarrinho(totalPrice: Float, onClick: () -> Unit = {}) {
+    val md = Modifier
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = md
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 10.dp)
+    ) {
+        Column {
+            SimpleText("Total sem a entrega", fontSize = 15, color = Color.DarkGray)
+            SimpleText("R$ $totalPrice", fontSize = 16)
+        }
+        Button(
+            onClick = onClick,
+            modifier = md.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                MainRed
+            ),
+            contentPadding = PaddingValues(vertical = 10.dp),
+            shape = RoundedCornerShape(11.dp)
+        ) {
+            SimpleText("Finalizar Pedido", fontWeight = "bold", color = Color.White)
+        }
+    }
+}
 @Composable
 fun ItemAdicional(adicional: Adicional) {
     val md = Modifier
@@ -181,53 +213,3 @@ fun ItemAdicional(adicional: Adicional) {
         }
     }
 }
-
-/*
-@Composable
-fun ChartScreen(chartViewModel: ChartViewModel){
-    val cvm by chartViewModel.chartList.observeAsState()
-
-    val incrementOnClick:(salgadoId:String)->Unit = {salgadoId->
-        print.log("cvm",cvm)
-        chartViewModel.increment(salgadoId)
-    }
-
-    if (!cvm.isNullOrEmpty()) {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(270.dp),
-        ) {
-            items(cvm) { salgado ->
-                ChartItem(
-                    salgado,
-                    increment = incrementOnClick
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ChartItem(
-    salgado: Salgado, modifier: Modifier = Modifier,
-    increment: (salgadoId: String) -> Unit = { s: String -> },
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-        Text(
-            text = "R$ " +  salgado.newPriceAux,
-            color = Color.Black,
-            fontWeight = FontWeight.Medium,
-            fontSize = 17.sp
-        )
-    }
-
-    Icon(
-        imageVector = FontAwesomeIcons.Solid.Plus,
-        contentDescription = null,
-        tint = Color.Black,
-        modifier = modifier.size(50.dp).clickable(onClick = { increment(salgado.id) })
-    )
-}
- */

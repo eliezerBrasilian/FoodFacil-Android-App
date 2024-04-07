@@ -80,7 +80,6 @@ class ChartViewModel : ViewModel(){
 
             print.log("salgado alterado",atualChartList[index])
         }
-
     }
 
     fun findPrice(salgadoId:String): Float {
@@ -140,7 +139,7 @@ class ChartViewModel : ViewModel(){
     fun getTotalPrice():Float{
          var total = 0F
         _chartList.value?.forEach { salgado ->
-            total += salgado.priceInOffer
+            total += salgado.newPriceAux
         }
 
         return total;

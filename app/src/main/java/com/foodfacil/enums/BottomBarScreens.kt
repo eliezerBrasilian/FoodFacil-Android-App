@@ -21,8 +21,8 @@ sealed class BottomBarScreen(
     )
 
     data object Combos : BottomBarScreen(
-        route = "COMBOS",
-        title = "Combos",
+        route = "CARDAPIO",
+        title = "Cardapio",
         icon = Icons.Default.CheckCircle
     )
 
