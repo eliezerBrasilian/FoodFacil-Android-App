@@ -56,23 +56,31 @@ class ChartViewModel : ViewModel(){
         }else{
             atualChartList[index].newPriceAux
         }
-        var newAmount = 1
-        var newPrice = atualPrice
+        //logica
+        val newAmount = atualAmount - 1
+        val newPrice = atualPrice * newAmount
 
-        if(atualAmount > 1){
-             newAmount = atualAmount - 1
-             newPrice = atualPrice * newAmount
+        print.log("atual amount", newAmount)
+        if(newAmount == 0){
+            //remove
+            print.log("vazio")
+            atualChartList.removeAt(index)
+            _chartList.value = atualChartList
+
+           /* val contem = _chartList.value.contains(salgadoFounded)*/
+        }else{
+            //só atualiza
+            val atualSalgadoAlterado =  atualChartList[index].copy(
+                amount =  newAmount,
+                newPriceAux = newPrice
+            )
+
+            atualChartList[index] = atualSalgadoAlterado
+            _chartList.value = atualChartList //lista atual + o salgado
+
+            print.log("salgado alterado",atualChartList[index])
         }
 
-        val atualSalgadoAlterado =  atualChartList[index].copy(
-            amount =  newAmount,
-            newPriceAux = newPrice
-        )
-
-        atualChartList[index] = atualSalgadoAlterado
-        _chartList.value = atualChartList //lista atual + o salgado
-
-        print.log("salgado alterado",atualChartList[index])
     }
 
     fun findPrice(salgadoId:String): Float {

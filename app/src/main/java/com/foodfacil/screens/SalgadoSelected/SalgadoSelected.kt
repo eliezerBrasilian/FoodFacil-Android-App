@@ -85,7 +85,7 @@ fun SalgadoSelected(
         acompanhamentosReceived.clear()
         acompanhamentosReceived.addAll(acompanhamentosList)
         checkboxesStates.add("Salgados Sortidos")
-        total.value += 1f
+
     }
 
     val esteItemJaEstaMarcado: (acompanhamento:String)->Boolean = {acompanhamento->
@@ -133,14 +133,15 @@ fun SalgadoSelected(
                     items(acompanhamentosReceived){ acompanhamento->
                         ItemWithCheckBox(text = acompanhamento.name, onClick = {isActive->
                             print.log("clicked",isActive)
+                            print.log("acompanhamento",isActive)
 
                             if(isActive) {
-                                total.value += acompanhamento.precoPorUnidade
+                               // total.value += acompanhamento.precoPorUnidade
                                 checkboxesStates.add(acompanhamento.name)
                             }
                             else {
                                 //desmarcou
-                                total.value -= acompanhamento.precoPorUnidade
+                              //  total.value -= acompanhamento.precoPorUnidade
                                 checkboxesStates.remove(acompanhamento.name)
 
                             }

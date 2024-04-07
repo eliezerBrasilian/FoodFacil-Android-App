@@ -73,7 +73,6 @@ fun Home(
     val totalPrice = chartViewModel.getTotalPrice()
 
 
-
     NavigationBarColor(color = MainYellow)
 
     /*    LaunchedEffect(key1 = true, block = {
@@ -158,7 +157,7 @@ fun RowVerCarrinho(totalPrice: Float, amount: Int, onClick: () -> Unit = {}) {
 
     val md = Modifier
 
-    if (totalPrice == 0f)
+    if (amount == 0)
         Box(
             md
                 .height(0.dp)
