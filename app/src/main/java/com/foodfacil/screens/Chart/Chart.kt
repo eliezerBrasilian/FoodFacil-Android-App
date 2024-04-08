@@ -60,7 +60,7 @@ import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.ui.theme.MainYellow
 import com.foodfacil.ui.theme.PinkSalgadoSelected
 
-data class Adicional(val id:String,val imagem:Int, val titulo:String,val descricao:String)
+data class Adicional(val id: String, val imagem: Int, val titulo: String, val descricao: String)
 
 @Composable
 fun ChartScreen(
@@ -75,21 +75,21 @@ fun ChartScreen(
     val print = Print(tag)
 
     val cvm by chartViewModel.chartList.observeAsState()
-    print.log("cvm",cvm)
+    print.log("cvm", cvm)
 
     val totalPrice = chartViewModel.getTotalPrice()
 
     val adicionais = listOf(
-        Adicional("1", R.drawable.refrigerente,"Cola-cola","1 litro"),
-        Adicional("2", R.drawable.refrigerente,"Fanta uva","2,5 litros"),
-        Adicional("3", R.drawable.refrigerente,"Guaraná Antártica","1 litro")
+        Adicional("1", R.drawable.refrigerente, "Cola-cola", "1 litro"),
+        Adicional("2", R.drawable.refrigerente, "Fanta uva", "2,5 litros"),
+        Adicional("3", R.drawable.refrigerente, "Guaraná Antártica", "1 litro")
     )
 
-    val incrementOnClick:(salgadoId:String)->Unit = {salgadoId->
-        print.log("cvm",cvm)
+    val incrementOnClick: (salgadoId: String) -> Unit = { salgadoId ->
+        print.log("cvm", cvm)
         chartViewModel.increment(salgadoId)
     }
-    val decrementOnClick:(salgadoId:String)->Unit = {salgadoId->
+    val decrementOnClick: (salgadoId: String) -> Unit = { salgadoId ->
         chartViewModel.decrement(salgadoId)
     }
 
@@ -102,7 +102,7 @@ fun ChartScreen(
                 navController = navController,
                 title = "Carrinho de compras"
             )
-        }, bottomBar = { RowVerCarrinho(totalPrice = totalPrice)}) { pv ->
+        }, bottomBar = { RowVerCarrinho(totalPrice = totalPrice) }) { pv ->
         Surface(md.padding(pv), color = Color.White) {
             Column(
                 modifier = md
@@ -111,7 +111,7 @@ fun ChartScreen(
                 if (cvm.isNullOrEmpty()) {
                     SimpleText("Seu carrinho está vazio")
                 } else {
-                    Top(navController = navController, cvm, incrementOnClick, decrementOnClick )
+                    Top(navController = navController, cvm, incrementOnClick, decrementOnClick)
                     Line()
                     MainContent(adicionais)
                 }
@@ -127,7 +127,9 @@ private fun Top(
     decrementOnClick: (salgadoId: String) -> Unit = { s: String -> }
 ) {
     Column(
-        modifier = Modifier.padding(horizontal = 15.dp).heightIn(max = 250.dp)
+        modifier = Modifier
+            .padding(horizontal = 15.dp)
+            .heightIn(max = 250.dp)
     ) {
         //lazycolumn
         if (!cvm.isNullOrEmpty()) {
@@ -137,8 +139,10 @@ private fun Top(
                     .fillMaxWidth()
             ) {
                 items(cvm) { salgado ->
-                    ChartItem(salgado,
-                        increment = incrementOnClick, decrement = decrementOnClick)
+                    ChartItem(
+                        salgado,
+                        increment = incrementOnClick, decrement = decrementOnClick
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -148,13 +152,15 @@ private fun Top(
 
 @Composable
 private fun MainContent(adicionais: List<Adicional>) {
-    Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(1f)) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight(1f)) {
         Spacer(modifier = Modifier.height(30.dp))
         SimpleText("Compre também", fontWeight = "bold", fontSize = 18, marginLeft = 20)
 
         Spacer(modifier = Modifier.height(20.dp))
         LazyRow {
-            items(adicionais){adicional->
+            items(adicionais) { adicional ->
                 ItemAdicional(adicional)
             }
         }
@@ -164,49 +170,60 @@ private fun MainContent(adicionais: List<Adicional>) {
 @Composable
 fun RowVerCarrinho(totalPrice: Float, onClick: () -> Unit = {}) {
     val md = Modifier
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = md
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 10.dp)
-    ) {
-        Column {
-            SimpleText("Total sem a entrega", fontSize = 15, color = Color.DarkGray)
-            SimpleText("R$ $totalPrice", fontSize = 16)
-        }
-        Button(
-            onClick = onClick,
-            modifier = md.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                MainRed
-            ),
-            contentPadding = PaddingValues(vertical = 10.dp),
-            shape = RoundedCornerShape(11.dp)
+
+    if (totalPrice == 0f)
+        Box(
+            md
+                .height(0.dp)
+                .fillMaxWidth()
+        ) {}
+    else
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = md
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 10.dp)
         ) {
-            SimpleText("Finalizar Pedido", fontWeight = "bold", color = Color.White)
+            Column {
+                SimpleText("Total sem a entrega", fontSize = 15, color = Color.DarkGray)
+                SimpleText("R$ $totalPrice", fontSize = 16)
+            }
+            Button(
+                onClick = onClick,
+                modifier = md.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    MainRed
+                ),
+                contentPadding = PaddingValues(vertical = 10.dp),
+                shape = RoundedCornerShape(11.dp)
+            ) {
+                SimpleText("Finalizar Pedido", fontWeight = "bold", color = Color.White)
+            }
         }
-    }
 }
+
 @Composable
 fun ItemAdicional(adicional: Adicional) {
     val md = Modifier
-    Box(modifier = md
-        .padding(15.dp)
-        .width(150.dp)
-        .height(230.dp)
-        .background(PinkSalgadoSelected, RoundedCornerShape(12.dp))){
+    Box(
+        modifier = md
+            .padding(15.dp)
+            .width(150.dp)
+            .height(230.dp)
+            .background(PinkSalgadoSelected, RoundedCornerShape(12.dp))
+    ) {
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Centralize {
                 Rectangle(adicional.imagem)
             }
 
             Column(md.padding(start = 20.dp)) {
-                Text(text = adicional.titulo, color = Color.Black, fontSize = 17.sp , maxLines = 1)
+                Text(text = adicional.titulo, color = Color.Black, fontSize = 17.sp, maxLines = 1)
                 SimpleText(adicional.descricao)
             }
             Centralize {
-                Circle(md, MainYellow,70.dp, hasElevation = true) {
+                Circle(md, MainYellow, 70.dp, hasElevation = true) {
                     Icon(imageVector = Icons.Filled.Add, contentDescription = null, md.size(60.dp))
                 }
             }

@@ -1,6 +1,7 @@
 package com.foodfacil.screens.Home
 
 import NavigationBarColor
+import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Build
 import android.view.animation.OvershootInterpolator
@@ -44,6 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.foodfacil.components.FirebaseMessagingNotificationPermissionDialog
 import com.foodfacil.components.HomeHeader
 import com.foodfacil.components.SalgadoItem
 import com.foodfacil.ui.theme.MainRed
@@ -53,8 +55,14 @@ import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.viewModel.UserViewModel
 import com.gamestate.enums.NavigationScreens
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.firebase.Firebase
+import com.google.firebase.messaging.messaging
 import com.simpletext.SimpleText
 
+@OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("InlinedApi")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -71,6 +79,25 @@ fun Home(
     val cvm by chartViewModel.chartList.observeAsState(emptyList())
     val totalSalgadosNoCarrinho = chartViewModel.getTotalSalgados()
     val totalPrice = chartViewModel.getTotalPrice()
+
+    val showNotificationDialog = remember { mutableStateOf(false) }
+
+    // Android 13 Api 33 - runtime notification permission has been added
+    val notificationPermissionState = rememberPermissionState(
+        permission = Manifest.permission.POST_NOTIFICATIONS
+    )
+    if (showNotificationDialog.value) FirebaseMessagingNotificationPermissionDialog(
+        showNotificationDialog = showNotificationDialog,
+        notificationPermissionState = notificationPermissionState
+    )
+
+    LaunchedEffect(key1=Unit){
+        if (notificationPermissionState.status.isGranted ||
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+        ) {
+            Firebase.messaging.subscribeToTopic("Tutorial")
+        } else showNotificationDialog.value = true
+    }
 
 
     NavigationBarColor(color = MainYellow)

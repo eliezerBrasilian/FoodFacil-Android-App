@@ -29,6 +29,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -52,6 +53,12 @@ android {
 }
 
 dependencies {
+    //in app message (opcional)
+    implementation("com.google.firebase:firebase-inappmessaging-display")
+
+    // messaging
+    implementation("com.google.firebase:firebase-messaging-ktx:23.4.1")
+
     //circle image
     implementation("com.github.azmiradi:CircleImageCompose:0.1.0")
 

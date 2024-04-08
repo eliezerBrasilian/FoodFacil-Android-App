@@ -1,3 +1,5 @@
+package com.foodfacil.services
+
 import android.content.Context
 import androidx.core.content.ContextCompat.getString
 import com.google.android.gms.auth.api.signin.GoogleSignIn

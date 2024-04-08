@@ -4,8 +4,8 @@ import android.util.Log
 
 class Print(val TAG: String) {
     fun log(title:Any?, message: Any? = null){
-        if(title == null){
-            Log.e(TAG, message.toString())
+        if(message == null){
+            Log.e(TAG, title.toString())
         }else{
             Log.e(TAG,"$title : $message")
         }
