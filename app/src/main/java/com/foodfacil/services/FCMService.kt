@@ -20,7 +20,7 @@ class FCMService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         val print = Print("FCMSERVUCE")
-        print.log(message)
+        print.log(message.data)
         super.onMessageReceived(message)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
