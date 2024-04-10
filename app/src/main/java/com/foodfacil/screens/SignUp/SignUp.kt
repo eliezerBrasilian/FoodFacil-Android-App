@@ -2,7 +2,6 @@ package com.gamestate.screens.SignUp
 
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -19,7 +18,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -37,7 +35,6 @@ import com.gamestate.components.InputText
 import com.gamestate.components.Logo
 import com.gamestate.components.PasswordInput
 import com.gamestate.enums.KeyboardTypes
-import com.gamestate.enums.NavigationScreens
 import com.foodfacil.viewModel.AuthViewModel
 import com.simpletext.SimpleText
 import kotlinx.coroutines.launch

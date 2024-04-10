@@ -1,6 +1,7 @@
 package com.foodfacil.screens.Chart
 
 import android.view.animation.OvershootInterpolator
+import android.widget.Toast
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -36,14 +37,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCompositionContext
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.foodfacil.R
+import com.foodfacil.api.makePayment
 import com.foodfacil.components.Line
 import com.foodfacil.viewModel.AcompanhamentosViewModel
 import com.foodfacil.viewModel.ChartViewModel
@@ -55,10 +60,13 @@ import com.foodfacil.dataClass.Salgado
 import com.foodfacil.components.ChartItem
 import com.foodfacil.components.Circle
 import com.foodfacil.components.Rectangle
+import com.foodfacil.dataClass.PaymentData
+import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.ui.theme.MainYellow
 import com.foodfacil.ui.theme.PinkSalgadoSelected
+import kotlinx.coroutines.launch
 
 data class Adicional(val id: String, val imagem: Int, val titulo: String, val descricao: String)
 
@@ -70,6 +78,21 @@ fun ChartScreen(
     paddingValues: PaddingValues,
     chartViewModel: ChartViewModel
 ) {
+
+    val coroutine = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    val clickedOnFinalizarPedido:()->Unit = {
+        navController.navigate(NavigationScreens.FINALIZAR_PEDIDO)
+       /* val data = PaymentData("abc123","eliezerBrasilian","12345678911")
+        coroutine.launch {
+            val response = makePayment(data)
+
+            if(response == "Pagamento aprovado"){
+                Toast.makeText(context,"Seu pagamento foi aprovado",Toast.LENGTH_SHORT).show()
+            }
+        }*/
+    }
 
     val tag = "CHART"
     val print = Print(tag)
@@ -102,7 +125,9 @@ fun ChartScreen(
                 navController = navController,
                 title = "Carrinho de compras"
             )
-        }, bottomBar = { RowVerCarrinho(totalPrice = totalPrice) }) { pv ->
+        }, bottomBar = { RowVerCarrinho(totalPrice = totalPrice, onClick = clickedOnFinalizarPedido) })
+
+    { pv ->
         Surface(md.padding(pv), color = Color.White) {
             Column(
                 modifier = md

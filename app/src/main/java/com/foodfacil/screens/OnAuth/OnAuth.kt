@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -31,12 +29,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.carrousel.Carrousel
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.foodfacil.R
 import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.ui.theme.MainYellow
 import com.foodfacil.ui.theme.YellowText
-import com.gamestate.enums.NavigationScreens
+import com.foodfacil.enums.NavigationScreens
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.simpletext.SimpleText
 

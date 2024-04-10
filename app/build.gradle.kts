@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("com.google.gms.google-services")
-
+    kotlin("plugin.serialization") version "1.9.10"
 }
 
 android {
@@ -53,6 +53,15 @@ android {
 }
 
 dependencies {
+    //ktor
+    val ktorVersion = "2.3.2"
+    implementation("io.ktor:ktor-client-android:$ktorVersion")
+    implementation("io.ktor:ktor-client-logging:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("org.slf4j:slf4j-android:1.7.36")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
     //in app message (opcional)
     implementation("com.google.firebase:firebase-inappmessaging-display")
 

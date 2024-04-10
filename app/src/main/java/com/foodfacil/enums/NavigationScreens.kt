@@ -1,4 +1,4 @@
-package com.gamestate.enums
+package com.foodfacil.enums
 
  class NavigationScreens{
     companion object{
@@ -12,6 +12,7 @@ package com.gamestate.enums
         val ON_AUTH_LOGIN = "OnAuthLogin"
         val ON_AUTH_SIGN_UP = "OnAuthSignUp"
         val CHART = "Chart"
+        val FINALIZAR_PEDIDO = "FinalizarPedido"
     }
 
       enum class Screens {

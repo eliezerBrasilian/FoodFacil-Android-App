@@ -2,7 +2,6 @@ package com.foodfacil.screens.Login
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +34,7 @@ import com.gamestate.components.InputText
 import com.gamestate.components.Logo
 import com.gamestate.components.PasswordInput
 import com.gamestate.enums.KeyboardTypes
-import com.gamestate.enums.NavigationScreens
+import com.foodfacil.enums.NavigationScreens
 import com.simpletext.SimpleText
 import kotlinx.coroutines.launch
 

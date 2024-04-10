@@ -8,14 +8,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.foodfacil.enums.AuthScreen
 import com.foodfacil.enums.Graph
 import com.foodfacil.screens.Login.Login
 import com.foodfacil.screens.OnAuth.OnAuth
 import com.foodfacil.screens.Splash.Splash
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.UserViewModel
-import com.gamestate.enums.NavigationScreens
+import com.foodfacil.enums.NavigationScreens
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.authNavGraph(navController: NavHostController, authViewModel: AuthViewModel,

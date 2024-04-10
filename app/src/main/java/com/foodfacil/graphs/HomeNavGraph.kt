@@ -20,6 +20,7 @@ import com.foodfacil.components.SalgadoSelected
 import com.foodfacil.enums.BottomBarScreen
 import com.foodfacil.enums.Graph
 import com.foodfacil.screens.Chart.ChartScreen
+import com.foodfacil.screens.Chart.FinalizarPedido
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.UserViewModel
 import com.foodfacil.screens.Home.Home
@@ -28,7 +29,7 @@ import com.foodfacil.viewModel.AcompanhamentosViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.screens.Profile.Profile
 import com.foodfacil.viewModel.ChartViewModel
-import com.gamestate.enums.NavigationScreens
+import com.foodfacil.enums.NavigationScreens
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -51,7 +52,7 @@ fun HomeNavGraph(
             }
 
             detailsNavGraph(navController = navController, salgadosViewModel, acompanhamentosViewModel,
-                paddingValues,chartViewModel)
+                paddingValues,chartViewModel, userViewModel)
 
             composable(route = NavigationScreens.CHART){
                 ChartScreen(navController,salgadosViewModel, acompanhamentosViewModel,
@@ -74,7 +75,8 @@ fun NavGraphBuilder.detailsNavGraph(
     salgadosViewModel: SalgadosViewModel,
     acompanhamentosViewModel: AcompanhamentosViewModel,
     paddingValues: PaddingValues,
-    chartViewModel: ChartViewModel
+    chartViewModel: ChartViewModel,
+    userViewModel: UserViewModel
 ) {
     navigation(
         route = Graph.DETAILS,
@@ -89,6 +91,10 @@ fun NavGraphBuilder.detailsNavGraph(
 
             SalgadoSelected(navController, id,salgadosViewModel, acompanhamentosViewModel,
                 paddingValues,chartViewModel)
+        }
+
+        composable(route = NavigationScreens.FINALIZAR_PEDIDO) {
+            FinalizarPedido(navController, paddingValues,userViewModel, chartViewModel)
         }
 
         /*composable(route = DetailsScreen.Overview.route) {
