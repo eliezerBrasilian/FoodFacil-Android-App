@@ -45,7 +45,7 @@ fun Profile(
         .padding(paddingValues)
         .fillMaxSize()
         .background(Color.White)) {
-        Top(md = md, userViewModel.user.value.name)
+        Top(md = md, userViewModel.user.value?.name)
         Line()
 
         ProfileMenuItem(md = md, title = "Dados da conta")
@@ -60,7 +60,7 @@ fun Profile(
 }
 
 @Composable
-private fun Top(md: Modifier, user: String){
+private fun Top(md: Modifier, user: String?){
     Box(modifier = md
         .height(180.dp)
         .fillMaxWidth()
@@ -71,7 +71,7 @@ private fun Top(md: Modifier, user: String){
                 painter = painterResource(id = R.drawable.combo_g),
                 contentDescription = null, size = 70.dp
             )
-            SimpleText(user, fontSize = 17)
+            SimpleText(user.toString(), fontSize = 17)
         }
     }
 }

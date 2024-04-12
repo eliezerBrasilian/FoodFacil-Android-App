@@ -20,7 +20,7 @@ import com.foodfacil.components.SalgadoSelected
 import com.foodfacil.enums.BottomBarScreen
 import com.foodfacil.enums.Graph
 import com.foodfacil.screens.Chart.ChartScreen
-import com.foodfacil.screens.Chart.FinalizarPedido
+import com.foodfacil.screens.FinalizarPedido.FinalizarPedido
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.UserViewModel
 import com.foodfacil.screens.Home.Home
@@ -30,6 +30,7 @@ import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.screens.Profile.Profile
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.enums.NavigationScreens
+import com.foodfacil.screens.Pagamento.Pagamento
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -44,11 +45,17 @@ fun HomeNavGraph(
     NavHost(
         navController = navController,
         route = Graph.HOME,
-        startDestination = BottomBarScreen.Home.route,
+        //startDestination = BottomBarScreen.Home.route,
+        startDestination = NavigationScreens.FINALIZAR_PEDIDO,
         modifier = Modifier.padding(0.dp).background(Color.White),
         builder = {
             composable(BottomBarScreen.Home.route) {
                 Home(navController, authViewModel, userViewModel, salgadosViewModel,chartViewModel ,paddingValues)
+            }
+
+            //todo excluir isso depois
+            composable(route = NavigationScreens.FINALIZAR_PEDIDO) {
+                FinalizarPedido(navController, paddingValues,userViewModel, chartViewModel)
             }
 
             detailsNavGraph(navController = navController, salgadosViewModel, acompanhamentosViewModel,
@@ -95,6 +102,10 @@ fun NavGraphBuilder.detailsNavGraph(
 
         composable(route = NavigationScreens.FINALIZAR_PEDIDO) {
             FinalizarPedido(navController, paddingValues,userViewModel, chartViewModel)
+        }
+
+        composable(route = NavigationScreens.PAGAMENTO) {
+            Pagamento(navController, paddingValues,userViewModel, chartViewModel)
         }
 
         /*composable(route = DetailsScreen.Overview.route) {

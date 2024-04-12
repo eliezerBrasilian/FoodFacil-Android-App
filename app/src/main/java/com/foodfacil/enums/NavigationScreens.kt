@@ -13,6 +13,7 @@ package com.foodfacil.enums
         val ON_AUTH_SIGN_UP = "OnAuthSignUp"
         val CHART = "Chart"
         val FINALIZAR_PEDIDO = "FinalizarPedido"
+        val PAGAMENTO = "Pagamento"
     }
 
       enum class Screens {

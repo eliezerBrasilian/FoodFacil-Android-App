@@ -53,6 +53,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.firebase.storage.ktx)
     //ktor
     val ktorVersion = "2.3.2"
     implementation("io.ktor:ktor-client-android:$ktorVersion")
