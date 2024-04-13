@@ -28,6 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.foodfacil.dataClass.Acompanhamento
 import com.foodfacil.dataClass.Salgado
 import com.foodfacil.services.Print
@@ -35,6 +36,8 @@ import com.foodfacil.ui.theme.PinkSalgadoSelected
 import com.foodfacil.viewModel.AcompanhamentosViewModel
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
+import org.jetbrains.annotations.Async
+
 @Composable
 fun SalgadoSelected(
     navController: NavHostController,
@@ -171,15 +174,13 @@ private fun Top(md: Modifier, navController: NavHostController, salgadoSelected:
                 .background(color = PinkSalgadoSelected),
             contentAlignment = Alignment.Center
         ) {
-            salgadoSelected.value?.image?.let { painterResource(id = it) }
-                ?.let {
-                    Image(
-                        painter = it,
+
+            AsyncImage(
+                        model = salgadoSelected.value?.image,
                         contentDescription = null,
                         modifier = md.width(260.dp),
                         contentScale = ContentScale.Crop
                     )
-                }
         }
     }
 }

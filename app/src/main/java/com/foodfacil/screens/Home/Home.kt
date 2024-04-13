@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +45,7 @@ import androidx.navigation.NavHostController
 import com.foodfacil.components.FirebaseMessagingNotificationPermissionDialog
 import com.foodfacil.components.HomeHeader
 import com.foodfacil.components.SalgadoItem
+import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.ui.theme.MainYellow
 import com.foodfacil.viewModel.AuthViewModel
@@ -52,6 +53,7 @@ import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.viewModel.UserViewModel
 import com.foodfacil.enums.NavigationScreens
+import com.foodfacil.services.Print
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -69,8 +71,15 @@ fun Home(
     userViewModel: UserViewModel,
     salgadosViewModel: SalgadosViewModel,
     chartViewModel: ChartViewModel,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    storeUserData: StoreUserData
 ) {
+
+    val TAG = "HOME"
+    val print = Print(TAG);
+
+    val userToken by storeUserData.getToken.collectAsState(initial = "")
+
     val cA = LocalContext.current as ComponentActivity
 
     val cvm by chartViewModel.chartList.observeAsState(emptyList())
@@ -94,19 +103,13 @@ fun Home(
         ) {
             Firebase.messaging.subscribeToTopic("Tutorial")
         } else showNotificationDialog.value = true
-    }
 
+
+        salgadosViewModel.getAllSalgados_(userToken.toString())
+    }
 
     NavigationBarColor(color = MainYellow)
 
-    /*    LaunchedEffect(key1 = true, block = {
-            //status bar
-            cA.enableEdgeToEdge(
-                statusBarStyle = SystemBarStyle.light(Color.White.toArgb(), MainRed.toArgb()),
-                //navigationBarStyle = SystemBarStyle.auto(Color.White.toArgb(), MainRed.toArgb())
-                )
-
-        })*/
 
     val md = Modifier
     Scaffold(
@@ -147,6 +150,7 @@ fun Home(
                     userScrollEnabled = false
                 ) {
                     items(salgadosViewModel.salgadosInOfferList()) {
+                        print.log(it)
                         SalgadoItem(md = md, salgado = it, navController = navController)
                     }
                 }
@@ -154,11 +158,11 @@ fun Home(
                 Spacer(md.height(30.dp))
                 SimpleText("Salgadinhos no Copo", fontSize = 22, fontWeight = "400")
                 Spacer(md.height(20.dp))
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+             /*   LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     items(salgadosViewModel.salgadosNoCopoList()) {
                         SalgadoItem(md = md, salgado = it, navController)
                     }
-                }
+                }*/
             }
         }
     }

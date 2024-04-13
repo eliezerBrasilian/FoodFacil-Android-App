@@ -34,7 +34,7 @@ fun RootNavigationGraph(
             MainAppNavigation(authViewModel = authViewModel, userViewModel = userViewModel,
                 salgadosViewModel = salgadosViewModel,
                 acompanhamentosViewModel = acompanhamentosViewModel,
-                chartViewModel = chartViewModel)
+                chartViewModel = chartViewModel, storeUserData = storeUserData)
         }
     }
 }

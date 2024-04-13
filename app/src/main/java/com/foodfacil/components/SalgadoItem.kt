@@ -7,32 +7,50 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.foodfacil.dataClass.Salgado
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.foodfacil.api.SalgadoResponseDto
 import com.foodfacil.graphs.DetailsScreen
+import com.foodfacil.ui.theme.MainRed
+import com.foodfacil.ui.theme.MainYellow
 import com.simpletext.SimpleText
 
 @Composable
-fun SalgadoItem(md: Modifier, salgado: Salgado, navController: NavHostController){
-   Box(modifier = md.background(Color(0xffF1F1F1), shape = RoundedCornerShape(12.dp)).padding(15.dp).clickable{
+fun SalgadoItem(md: Modifier, salgado: SalgadoResponseDto, navController: NavHostController){
+   Box(modifier = md.background(Color(0xffF1F1F1),
+       shape = RoundedCornerShape(12.dp)).clickable{
        navController.navigate(DetailsScreen.Information.route + "/${salgado.id}")
    }){
-       Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-           Column(verticalArrangement = Arrangement.spacedBy(15.dp)) {
-               Title(salgado.title)
+       Row(horizontalArrangement = Arrangement.SpaceBetween,
+           verticalAlignment = Alignment.CenterVertically,
+           modifier = md.fillMaxWidth().padding(15.dp)) {
+           Column(verticalArrangement = Arrangement.spacedBy(15.dp),
+               modifier = md.width(180.dp)) {
+               Title(salgado.name)
                Description(text = salgado.description)
                Price(price = salgado.priceInOffer)
            }
-           Image(painter = painterResource(id = salgado.image), contentDescription = null, md.size(100.dp))
+
+           AsyncImage(model = salgado.image,
+                   contentDescription = null,
+                   contentScale = ContentScale.Fit,
+                   modifier = md.width(170.dp))
+
+
        }
    }
 }

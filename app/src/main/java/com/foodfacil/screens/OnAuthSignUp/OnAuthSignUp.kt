@@ -104,7 +104,7 @@ fun OnAuthSignUp(navController: NavHostController, authViewModel: AuthViewModel)
     }
 }
 
-fun handleGoogleSign(
+private fun handleGoogleSign(
     result: GoogleSignInAccount,
     authViewModel: AuthViewModel,
     navController: NavHostController,

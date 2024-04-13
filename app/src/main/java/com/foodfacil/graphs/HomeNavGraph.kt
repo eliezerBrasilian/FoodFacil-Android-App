@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.foodfacil.components.SalgadoSelected
+import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.enums.BottomBarScreen
 import com.foodfacil.enums.Graph
 import com.foodfacil.screens.Chart.ChartScreen
@@ -41,7 +42,8 @@ fun HomeNavGraph(
     salgadosViewModel: SalgadosViewModel,
     acompanhamentosViewModel: AcompanhamentosViewModel,
     chartViewModel: ChartViewModel,
-    paddingValues: PaddingValues,) {
+    paddingValues: PaddingValues,
+    storeUserData: StoreUserData,) {
     NavHost(
         navController = navController,
         route = Graph.HOME,
@@ -49,7 +51,7 @@ fun HomeNavGraph(
         modifier = Modifier.padding(0.dp).background(Color.White),
         builder = {
             composable(BottomBarScreen.Home.route) {
-                Home(navController, authViewModel, userViewModel, salgadosViewModel,chartViewModel ,paddingValues)
+                Home(navController, authViewModel, userViewModel, salgadosViewModel,chartViewModel ,paddingValues, storeUserData)
             }
 
             composable(route = NavigationScreens.FINALIZAR_PEDIDO) {

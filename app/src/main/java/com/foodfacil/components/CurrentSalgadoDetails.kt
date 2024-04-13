@@ -13,7 +13,6 @@ import com.foodfacil.dataClass.Salgado
 import com.foodfacil.ui.theme.GreenDot
 import com.simpletext.SimpleText
 
-
 @Composable
 fun CurrentSalgadoDetails(
     md: Modifier.Companion,
@@ -42,6 +41,5 @@ fun CurrentSalgadoDetails(
             fontSize = 16,
             color = GreenDot
         )
-
     }
 }

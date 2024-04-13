@@ -1,2 +1,10 @@
 package com.foodfacil.dataClass
-data class Acompanhamento(val name:String,val precoPorUnidade:Float)
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class Acompanhamento(val id:String = "",
+                          val name:String,
+                          val precoPorUnidade:Float = 0f,
+                            val disponibilidade:String = ""
+    )
