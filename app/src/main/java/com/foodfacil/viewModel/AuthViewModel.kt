@@ -7,16 +7,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.foodfacil.api.baseUrl
+import com.foodfacil.dataClass.UserAuthDto
+import com.foodfacil.datastore.StoreUserData
+import com.foodfacil.ktor.httpCLient
 import com.foodfacil.services.Print
-import com.foodfacil.enums.Collections.Companion.USERS
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
+import io.ktor.client.call.body
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import io.ktor.http.headers
+import io.ktor.http.isSuccess
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 
 class AuthViewModel : ViewModel(){
-    private val firestore = Firebase.firestore
     private val TAG = "AUTHVIEWMODEL"
 
     private val print = Print(TAG)
@@ -24,60 +30,60 @@ class AuthViewModel : ViewModel(){
     private val _loading = MutableLiveData(false)
     val loading: LiveData<Boolean> = _loading
 
-    fun isLogged():Boolean{
-        return false;
-    }
-
-    fun login(emailInput: String, passwordInput: String, context: Context, function: () -> Unit) {
-
-    }
-
-    fun createUserWithEmailAndPassword(emailInput: String, passwordInput: String, nameInput: String, context: Context, function: () -> Unit) {
-
-    }
-
-    fun createUserAfterGoogleSignIn(
+    fun googleSignIn(
         userUid: String,
-        userToken:String,
-        name:String, email:String, profilePicture: Uri?,
+        name:String, email:String,
+        profilePicture: Uri?,
+        context: Context,
         onSuccess:()->Unit = {},
         onError:()->Unit = {}
     ) = viewModelScope.launch{
         print.log("userUid",userUid)
        // _loading.value = true
-       val userExists = userExistsOnFirebase(userUid)
-        print.log("user exists",userExists)
 
-        val newUserData = mapOf("name" to name, "email" to email, "address" to null,
-            "profilePicture" to profilePicture, "uid" to userUid, "userToken" to userToken,
-            "deviceUid" to null, "amountOfMoneySpentTotal" to 0, "amountOfItemsBoughtTotal" to 0,
-            "amountOfCouponsUsed" to 0)
-
-        if(!userExists){
-            firestore.collection(USERS).add(newUserData).addOnSuccessListener { docRef->
-                print.log("user added",docRef.id)
-                onSuccess()
-            }
-        }
-        else {
-            print.log("logado com sucesso")
-            onSuccess()
-        }
-    }
-    private suspend fun userExistsOnFirebase(userUid: String):Boolean{
         try {
-            val documentFounded = firestore.collection(USERS).whereEqualTo("uid", userUid)
-                .get().await()
-            print.log("documentFounded",documentFounded.size())
-            _loading.value = false
-            return documentFounded.size() > 0
-        }
-        catch (e:Exception){
-            print.log(TAG, "error: ${e.message}")
-            _loading.value = false
-            return false;
+            val response = httpCLient.post("$baseUrl/auth/google-login") {
+                headers {
+                    contentType(ContentType.Application.Json)
+                }
+                setBody(UserAuthDto(
+                    email = email,
+                    password = "12345",
+                    name = name,
+                    profilePicture = profilePicture.toString()
+                ))
+            }
+            print.log("Request finalizada")
+
+            if (response.status.isSuccess()) {
+                val responseBody = response.body<Map<String, String>>()
+                val token = responseBody["token"]
+                val userUid = responseBody["userUid"]
+                val profilePicture = responseBody["profilePicture"]
+
+                print.log("Token: $token")
+                print.log("userUid: $userUid")
+
+                val storeData = StoreUserData(context)
+                    storeData.saveUid(userUid.toString())
+                storeData.saveEmail(email)
+                storeData.saveToken(token.toString())
+                storeData.saveName(name)
+                storeData.savePhoto( if(profilePicture == null)"" else profilePicture)
+
+                onSuccess()
+
+            } else {
+                print.log(response.body())
+                print.log("Erro na requisição: ${response.status}")
+               // onError(Exception("Erro na requisição: ${response.status}"))
+            }
+        } catch (e: Exception) {
+            print.log("Excessao na requisição: ${e.message}")
+           // onError(e)
         }
     }
+
 
 }
 

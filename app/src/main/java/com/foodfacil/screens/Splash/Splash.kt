@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,18 +29,29 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.foodfacil.R
+import com.foodfacil.datastore.StoreUserData
+import com.foodfacil.enums.Graph
 import com.foodfacil.ui.theme.MainRed
-import com.foodfacil.enums.NavigationScreens
+import com.foodfacil.viewModel.UserViewModel
 import kotlinx.coroutines.delay
 
 
 @Composable
-fun Splash(nav: NavHostController) {
+fun Splash(
+    nav: NavHostController,
+    userViewModel: UserViewModel,
+    storeUserData: StoreUserData,
+    onLogin: () -> Unit
+) {
    // val authViewModel: AuthViewModel = viewModel()
 
     val scale by remember {
         mutableStateOf(Animatable(0f))
     }
+
+    val userToken by storeUserData.getToken.collectAsState(initial = "")
+
+    val context_ = LocalContext.current
 
     val context = LocalContext.current as ComponentActivity
     LaunchedEffect(key1 = true, block = {
@@ -51,18 +63,14 @@ fun Splash(nav: NavHostController) {
         }))
 
         delay(1500L)
-        // if (authViewModel.isLogged()) {
-        val isLogged = false
-        if (isLogged) {
-            nav.navigate(NavigationScreens.HOME)
-        } else {
-            nav.navigate(NavigationScreens.ON_AUTH)
+        userViewModel.loadUserData(context_)
+         if (userToken != null && userToken!= "") {
+            nav.navigate(Graph.HOME)
+        }
+         else {
+           onLogin()
         }
     })
-
-
-
-
 
     Surface(modifier = Modifier.fillMaxSize(), color = MainRed) {
 

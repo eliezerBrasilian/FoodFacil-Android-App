@@ -45,15 +45,13 @@ fun HomeNavGraph(
     NavHost(
         navController = navController,
         route = Graph.HOME,
-        //startDestination = BottomBarScreen.Home.route,
-        startDestination = NavigationScreens.FINALIZAR_PEDIDO,
+        startDestination = BottomBarScreen.Home.route,
         modifier = Modifier.padding(0.dp).background(Color.White),
         builder = {
             composable(BottomBarScreen.Home.route) {
                 Home(navController, authViewModel, userViewModel, salgadosViewModel,chartViewModel ,paddingValues)
             }
 
-            //todo excluir isso depois
             composable(route = NavigationScreens.FINALIZAR_PEDIDO) {
                 FinalizarPedido(navController, paddingValues,userViewModel, chartViewModel)
             }

@@ -1,5 +1,6 @@
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.foodfacil.R
 import com.foodfacil.components.TopBarOnAuth
+import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.enums.Graph
 import com.foodfacil.services.Print
 import com.foodfacil.services.getGoogleLoginAuth
@@ -46,7 +48,7 @@ fun OnAuthSignUp(navController: NavHostController, authViewModel: AuthViewModel)
     val  clientId = "191389897644-f2qqgp4g23jsbu5f4sapr8o9n74f8gb7.apps.googleusercontent.com"
 
     val isLoading by authViewModel.loading.observeAsState(false)
-
+    val context = LocalContext.current
     val googleSignInClient = getGoogleLoginAuth(clientId, LocalContext.current)
     val print = Print(TAG)
 
@@ -60,7 +62,7 @@ fun OnAuthSignUp(navController: NavHostController, authViewModel: AuthViewModel)
 
                     print.log("Task", task)
                     print.log("Id", task.result.id)
-                    handleGoogleSign(task.result,authViewModel, navController)
+                    handleGoogleSign(task.result,authViewModel, navController,context)
                 }
             }
         }
@@ -105,17 +107,19 @@ fun OnAuthSignUp(navController: NavHostController, authViewModel: AuthViewModel)
 fun handleGoogleSign(
     result: GoogleSignInAccount,
     authViewModel: AuthViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    context: Context
 ) {
-    val navigateToHome = {
+
+    val navigateToHome: ()->Unit = {
         navController.navigate(Graph.HOME)
     }
-    authViewModel.createUserAfterGoogleSignIn(
+    authViewModel.googleSignIn(
         userUid = result.id!!,
-        userToken = result.idToken!!,
         email = result.email!!,
         name = result.displayName!!,
         profilePicture = result.photoUrl,
+        context = context,
         onSuccess = navigateToHome
     )
 }

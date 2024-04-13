@@ -8,6 +8,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.enums.Graph
 import com.foodfacil.screens.Login.Login
 import com.foodfacil.screens.OnAuth.OnAuth
@@ -17,14 +18,16 @@ import com.foodfacil.viewModel.UserViewModel
 import com.foodfacil.enums.NavigationScreens
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun NavGraphBuilder.authNavGraph(navController: NavHostController, authViewModel: AuthViewModel,
-                                 userViewModel: UserViewModel,) {
+fun NavGraphBuilder.authNavGraph(
+    navController: NavHostController, authViewModel: AuthViewModel,
+    userViewModel: UserViewModel,
+    storeUserData: StoreUserData,) {
     navigation(
         route = Graph.AUTHENTICATION,
         startDestination = NavigationScreens.SPLASH
     ) {
         composable(NavigationScreens.SPLASH) {
-            Splash(navController)
+            Splash(navController, userViewModel,storeUserData){navController.navigate(NavigationScreens.ON_AUTH)}
         }
         composable(NavigationScreens.ON_AUTH) {
             OnAuth(navController)
