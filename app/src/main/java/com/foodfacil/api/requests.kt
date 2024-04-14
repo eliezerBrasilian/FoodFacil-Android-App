@@ -1,8 +1,12 @@
 package com.foodfacil.api
 
-import com.foodfacil.dataClass.Acompanhamento
+import com.foodfacil.dataClass.AdicionalDto
+import com.foodfacil.dataClass.AdicionalResponse
 import com.foodfacil.dataClass.PaymentData
+import com.foodfacil.dataClass.SalgadoResponseDto
+import com.foodfacil.dataClass.SalgadosResponse
 import com.foodfacil.dataClass.UserAuthDto
+import com.foodfacil.enums.Disponibilidade
 import com.foodfacil.ktor.httpCLient
 import com.foodfacil.services.Print
 import io.ktor.client.call.body
@@ -15,57 +19,29 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.headers
 import io.ktor.http.isSuccess
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import org.jetbrains.annotations.NotNull
 
 val ip = "192.168.100.31"
 val baseUrl = "http://$ip:8080/food-facil/api/v1"
 
 val json = Json { ignoreUnknownKeys = true }
 
-enum class Disponibilidade(val value: String) {
-    DISPONIVEL("Disponivel"),
-    INDISPONIVEL("INDISPONIVEL")
+suspend fun getAllAdicionais(token:String): List<AdicionalDto> {
+    val print = Print("REQUESTS_GET_ALL_ADICIONAIS")
+    try {
+        val response = httpCLient.get("$baseUrl/adicional") {
+            contentType(ContentType.Application.Json)
+            header("Authorization", "Bearer $token")
+        }
+        print.log("sucesso",response.body())
+        val list = json.decodeFromString<AdicionalResponse>(response.body())
+        print.log("adicionais: $list")
+        return list.lista;
+    }catch (e:Exception){
+        print.log("erro", e.message)
+        return emptyList()
+    }
 }
-
-
-data class Acompanhamento(
-    val id: String,
-    val name: String,
-    val precoPorUnidade: Float,
-    val image: String?,
-    val disponibilidade: Disponibilidade
-)
-
-enum class Categoria(val value: String) {
-    SALGADONOCOPO("Salgado no Copo"),
-    RISOLE("Risole"),
-    COXINHA("Coxinha"),
-    PASTEL("Pastel"),
-    HOTDOG("Hot Dog"),
-    COMBO("Combo"),
-    CONGELADOS("Congelados")
-}
-@Serializable
-data class SalgadoResponseDto(
-    @NotNull val id: String,
-    @NotNull val name: String,
-    @NotNull val categoria: Categoria,
-    @NotNull val description: String,
-    @NotNull val price: Float,
-    val image: String?,
-    @NotNull val inOffer: Boolean,
-    @NotNull val priceInOffer: Float,
-    @NotNull val disponibilidade: Disponibilidade,
-    @NotNull val acompanhamentos: List<Acompanhamento>
-)
-
-@Serializable
-data class SalgadosResponse(
-    val lista: List<SalgadoResponseDto>,
-    val message: String
-)
 
 suspend fun getAllSalgados(token:String): List<SalgadoResponseDto> {
     val print = Print("REQUESTS_GET_ALL_SALGADOS")

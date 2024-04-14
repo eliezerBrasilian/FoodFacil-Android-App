@@ -3,12 +3,17 @@ package com.foodfacil.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.foodfacil.dataClass.AdicionalDto
 import com.foodfacil.dataClass.Salgado
 import com.foodfacil.services.Print
 
 class ChartViewModel : ViewModel(){
     private val _chartList = MutableLiveData<List<Salgado>>(emptyList())
     val chartList:LiveData<List<Salgado>> = _chartList
+
+    val _adicionais = MutableLiveData<List<AdicionalDto>>(emptyList())
+    val adicionais:LiveData<List<AdicionalDto>> = _adicionais
+
     val print = Print("CHARTVIEWMODEL")
 
     fun increment(salgadoId: String){
@@ -107,14 +112,14 @@ class ChartViewModel : ViewModel(){
 
                val atualAmountSalgado = atualCharList[index].amount
 
-               val atualSalgadolterado =  atualCharList[index].copy(amount =  atualAmountSalgado + 1)
-               atualCharList[index] = atualSalgadolterado
+               val atualSalgadoAlterado =  atualCharList[index].copy(amount =  atualAmountSalgado + 1)
+               atualCharList[index] = atualSalgadoAlterado
 
                 _chartList.value = atualCharList //lista atual + o salgado
                 //incrementar 1 no carrinho
 
-            print.log("---id", atualSalgadolterado.id)
-            print.log("novo valor", atualSalgadolterado.amount)
+            print.log("---id", atualSalgadoAlterado.id)
+            print.log("novo valor", atualSalgadoAlterado.amount)
            // print.log("novo valor", _chartList.value)
         }
 
@@ -143,5 +148,29 @@ class ChartViewModel : ViewModel(){
         }
 
         return total;
+    }
+
+    fun addItemAdicional(itemAdicional: AdicionalDto){
+        val atualAdicionaisList = _adicionais.value ?: emptyList()
+
+        print.log("lista adicionais agora:", _adicionais.value )
+
+        _adicionais.value = atualAdicionaisList + itemAdicional
+
+        print.log("lista adicionais depois:", _adicionais.value )
+    }
+    fun removeItemAdicional(id:String){
+        val atualAdicionaisList = _adicionais.value ?: emptyList()
+
+        val newList:MutableList<AdicionalDto> = atualAdicionaisList.toMutableList()
+        print.log("newList", newList)
+
+        atualAdicionaisList.forEach {
+            if(it.id == id) newList.remove(it)
+        }
+
+        _adicionais.value = newList
+
+        print.log("lista adicionais depois:", _adicionais.value )
     }
 }

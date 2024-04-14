@@ -1,9 +1,5 @@
 package com.foodfacil.screens.Chart
 
-import android.view.animation.OvershootInterpolator
-import android.widget.Toast
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,58 +25,55 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCompositionContext
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.foodfacil.R
-import com.foodfacil.api.makePayment
-import com.foodfacil.components.Line
-import com.foodfacil.viewModel.AcompanhamentosViewModel
-import com.foodfacil.viewModel.ChartViewModel
-import com.foodfacil.viewModel.SalgadosViewModel
-import com.simpletext.SimpleText
 import com.foodfacil.components.BackButtonWithTitle
 import com.foodfacil.components.Centralize
-import com.foodfacil.dataClass.Salgado
 import com.foodfacil.components.ChartItem
 import com.foodfacil.components.Circle
+import com.foodfacil.components.Line
 import com.foodfacil.components.Rectangle
-import com.foodfacil.dataClass.PaymentData
+import com.foodfacil.dataClass.AdicionalDto
+import com.foodfacil.dataClass.Salgado
 import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.ui.theme.MainYellow
 import com.foodfacil.ui.theme.PinkSalgadoSelected
-import kotlinx.coroutines.launch
-
-data class Adicional(val id: String, val imagem: Int, val titulo: String, val descricao: String)
+import com.foodfacil.viewModel.ChartViewModel
+import com.foodfacil.viewModel.SalgadosViewModel
+import com.simpletext.SimpleText
 
 @Composable
 fun ChartScreen(
     navController: NavHostController,
     salgadosViewModel: SalgadosViewModel,
-    acompanhamentosViewModel: AcompanhamentosViewModel,
     paddingValues: PaddingValues,
     chartViewModel: ChartViewModel
 ) {
-
     val coroutine = rememberCoroutineScope()
     val context = LocalContext.current
+
+    val listaAdicionaisOnSnapshot by chartViewModel.adicionais.observeAsState();
+
+    val adicionaisSelected = remember{
+        mutableStateListOf<String>()
+    }
 
     val clickedOnFinalizarPedido:()->Unit = {
         navController.navigate(NavigationScreens.FINALIZAR_PEDIDO)
@@ -98,22 +91,28 @@ fun ChartScreen(
     val print = Print(tag)
 
     val cvm by chartViewModel.chartList.observeAsState()
-    print.log("cvm", cvm)
 
     val totalPrice = chartViewModel.getTotalPrice()
-
-    val adicionais = listOf(
-        Adicional("1", R.drawable.refrigerente, "Cola-cola", "1 litro"),
-        Adicional("2", R.drawable.refrigerente, "Fanta uva", "2,5 litros"),
-        Adicional("3", R.drawable.refrigerente, "Guaraná Antártica", "1 litro")
-    )
 
     val incrementOnClick: (salgadoId: String) -> Unit = { salgadoId ->
         print.log("cvm", cvm)
         chartViewModel.increment(salgadoId)
     }
+
     val decrementOnClick: (salgadoId: String) -> Unit = { salgadoId ->
         chartViewModel.decrement(salgadoId)
+    }
+
+    val addAdicionalNoCarrinho:(item:AdicionalDto)->Unit = {
+        if(!adicionaisSelected.contains(it.id)){
+            chartViewModel.addItemAdicional(it)
+            adicionaisSelected.add(it.id)
+        }
+
+        else {
+            chartViewModel.removeItemAdicional(it.id)
+            adicionaisSelected.remove(it.id)
+        }
     }
 
     val md = Modifier
@@ -138,7 +137,7 @@ fun ChartScreen(
                 } else {
                     Top(navController = navController, cvm, incrementOnClick, decrementOnClick)
                     Line()
-                    MainContent(adicionais)
+                    MainContent(salgadosViewModel.adicionais.value, addAdicionalNoCarrinho, adicionaisSelected)
                 }
             }
         }
@@ -176,7 +175,11 @@ private fun Top(
 }
 
 @Composable
-private fun MainContent(adicionais: List<Adicional>) {
+private fun MainContent(
+    adicionais: List<AdicionalDto>,
+    addAdicionalNoCarrinho: (item: AdicionalDto) -> Unit,
+    adicionaisSelected: SnapshotStateList<String>
+) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(1f)) {
@@ -186,7 +189,8 @@ private fun MainContent(adicionais: List<Adicional>) {
         Spacer(modifier = Modifier.height(20.dp))
         LazyRow {
             items(adicionais) { adicional ->
-                ItemAdicional(adicional)
+                val isSelected = if(adicionaisSelected.contains(adicional.id))true else false
+                ItemAdicional(adicional,addAdicionalNoCarrinho,isSelected)
             }
         }
     }
@@ -229,7 +233,11 @@ fun RowVerCarrinho(totalPrice: Float, onClick: () -> Unit = {}) {
 }
 
 @Composable
-fun ItemAdicional(adicional: Adicional) {
+fun ItemAdicional(
+    adicional: AdicionalDto,
+    addAdicionalNoCarrinho: (item: AdicionalDto) -> Unit,
+    isSelected: Boolean,
+) {
     val md = Modifier
     Box(
         modifier = md
@@ -248,8 +256,13 @@ fun ItemAdicional(adicional: Adicional) {
                 SimpleText(adicional.descricao)
             }
             Centralize {
-                Circle(md, MainYellow, 70.dp, hasElevation = true) {
-                    Icon(imageVector = Icons.Filled.Add, contentDescription = null, md.size(60.dp))
+                Circle(md, MainYellow, 70.dp, hasElevation = true, onClick = {
+                    addAdicionalNoCarrinho(
+                        adicional
+                    )
+                }) {
+
+                    Icon(imageVector = if (isSelected) Icons.Filled.Close else  Icons.Filled.Add, contentDescription = null, md.size(60.dp))
                 }
             }
         }

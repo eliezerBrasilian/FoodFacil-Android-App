@@ -14,10 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.foodfacil.ui.theme.MainRed
 
 @Composable
-fun Rectangle(imagem: Int) {
+fun Rectangle(imagem: String?) {
     val md = Modifier
     Box(
         modifier = md
@@ -27,6 +28,6 @@ fun Rectangle(imagem: Int) {
             .border(width = 1.dp, color = MainRed, RoundedCornerShape(12.dp)),
         contentAlignment = Alignment.Center
     ) {
-        Image(painter = painterResource(id = imagem), contentDescription = null, md.size(50.dp))
+        AsyncImage(model  = imagem, contentDescription = null, md.size(50.dp))
     }
 }

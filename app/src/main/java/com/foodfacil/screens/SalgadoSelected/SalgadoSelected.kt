@@ -1,6 +1,5 @@
 package com.foodfacil.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,17 +32,14 @@ import com.foodfacil.dataClass.Acompanhamento
 import com.foodfacil.dataClass.Salgado
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.PinkSalgadoSelected
-import com.foodfacil.viewModel.AcompanhamentosViewModel
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
-import org.jetbrains.annotations.Async
 
 @Composable
 fun SalgadoSelected(
     navController: NavHostController,
     id: String?,
     salgadosViewModel: SalgadosViewModel,
-    acompanhamentosViewModel: AcompanhamentosViewModel,
     paddingValues: PaddingValues,
     chartViewModel: ChartViewModel
 ) {
@@ -82,13 +78,12 @@ fun SalgadoSelected(
         total.value += founded.priceInOffer
 
         //busca acompanhamentos
-        val acompanhamentosList = acompanhamentosViewModel.getAcompanhamentosList()
+        val acompanhamentosList = founded.acompanhamentos
         print.log("acompanhamentos carregados", acompanhamentosList)
 
         acompanhamentosReceived.clear()
         acompanhamentosReceived.addAll(acompanhamentosList)
         checkboxesStates.add("Salgados Sortidos")
-
     }
 
     val esteItemJaEstaMarcado: (acompanhamento:String)->Boolean = {acompanhamento->
@@ -114,7 +109,6 @@ fun SalgadoSelected(
         chartViewModel.addSalgadoToChart(salgadoSelected.value)
         navController.popBackStack()
     }
-
 
     Scaffold(md.padding(paddingValues)) { pv ->
         Surface(md.padding(pv), color = PinkSalgadoSelected

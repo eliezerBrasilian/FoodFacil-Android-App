@@ -106,6 +106,7 @@ fun Home(
 
 
         salgadosViewModel.getAllSalgados_(userToken.toString())
+        salgadosViewModel.getAllAdicionais_(userToken.toString())
     }
 
     NavigationBarColor(color = MainYellow)

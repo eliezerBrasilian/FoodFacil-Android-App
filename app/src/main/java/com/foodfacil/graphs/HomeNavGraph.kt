@@ -26,7 +26,6 @@ import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.UserViewModel
 import com.foodfacil.screens.Home.Home
 import com.foodfacil.screens.Pedidos
-import com.foodfacil.viewModel.AcompanhamentosViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.screens.Profile.Profile
 import com.foodfacil.viewModel.ChartViewModel
@@ -40,7 +39,6 @@ fun HomeNavGraph(
     authViewModel: AuthViewModel,
     userViewModel: UserViewModel,
     salgadosViewModel: SalgadosViewModel,
-    acompanhamentosViewModel: AcompanhamentosViewModel,
     chartViewModel: ChartViewModel,
     paddingValues: PaddingValues,
     storeUserData: StoreUserData,) {
@@ -58,11 +56,11 @@ fun HomeNavGraph(
                 FinalizarPedido(navController, paddingValues,userViewModel, chartViewModel)
             }
 
-            detailsNavGraph(navController = navController, salgadosViewModel, acompanhamentosViewModel,
+            detailsNavGraph(navController = navController, salgadosViewModel,
                 paddingValues,chartViewModel, userViewModel)
 
             composable(route = NavigationScreens.CHART){
-                ChartScreen(navController,salgadosViewModel, acompanhamentosViewModel,
+                ChartScreen(navController,salgadosViewModel,
                     paddingValues,chartViewModel)
             }
            // chartNavGraph(navController,salgadosViewModel,acompanhamentosViewModel,paddingValues, chartViewModel)
@@ -80,7 +78,6 @@ fun HomeNavGraph(
 fun NavGraphBuilder.detailsNavGraph(
     navController: NavHostController,
     salgadosViewModel: SalgadosViewModel,
-    acompanhamentosViewModel: AcompanhamentosViewModel,
     paddingValues: PaddingValues,
     chartViewModel: ChartViewModel,
     userViewModel: UserViewModel
@@ -96,7 +93,7 @@ fun NavGraphBuilder.detailsNavGraph(
         ) {route->
             val id = route.arguments?.getString("id")
 
-            SalgadoSelected(navController, id,salgadosViewModel, acompanhamentosViewModel,
+            SalgadoSelected(navController, id,salgadosViewModel,
                 paddingValues,chartViewModel)
         }
 
@@ -122,7 +119,6 @@ fun NavGraphBuilder.detailsNavGraph(
 fun NavGraphBuilder.chartNavGraph(
     navController: NavHostController,
     salgadosViewModel: SalgadosViewModel,
-    acompanhamentosViewModel: AcompanhamentosViewModel,
     paddingValues: PaddingValues,
     chartViewModel: ChartViewModel
 ) {
@@ -132,7 +128,7 @@ fun NavGraphBuilder.chartNavGraph(
     ) {
 
         composable(route = NavigationScreens.CHART){
-            ChartScreen(navController,salgadosViewModel, acompanhamentosViewModel,
+            ChartScreen(navController,salgadosViewModel,
                 paddingValues,chartViewModel)
         }
     }

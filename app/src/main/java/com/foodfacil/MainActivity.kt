@@ -16,7 +16,6 @@ import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.graphs.RootNavigationGraph
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.FoodFacilTheme
-import com.foodfacil.viewModel.AcompanhamentosViewModel
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.viewModel.UserViewModel
@@ -49,10 +48,9 @@ class MainActivity : ComponentActivity() {
                     val authViewModel: AuthViewModel = viewModel()
                     val userViewModel: UserViewModel = viewModel()
                     val salgadosViewModel: SalgadosViewModel = viewModel()
-                    val acompanhamentosViewModel: AcompanhamentosViewModel = viewModel()
                     val chartViewModel:ChartViewModel = viewModel()
                     RootNavigationGraph(rememberNavController(),
-                        authViewModel, userViewModel, salgadosViewModel, acompanhamentosViewModel,
+                        authViewModel, userViewModel, salgadosViewModel,
                         chartViewModel,storeUserData)
                 }
             }
