@@ -1,4 +1,4 @@
-package com.foodfacil.dataClass
+package com.foodfacil.enums
 
 enum class Categoria(val value: String) {
     SALGADONOCOPO("Salgado no Copo"),
@@ -7,5 +7,6 @@ enum class Categoria(val value: String) {
     PASTEL("Pastel"),
     HOTDOG("Hot Dog"),
     COMBO("Combo"),
-    CONGELADOS("Congelados")
+    CONGELADOS("Congelados"),
+    BATATAS("Batatas")
 }

@@ -8,6 +8,7 @@ import com.foodfacil.dataClass.SalgadoResponseDto
 import com.foodfacil.api.getAllSalgados
 import com.foodfacil.dataClass.AdicionalDto
 import com.foodfacil.dataClass.Salgado
+import com.foodfacil.enums.Categoria
 import com.foodfacil.services.Print
 import kotlinx.coroutines.launch
 
@@ -41,6 +42,9 @@ class SalgadosViewModel : ViewModel(){
 
     fun salgadosInOfferList(): List<SalgadoResponseDto> {
         return salgados.value.filter { it.inOffer == true }
+    }
+    fun batataRosti(): List<SalgadoResponseDto> {
+        return salgados.value.filter { it.categoria == Categoria.BATATAS }
     }
 
     fun findSalgado(id: String?): Salgado? {

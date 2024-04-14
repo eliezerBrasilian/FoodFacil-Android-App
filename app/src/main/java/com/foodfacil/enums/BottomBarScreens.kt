@@ -20,7 +20,7 @@ sealed class BottomBarScreen(
         icon = Icons.Default.Home
     )
 
-    data object Combos : BottomBarScreen(
+    data object Cardapio : BottomBarScreen(
         route = "CARDAPIO",
         title = "Cardapio",
         icon = Icons.Default.CheckCircle

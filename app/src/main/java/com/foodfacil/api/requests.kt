@@ -43,6 +43,22 @@ suspend fun getAllAdicionais(token:String): List<AdicionalDto> {
     }
 }
 
+suspend fun getByCategory(token:String, category:String): List<SalgadoResponseDto> {
+    val print = Print("REQUESTS_GET_ALL_SALGADOS")
+    try {
+        val response = httpCLient.get("$baseUrl/salgado/category/$category") {
+            contentType(ContentType.Application.Json)
+            header("Authorization", "Bearer $token")
+        }
+        print.log("sucesso",response.body())
+        val salgadosResponse = json.decodeFromString<SalgadosResponse>(response.body())
+        print.log("salgados: $salgadosResponse")
+        return salgadosResponse.lista;
+    }catch (e:Exception){
+        print.log("erro", e.message)
+        return emptyList()
+    }
+}
 suspend fun getAllSalgados(token:String): List<SalgadoResponseDto> {
     val print = Print("REQUESTS_GET_ALL_SALGADOS")
     try {

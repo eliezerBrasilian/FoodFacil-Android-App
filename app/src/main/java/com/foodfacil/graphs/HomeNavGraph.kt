@@ -30,6 +30,7 @@ import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.screens.Profile.Profile
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.enums.NavigationScreens
+import com.foodfacil.screens.Cardapio.Cardapio
 import com.foodfacil.screens.Pagamento.Pagamento
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -51,18 +52,13 @@ fun HomeNavGraph(
             composable(BottomBarScreen.Home.route) {
                 Home(navController, authViewModel, userViewModel, salgadosViewModel,chartViewModel ,paddingValues, storeUserData)
             }
-
-            composable(route = NavigationScreens.FINALIZAR_PEDIDO) {
-                FinalizarPedido(navController, paddingValues,userViewModel, chartViewModel)
+            composable(BottomBarScreen.Cardapio.route) {
+                Cardapio(navController, authViewModel, userViewModel, salgadosViewModel,chartViewModel ,paddingValues, storeUserData)
             }
 
             detailsNavGraph(navController = navController, salgadosViewModel,
                 paddingValues,chartViewModel, userViewModel)
 
-            composable(route = NavigationScreens.CHART){
-                ChartScreen(navController,salgadosViewModel,
-                    paddingValues,chartViewModel)
-            }
            // chartNavGraph(navController,salgadosViewModel,acompanhamentosViewModel,paddingValues, chartViewModel)
 
             composable(BottomBarScreen.Pedidos.route) {
@@ -97,6 +93,11 @@ fun NavGraphBuilder.detailsNavGraph(
                 paddingValues,chartViewModel)
         }
 
+        composable(route = NavigationScreens.CHART){
+            ChartScreen(navController,salgadosViewModel,
+                paddingValues,chartViewModel)
+        }
+
         composable(route = NavigationScreens.FINALIZAR_PEDIDO) {
             FinalizarPedido(navController, paddingValues,userViewModel, chartViewModel)
         }
@@ -115,25 +116,6 @@ fun NavGraphBuilder.detailsNavGraph(
         }*/
     }
 }
-
-fun NavGraphBuilder.chartNavGraph(
-    navController: NavHostController,
-    salgadosViewModel: SalgadosViewModel,
-    paddingValues: PaddingValues,
-    chartViewModel: ChartViewModel
-) {
-    navigation(
-        route = Graph.DETAILS,
-        startDestination = NavigationScreens.CHART
-    ) {
-
-        composable(route = NavigationScreens.CHART){
-            ChartScreen(navController,salgadosViewModel,
-                paddingValues,chartViewModel)
-        }
-    }
-}
-
 
 sealed class DetailsScreen(val route: String) {
     object Information : DetailsScreen(route = "INFORMATION")

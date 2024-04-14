@@ -1,5 +1,6 @@
 package com.foodfacil.dataClass
 
+import com.foodfacil.enums.Categoria
 import com.foodfacil.enums.Disponibilidade
 import kotlinx.serialization.Serializable
 import org.jetbrains.annotations.NotNull

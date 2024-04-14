@@ -35,7 +35,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
         BottomBarScreen.Home,
-        BottomBarScreen.Combos,
+        BottomBarScreen.Cardapio,
         BottomBarScreen.Pedidos,
         BottomBarScreen.Perfil,
     )
