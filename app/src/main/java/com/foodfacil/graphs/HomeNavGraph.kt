@@ -65,7 +65,7 @@ fun HomeNavGraph(
                 Pedidos(navController, salgadosViewModel, paddingValues)
             }
             composable(BottomBarScreen.Perfil.route) {
-                Profile(navController, authViewModel,userViewModel, paddingValues)
+                Profile(navController, authViewModel,userViewModel, paddingValues,storeUserData)
             }
         }
     )
