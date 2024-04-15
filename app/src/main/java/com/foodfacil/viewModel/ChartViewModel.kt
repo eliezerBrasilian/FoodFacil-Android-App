@@ -3,8 +3,8 @@ package com.foodfacil.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.foodfacil.dataClass.AdicionalDto
-import com.foodfacil.dataClass.Salgado
+import com.foodfacil.dataclass.AdicionalDto
+import com.foodfacil.dataclass.Salgado
 import com.foodfacil.services.Print
 
 class ChartViewModel : ViewModel(){

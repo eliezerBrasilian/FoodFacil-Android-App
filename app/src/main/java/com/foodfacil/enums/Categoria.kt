@@ -10,3 +10,4 @@ enum class Categoria(val value: String) {
     CONGELADOS("Congelados"),
     BATATAS("Batatas")
 }
+

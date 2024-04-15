@@ -1,8 +1,5 @@
 package com.foodfacil.dummy
 
-import com.foodfacil.dataClass.Salgado
-import com.foodfacil.R
-
 /*val salgados = listOf(
     Salgado("1", "Combo P", "15 salgados médios + refrigerante\n" +
             "200 ml + ketchup e maionese", 14.0F,R.drawable.como_p, inOffer = true),

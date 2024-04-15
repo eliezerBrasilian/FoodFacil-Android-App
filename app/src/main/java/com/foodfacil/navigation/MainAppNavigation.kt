@@ -13,10 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import com.foodfacil.components.BottomBar
 import com.foodfacil.datastore.StoreUserData
-import com.foodfacil.viewModel.AuthViewModel
-import com.foodfacil.viewModel.ChartViewModel
-import com.foodfacil.viewModel.SalgadosViewModel
-import com.foodfacil.viewModel.UserViewModel
+import com.foodfacil.viewModel.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -28,6 +25,7 @@ fun MainAppNavigation(
     chartViewModel: ChartViewModel,
     navController: NavHostController = rememberNavController(),
     storeUserData: StoreUserData,
+    cuponsViewModel: CuponsViewModel,
 ) {
 
     Scaffold(
@@ -35,7 +33,7 @@ fun MainAppNavigation(
 
         bottomBar = { BottomBar(navController = navController) }, content = {paddingValues ->
             HomeNavGraph( navController, authViewModel, userViewModel,salgadosViewModel,
-                chartViewModel, paddingValues, storeUserData)
+                chartViewModel, paddingValues, storeUserData,cuponsViewModel)
 
         }
     )

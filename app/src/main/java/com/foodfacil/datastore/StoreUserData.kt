@@ -74,4 +74,11 @@ class StoreUserData(private val context: Context) {
             preferences[USER_PHOTO] = photo
         }
     }
+
+    suspend fun clearAllData() {
+        context.dataStore.edit { preferences ->
+            preferences.clear()
+        }
+    }
+
 }

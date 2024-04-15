@@ -1,16 +1,15 @@
 package com.foodfacil.viewModel
 
-
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.foodfacil.api.baseUrl
-import com.foodfacil.dataClass.UserAuthDto
+import com.foodfacil.api.ktor.baseUrl
+import com.foodfacil.api.ktor.httpClient
+import com.foodfacil.dataclass.UserAuthDto
 import com.foodfacil.datastore.StoreUserData
-import com.foodfacil.ktor.httpCLient
 import com.foodfacil.services.Print
 import io.ktor.client.call.body
 import io.ktor.client.request.post
@@ -20,7 +19,6 @@ import io.ktor.http.contentType
 import io.ktor.http.headers
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.launch
-
 
 class AuthViewModel : ViewModel(){
     private val TAG = "AUTHVIEWMODEL"
@@ -42,7 +40,7 @@ class AuthViewModel : ViewModel(){
        // _loading.value = true
 
         try {
-            val response = httpCLient.post("$baseUrl/auth/google-login") {
+            val response = httpClient.post("$baseUrl/auth/google-login") {
                 headers {
                     contentType(ContentType.Application.Json)
                 }

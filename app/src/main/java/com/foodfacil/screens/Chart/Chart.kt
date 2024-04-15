@@ -48,8 +48,8 @@ import com.foodfacil.components.ChartItem
 import com.foodfacil.components.Circle
 import com.foodfacil.components.Line
 import com.foodfacil.components.Rectangle
-import com.foodfacil.dataClass.AdicionalDto
-import com.foodfacil.dataClass.Salgado
+import com.foodfacil.dataclass.AdicionalDto
+import com.foodfacil.dataclass.Salgado
 import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainRed

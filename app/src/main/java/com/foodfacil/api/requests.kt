@@ -1,13 +1,9 @@
 package com.foodfacil.api
 
-import com.foodfacil.dataClass.AdicionalDto
-import com.foodfacil.dataClass.AdicionalResponse
-import com.foodfacil.dataClass.PaymentData
-import com.foodfacil.dataClass.SalgadoResponseDto
-import com.foodfacil.dataClass.SalgadosResponse
-import com.foodfacil.dataClass.UserAuthDto
-import com.foodfacil.enums.Disponibilidade
-import com.foodfacil.ktor.httpCLient
+import com.foodfacil.api.ktor.baseUrl
+import com.foodfacil.dataclass.*
+import com.foodfacil.api.ktor.httpClient
+import com.foodfacil.api.ktor.json
 import com.foodfacil.services.Print
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -21,15 +17,10 @@ import io.ktor.http.headers
 import io.ktor.http.isSuccess
 import kotlinx.serialization.json.Json
 
-val ip = "192.168.100.31"
-val baseUrl = "http://$ip:8080/food-facil/api/v1"
-
-val json = Json { ignoreUnknownKeys = true }
-
 suspend fun getAllAdicionais(token:String): List<AdicionalDto> {
     val print = Print("REQUESTS_GET_ALL_ADICIONAIS")
     try {
-        val response = httpCLient.get("$baseUrl/adicional") {
+        val response = httpClient.get("$baseUrl/adicional") {
             contentType(ContentType.Application.Json)
             header("Authorization", "Bearer $token")
         }
@@ -46,7 +37,7 @@ suspend fun getAllAdicionais(token:String): List<AdicionalDto> {
 suspend fun getByCategory(token:String, category:String): List<SalgadoResponseDto> {
     val print = Print("REQUESTS_GET_ALL_SALGADOS")
     try {
-        val response = httpCLient.get("$baseUrl/salgado/category/$category") {
+        val response = httpClient.get("$baseUrl/salgado/category/$category") {
             contentType(ContentType.Application.Json)
             header("Authorization", "Bearer $token")
         }
@@ -62,7 +53,7 @@ suspend fun getByCategory(token:String, category:String): List<SalgadoResponseDt
 suspend fun getAllSalgados(token:String): List<SalgadoResponseDto> {
     val print = Print("REQUESTS_GET_ALL_SALGADOS")
     try {
-        val response = httpCLient.get("$baseUrl/salgado") {
+        val response = httpClient.get("$baseUrl/salgado") {
             contentType(ContentType.Application.Json)
             header("Authorization", "Bearer $token")
         }
@@ -81,7 +72,7 @@ suspend fun getAllSalgados(token:String): List<SalgadoResponseDto> {
     val print = Print("REQUESTS_CADASTRO")
 
     try {
-        val response = httpCLient.post("$baseUrl/auth/google-login") {
+        val response = httpClient.post("$baseUrl/auth/google-login") {
             headers {
                 contentType(ContentType.Application.Json)
             }
@@ -101,14 +92,14 @@ suspend fun getAllSalgados(token:String): List<SalgadoResponseDto> {
     } catch (e: Exception) {
         print.log("Excessao na requisição: ${e.message}")
     } finally {
-        httpCLient.close()
+        httpClient.close()
     }
     return null
 }
 
 suspend fun makePayment(body: PaymentData): String {
     val print = Print("REQUESTS_MAKE_PAYMENT")
-    val response = httpCLient.post("http://192.168.100.31:8080/food-facil/api/payment/v1"){
+    val response = httpClient.post("http://192.168.100.31:8080/food-facil/api/payment/v1"){
         headers{
             contentType(ContentType.Application.Json)
         }
@@ -117,6 +108,6 @@ suspend fun makePayment(body: PaymentData): String {
     print.log("request finalizada")
     val responseBody = response.bodyAsText()
     print.log(responseBody)
-    httpCLient.close()
+    httpClient.close()
     return responseBody
 }

@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.foodfacil.dataClass.SalgadoResponseDto
+import com.foodfacil.dataclass.SalgadoResponseDto
 import com.foodfacil.graphs.DetailsScreen
 import com.simpletext.SimpleText
 

@@ -39,7 +39,7 @@ import com.simpletext.SimpleText
 import com.foodfacil.components.BackButtonWithTitle
 import com.foodfacil.components.CustomIcon
 import com.foodfacil.components.PixContainer
-import com.foodfacil.dataClass.Address
+import com.foodfacil.dataclass.AddressResponseDto
 import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainRed
@@ -75,7 +75,7 @@ fun FinalizarPedido(
     }
 
     LaunchedEffect(true) {
-        val address = user.value?.address
+        val address = user.value?.addressResponseDto
         if(address == null){
             rua = ""
             numero = ""
@@ -112,11 +112,11 @@ fun FinalizarPedido(
     val md = Modifier
 
     val handleAddAddress: () -> Unit = {
-        val address = Address(
+        val addressResponseDto = AddressResponseDto(
             cidade = "Brás Pires",
             complemento = complememto, bairro = bairro, rua = rua, numero = numero )
 
-        userViewModel.addAddress(address)
+        userViewModel.addAddress(addressResponseDto)
         Toast(context).showToast("Endereço adicionado")
     }
 
@@ -141,7 +141,7 @@ fun FinalizarPedido(
                 Spacer(md.height(10.dp))
                 PixContainer()
                 Spacer(md.height(15.dp))
-                if (user.value?.address == null) {
+                if (user.value?.addressResponseDto == null) {
                     Box(md.clickable { toogleDialogVisible() }) {
                         Row {
                             SimpleText("Adicionar endereço", fontWeight = "bold", fontSize = 20)
@@ -150,7 +150,7 @@ fun FinalizarPedido(
                     }
 
                 } else {
-                    AddressRow(address = user.value?.address, onClick = handleEditAddress)
+                    AddressRow(addressResponseDto = user.value?.addressResponseDto, onClick = handleEditAddress)
                 }
                 if (dialogIsVisible.value)
                     AddAddressDialog(

@@ -2,8 +2,6 @@ package com.foodfacil.screens.Pagamento
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,17 +30,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.foodfacil.R
-import com.foodfacil.api.makePayment
 import com.foodfacil.viewModel.ChartViewModel
 import com.simpletext.SimpleText
 import com.foodfacil.components.BackButtonWithTitle
 import com.foodfacil.components.Centralize
-import com.foodfacil.dataClass.Address
-import com.foodfacil.dataClass.PaymentData
+import com.foodfacil.dataclass.AddressResponseDto
 import com.foodfacil.services.Print
-import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.viewModel.UserViewModel
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -56,7 +50,7 @@ fun Pagamento(
     val coroutine = rememberCoroutineScope()
     val context = LocalContext.current
     
-    val address = userViewModel.user.value?.address
+    val address = userViewModel.user.value?.addressResponseDto
 
     val codigoQR = "duiedbeuibuiuifbrfrbfrfubfuibfuibfuifbuefbufbeubfberufbuerfbuibyewvuv77438edbdbwi--dedbwiudbdbub874--dededwdbwuibiu"
 
@@ -94,7 +88,7 @@ fun Pagamento(
                 modifier = md
                     .padding(horizontal = 20.dp)
             ) {
-                PedidogeradoRow(address = address)
+                PedidogeradoRow(addressResponseDto = address)
                 Spacer(md.height(20.dp))
                 Centralize {
                     SimpleText("Pague com", fontWeight = "bold", fontSize = 24)
@@ -127,7 +121,7 @@ private fun QRCode(){
     Image(painter = painterResource(id = R.drawable.qr_code_fake), contentDescription = null, md.size(120.dp))
 }
 
-@Composable fun PedidogeradoRow(address: Address?){
+@Composable fun PedidogeradoRow(addressResponseDto: AddressResponseDto?){
     val md = Modifier
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(20.dp)) {
         Image(painter = painterResource(id = R.drawable.selecionar), contentDescription = null, md.size(35.dp))

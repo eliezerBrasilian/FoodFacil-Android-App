@@ -14,6 +14,7 @@ package com.foodfacil.enums
         val CHART = "Chart"
         val FINALIZAR_PEDIDO = "FinalizarPedido"
         val PAGAMENTO = "Pagamento"
+        val CUPONS = "Cupons"
     }
 
       enum class Screens {

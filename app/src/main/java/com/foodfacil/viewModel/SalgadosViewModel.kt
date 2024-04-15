@@ -4,10 +4,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.foodfacil.api.getAllAdicionais
-import com.foodfacil.dataClass.SalgadoResponseDto
+import com.foodfacil.dataclass.SalgadoResponseDto
 import com.foodfacil.api.getAllSalgados
-import com.foodfacil.dataClass.AdicionalDto
-import com.foodfacil.dataClass.Salgado
+import com.foodfacil.dataclass.AdicionalDto
+import com.foodfacil.dataclass.Salgado
 import com.foodfacil.enums.Categoria
 import com.foodfacil.services.Print
 import kotlinx.coroutines.launch

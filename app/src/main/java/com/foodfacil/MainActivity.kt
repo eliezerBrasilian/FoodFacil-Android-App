@@ -1,7 +1,6 @@
 package com.foodfacil
 
 import android.os.Build
-import com.foodfacil.viewModel.AuthViewModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,9 +15,7 @@ import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.graphs.RootNavigationGraph
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.FoodFacilTheme
-import com.foodfacil.viewModel.ChartViewModel
-import com.foodfacil.viewModel.SalgadosViewModel
-import com.foodfacil.viewModel.UserViewModel
+import com.foodfacil.viewModel.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 
@@ -49,9 +46,11 @@ class MainActivity : ComponentActivity() {
                     val userViewModel: UserViewModel = viewModel()
                     val salgadosViewModel: SalgadosViewModel = viewModel()
                     val chartViewModel:ChartViewModel = viewModel()
+                    val cuponsViewModel:CuponsViewModel = viewModel()
+
                     RootNavigationGraph(rememberNavController(),
                         authViewModel, userViewModel, salgadosViewModel,
-                        chartViewModel,storeUserData)
+                        chartViewModel,storeUserData, cuponsViewModel)
                 }
             }
         }

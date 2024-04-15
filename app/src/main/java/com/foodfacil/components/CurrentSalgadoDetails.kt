@@ -9,7 +9,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.foodfacil.dataClass.Salgado
+import com.foodfacil.dataclass.Salgado
 import com.foodfacil.ui.theme.GreenDot
 import com.simpletext.SimpleText
 

@@ -1,7 +1,10 @@
 package com.foodfacil.utils
 
 import androidx.core.net.toUri
+import com.foodfacil.dataclass.StorageFileResponse
+import com.foodfacil.services.Print
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
@@ -9,7 +12,7 @@ import java.util.UUID
 // Function to upload file to Firebase Storage and get download URL
 
 class UploadFile {
-    suspend fun uploadFileToFirebaseStorage(file: String):String? {
+    suspend fun uploadFileToFirebaseStorage(file: String): StorageFileResponse? {
         // Get a reference to Firebase Storage
         val storage = Firebase.storage
         // Create a storage reference
@@ -32,11 +35,21 @@ class UploadFile {
             val downloadUri = uploadTask.storage.downloadUrl.await().toString()
 
             // Return download URL
-            downloadUri
+            return StorageFileResponse(downloadUri,fileRef)
         } catch (e: Exception) {
             // Handle exceptions
             e.printStackTrace()
             null
+        }
+    }
+
+    suspend fun deleteFile(fileRef: StorageReference){
+        val print = Print("deleteFile")
+        try {
+            fileRef.delete();
+            print.log("deletado com sucesso")
+        }catch (e:Exception){
+            print.log("erro ao deletar arquivo: ${e.message}")
         }
     }
 }

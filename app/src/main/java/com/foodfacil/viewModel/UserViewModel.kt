@@ -5,18 +5,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.foodfacil.dataClass.Address
+import com.foodfacil.dataclass.AddressResponseDto
 import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.services.Print
 import kotlinx.coroutines.launch
 
 class UserViewModel : ViewModel(){
-    private val address = Address(rua = "Bom Jesus", bairro = "Praça de esportes", numero = "50")
+    private val addressResponseDto = AddressResponseDto(rua = "Bom Jesus", bairro = "Praça de esportes", numero = "50")
     private val emptyAddress = null
     data class User(var userUid:String,
                     var name:String,
                     var token:String = "",
-                    var address: Address? = null,
+                    var addressResponseDto: AddressResponseDto? = null,
                     var profilePicture:String = ""
         )
 
@@ -48,9 +48,10 @@ class UserViewModel : ViewModel(){
         return true;
     }
 
-    fun addAddress(address: Address){
-        _user.value?.address = address
+    fun addAddress(addressResponseDto: AddressResponseDto){
+        _user.value?.addressResponseDto = addressResponseDto
 
-        print.log(address)
+        print.log(addressResponseDto)
     }
+
 }

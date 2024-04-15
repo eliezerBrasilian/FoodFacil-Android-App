@@ -13,9 +13,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.foodfacil.R
-import com.foodfacil.dataClass.Salgado
+import com.foodfacil.dataclass.Salgado
 import com.foodfacil.ui.theme.MainYellow
-import com.foodfacil.viewModel.ChartViewModel
 import com.simpletext.SimpleText
 
 @Composable

@@ -12,11 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.foodfacil.R
-import com.foodfacil.dataClass.Address
+import com.foodfacil.dataclass.AddressResponseDto
 import com.simpletext.SimpleText
 
 @Composable
-fun AddressRow(address: Address?, onClick: () -> Unit){
+fun AddressRow(addressResponseDto: AddressResponseDto?, onClick: () -> Unit){
     val md = Modifier
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -25,7 +25,7 @@ fun AddressRow(address: Address?, onClick: () -> Unit){
         Column {
             SimpleText("Endereço", fontWeight = "bold", fontSize = 19)
             SimpleText(
-                "Rua ${address?.rua}, ${address?.numero}...",
+                "Rua ${addressResponseDto?.rua}, ${addressResponseDto?.numero}...",
                 fontWeight = "300",
                 fontSize = 17
             )

@@ -52,7 +52,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.firebase.Firebase
 import com.google.firebase.messaging.messaging
 import com.simpletext.SimpleText
-
+import com.foodfacil.dataclass.SalgadoResponseDto
 @OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("InlinedApi")
 @RequiresApi(Build.VERSION_CODES.O)
