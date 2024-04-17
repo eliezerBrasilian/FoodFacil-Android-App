@@ -1,62 +1,55 @@
 package com.foodfacil.screens.Chart
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.foodfacil.R
 import com.foodfacil.components.BackButtonWithTitle
-import com.foodfacil.components.Centralize
-import com.foodfacil.components.ChartItem
-import com.foodfacil.components.Circle
+import com.foodfacil.components.ChartTop
+import com.foodfacil.components.ItemAdicional
 import com.foodfacil.components.Line
-import com.foodfacil.components.Rectangle
+import com.foodfacil.components.RowFinalizarCarrinho
 import com.foodfacil.dataclass.AdicionalDto
-import com.foodfacil.dataclass.Salgado
 import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.services.Print
-import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.ui.theme.MainYellow
-import com.foodfacil.ui.theme.PinkSalgadoSelected
-import com.foodfacil.utils.toBrazilianCurrency
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.simpletext.SimpleText
@@ -68,10 +61,6 @@ fun ChartScreen(
     paddingValues: PaddingValues,
     chartViewModel: ChartViewModel
 ) {
-    val coroutine = rememberCoroutineScope()
-    val context = LocalContext.current
-
-    val listaAdicionaisOnSnapshot by chartViewModel.adicionais.observeAsState();
 
     val adicionaisSelected = remember{
         mutableStateListOf<String>()
@@ -124,52 +113,32 @@ fun ChartScreen(
                 navController = navController,
                 title = "Carrinho de compras"
             )
-        }, bottomBar = { RowVerCarrinho( cvm = chartViewModel, onClick = clickedOnFinalizarPedido) })
+        },
+      //  bottomBar = {Box(modifier = md.height(0.dp))}
+        bottomBar = { RowFinalizarCarrinho( cvm = chartViewModel, onClick = clickedOnFinalizarPedido) }
+        //
+        )
 
     { pv ->
-        Surface(md.padding(pv), color = Color.White) {
+        Surface(
+            md
+                .padding(pv), color = Color.White) {
             Column(
                 modifier = md
-                    .padding(pv)
+                    .fillMaxSize()
             ) {
                 if (cvm.isNullOrEmpty()) {
                     SimpleText("Seu carrinho está vazio")
                 } else {
-                    Top(cvm, incrementOnClick, decrementOnClick)
+                    ChartTop(cvm, incrementOnClick, decrementOnClick)
                     Line()
-                    MainContent(salgadosViewModel.adicionais.value, addAdicionalNoCarrinho, adicionaisSelected)
-                }
-            }
-        }
-    }
-}
+                    MainContent(salgadosViewModel.adicionais.value,
+                        addAdicionalNoCarrinho, adicionaisSelected,
+                        chartViewModel = chartViewModel,
+                        onClick = clickedOnFinalizarPedido)
 
-@Composable
-private fun Top(
-    cvm: List<Salgado>?,
-    incrementOnClick: (salgadoId: String) -> Unit = { s: String -> },
-    decrementOnClick: (salgadoId: String) -> Unit = { s: String -> }
-) {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 15.dp)
-            .heightIn(max = 250.dp)
-    ) {
-        //lazycolumn
-        if (!cvm.isNullOrEmpty()) {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                items(cvm) { salgado ->
-                    ChartItem(
-                        salgado,
-                        increment = incrementOnClick, decrement = decrementOnClick
-                    )
                 }
             }
-            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }
@@ -179,93 +148,85 @@ private fun MainContent(
     adicionais: List<AdicionalDto>,
     addAdicionalNoCarrinho: (item: AdicionalDto) -> Unit,
     adicionaisSelected: SnapshotStateList<String>,
+    chartViewModel: ChartViewModel,
+    onClick: () -> Unit,
 ) {
+    val scrollState = rememberLazyListState()
+
+    val marginInicial = 15.dp
+
+    val currentMargin = if(scrollState.firstVisibleItemIndex == 0) marginInicial else 0.dp
+
+    var cupomInput = remember{
+        mutableStateOf("")
+    }
+
+    val onInputChange:(text:String)->Unit = {
+        cupomInput.value = it.trim()
+    }
+
     Column(modifier = Modifier
         .fillMaxWidth()
-        .fillMaxHeight(1f)) {
+        .verticalScroll(rememberScrollState())
+        .fillMaxSize()) {
         Spacer(modifier = Modifier.height(30.dp))
         SimpleText("Compre também", fontWeight = "bold", fontSize = 18, marginLeft = 20)
 
         Spacer(modifier = Modifier.height(20.dp))
-        LazyRow {
+        LazyRow(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = currentMargin), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             items(adicionais) { adicional ->
                 val isSelected = if(adicionaisSelected.contains(adicional.id))true else false
                 ItemAdicional(adicional,addAdicionalNoCarrinho,isSelected)
             }
         }
+        Spacer(modifier = Modifier.height(30.dp))
+        ChartCupom(cupomInput = cupomInput.value, onInputChange = onInputChange)
+       // RowFinalizarCarrinho(cvm = chartViewModel, onClick = onClick)
+        Spacer(modifier = Modifier.height(200.dp))
     }
 }
 
-@Composable
-fun RowVerCarrinho(onClick: () -> Unit = {}, cvm: ChartViewModel) {
-    val md = Modifier
-    val totalPrice = cvm.priceTotal.collectAsState()
 
-    if (totalPrice.value == 0f)
-        Box(
-            md
-                .height(0.dp)
-                .fillMaxWidth()
-        ) {}
-    else
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = md
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 10.dp)
-        ) {
-            Column {
-                SimpleText("Total sem a entrega", fontSize = 15, color = Color.DarkGray)
-                SimpleText(toBrazilianCurrency(totalPrice.value), fontSize = 16)
-            }
-            Button(
-                onClick = onClick,
-                modifier = md.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    MainRed
-                ),
-                contentPadding = PaddingValues(vertical = 10.dp),
-                shape = RoundedCornerShape(11.dp)
-            ) {
-                SimpleText("Finalizar Pedido", fontWeight = "bold", color = Color.White)
+@Composable
+fun ChartCupom(cupomInput: String = "", onInputChange: (text: String) -> Unit = {}) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 15.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+            ChartCupomLeft()
+            Box(modifier = Modifier.clickable {  }){
+                Text("Adicionar", fontSize = 18.sp, color = Color(0xffFF0303), fontWeight = FontWeight.SemiBold)
             }
         }
+        TextField(value = cupomInput, onValueChange = onInputChange,
+            placeholder = {
+                Text(
+                    "Insira o código do Cupom",
+                    fontSize = 12.sp,
+                    color = Color.DarkGray,
+                    fontWeight = FontWeight.Normal
+                )
+            },
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color(0xffF8F8F8),
+                cursorColor = MainYellow))
+    }
 }
 
+
+
 @Composable
-fun ItemAdicional(
-    adicional: AdicionalDto,
-    addAdicionalNoCarrinho: (item: AdicionalDto) -> Unit,
-    isSelected: Boolean,
-) {
-    val md = Modifier
-    Box(
-        modifier = md
-            .padding(15.dp)
-            .width(150.dp)
-            .height(230.dp)
-            .background(PinkSalgadoSelected, RoundedCornerShape(12.dp))
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Centralize {
-                Rectangle(adicional.imagem)
-            }
-
-            Column(md.padding(start = 20.dp)) {
-                Text(text = adicional.titulo, color = Color.Black, fontSize = 17.sp, maxLines = 1)
-                SimpleText(adicional.descricao)
-            }
-            Centralize {
-                Circle(md, MainYellow, 70.dp, hasElevation = true, onClick = {
-                    addAdicionalNoCarrinho(
-                        adicional
-                    )
-                }) {
-
-                    Icon(imageVector = if (isSelected) Icons.Filled.Close else  Icons.Filled.Add, contentDescription = null, md.size(60.dp))
-                }
-            }
+fun ChartCupomLeft(cuponsDisponiveisTotal:Int = 2){
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Image(painter = painterResource(id = R.drawable.cupom), contentDescription = null, modifier = Modifier.size(30.dp))
+        Column {
+            Text("Cupom", fontSize = 17.sp, color = Color.Black, fontWeight = FontWeight.W600)
+            Text("$cuponsDisponiveisTotal disponíveis para usar", fontSize = 13.sp, color = Color.DarkGray, fontWeight = FontWeight.Light)
         }
     }
 }

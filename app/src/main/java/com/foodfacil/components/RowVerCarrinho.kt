@@ -45,41 +45,34 @@ fun RowVerCarrinho(totalPrice: Float, amount: Int, onClick: () -> Unit = {}) {
 
     val md = Modifier
 
-    if (amount == 0)
-        Box(
-            md
-                .height(0.dp)
-                .fillMaxWidth()
-        ) {}
-    else
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = md
-                .fillMaxWidth()
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 10.dp)
-                .scale(scale.value.value)
-        ) {
-            Column {
-                SimpleText("Total sem a entrega", fontSize = 15, color = Color.DarkGray)
-                Row {
-                    SimpleText(toBrazilianCurrency(totalPrice), fontSize = 16)
-                    SimpleText("/ $amount $item", fontSize = 15, color = Color.DarkGray)
-                }
-            }
-            Button(
-                onClick = onClick,
-                modifier = md.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    MainRed
-                ),
-                contentPadding = PaddingValues(vertical = 10.dp),
-                shape = RoundedCornerShape(11.dp)
-            ) {
-                SimpleText("Ver carrinho", fontWeight = "bold", color = Color.White)
+    if (amount == 0) Box(
+        md
+            .height(0.dp)
+            .fillMaxWidth()
+    ) {}
+    else Row(
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = md
+            .fillMaxWidth()
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .scale(scale.value.value)
+    ) {
+        Column {
+            SimpleText("Total sem a entrega", fontSize = 15, color = Color.DarkGray)
+            Row {
+                SimpleText(toBrazilianCurrency(totalPrice), fontSize = 16)
+                SimpleText("/ $amount $item", fontSize = 15, color = Color.DarkGray)
             }
         }
-
-
+        Button(
+            onClick = onClick, modifier = md.fillMaxWidth(), colors = ButtonDefaults.buttonColors(
+                MainRed
+            ), contentPadding = PaddingValues(vertical = 10.dp), shape = RoundedCornerShape(11.dp)
+        ) {
+            SimpleText("Ver carrinho", fontWeight = "bold", color = Color.White)
+        }
+    }
 }
+

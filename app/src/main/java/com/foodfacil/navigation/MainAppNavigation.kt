@@ -31,7 +31,8 @@ fun MainAppNavigation(
     Scaffold(
         modifier = Modifier.background(Color.White),
 
-        bottomBar = { BottomBar(navController = navController) }, content = {paddingValues ->
+        bottomBar = { BottomBar(navController = navController) },
+        content = {paddingValues ->
             HomeNavGraph( navController, authViewModel, userViewModel,salgadosViewModel,
                 chartViewModel, paddingValues, storeUserData,cuponsViewModel)
 
