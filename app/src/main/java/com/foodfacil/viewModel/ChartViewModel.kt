@@ -6,13 +6,18 @@ import androidx.lifecycle.ViewModel
 import com.foodfacil.dataclass.AdicionalDto
 import com.foodfacil.dataclass.Salgado
 import com.foodfacil.services.Print
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class ChartViewModel : ViewModel(){
     private val _chartList = MutableLiveData<List<Salgado>>(emptyList())
     val chartList:LiveData<List<Salgado>> = _chartList
 
-    val _adicionais = MutableLiveData<List<AdicionalDto>>(emptyList())
+    private val _adicionais = MutableLiveData<List<AdicionalDto>>(emptyList())
     val adicionais:LiveData<List<AdicionalDto>> = _adicionais
+
+    private val _priceTotal = MutableStateFlow<Float>(0f)
+    val priceTotal:StateFlow<Float> = _priceTotal
 
     val print = Print("CHARTVIEWMODEL")
 
@@ -24,16 +29,18 @@ class ChartViewModel : ViewModel(){
         val index = atualChartList.indexOf(salgadoFounded)
 
         val atualAmount = atualChartList[index].amount
-        var atualPrice: Float;
 
-        atualPrice = if(salgadoFounded?.inOffer == true){
+        val salgadoPrice: Float = if(salgadoFounded?.inOffer == true){
             atualChartList[index].priceInOffer
         }else{
             atualChartList[index].newPriceAux
         }
 
+        _priceTotal.value += salgadoPrice
+        print.log("_priceTotal.value",_priceTotal.value)
+
         val newAmount = atualAmount + 1
-        val newPrice = atualPrice * newAmount
+        val newPrice = salgadoPrice * newAmount
 
         val atualSalgadoAlterado =  atualChartList[index].copy(
             amount =  newAmount,
@@ -54,16 +61,18 @@ class ChartViewModel : ViewModel(){
         val index = atualChartList.indexOf(salgadoFounded)
 
         val atualAmount = atualChartList[index].amount
-        var atualPrice: Float;
 
-        atualPrice = if(salgadoFounded?.inOffer == true){
+        val salgadoPrice: Float = if(salgadoFounded?.inOffer == true){
             atualChartList[index].priceInOffer
         }else{
             atualChartList[index].newPriceAux
         }
+
+        _priceTotal.value -= salgadoPrice
+
         //logica
         val newAmount = atualAmount - 1
-        val newPrice = atualPrice * newAmount
+        val newPrice = salgadoPrice * newAmount
 
         print.log("atual amount", newAmount)
         if(newAmount == 0){
@@ -118,6 +127,12 @@ class ChartViewModel : ViewModel(){
                 _chartList.value = atualCharList //lista atual + o salgado
                 //incrementar 1 no carrinho
 
+
+            val salgadoPrice = if(salgado.inOffer)salgado.priceInOffer else salgado.price
+            print.log("salgadoPreço",salgadoPrice)
+            _priceTotal.value += salgadoPrice
+            print.log("_priceTotal.value",_priceTotal.value)
+
             print.log("---id", atualSalgadoAlterado.id)
             print.log("novo valor", atualSalgadoAlterado.amount)
            // print.log("novo valor", _chartList.value)
@@ -129,6 +144,12 @@ class ChartViewModel : ViewModel(){
             _chartList.value = atualCharList + salgado //lista atual + o salgado
             print.log("id", salgado.id)
             print.log("amount", salgado.amount)
+
+            val salgadoPrice = if(salgado.inOffer)salgado.priceInOffer else salgado.price
+            print.log("salgadoPreço",salgadoPrice)
+            _priceTotal.value += salgadoPrice
+            print.log("_priceTotal.value",_priceTotal.value)
+
             //print.log("added to chartlist",_chartList.value!!)
         }
     }

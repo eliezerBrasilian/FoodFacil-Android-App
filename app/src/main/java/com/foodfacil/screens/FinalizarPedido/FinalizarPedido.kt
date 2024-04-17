@@ -43,6 +43,7 @@ import com.foodfacil.dataclass.AddressResponseDto
 import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainRed
+import com.foodfacil.utils.toBrazilianCurrency
 import com.foodfacil.viewModel.UserViewModel
 import com.gamestate.utils.Toast
 
@@ -186,9 +187,9 @@ private fun DisplayTotal(subtotal: Float, onClick: () -> Unit = {}) {
                     third = "Valor total:"
                 )
                 DisplayTotalItems(
-                    first = "R$ $subtotal",
-                    second = "R$ $taxaEntrega",
-                    third = "R$ $totalPrice"
+                    first = toBrazilianCurrency(subtotal),
+                    second = toBrazilianCurrency(taxaEntrega),
+                    third = toBrazilianCurrency(totalPrice)
                 )
             }
             Button(

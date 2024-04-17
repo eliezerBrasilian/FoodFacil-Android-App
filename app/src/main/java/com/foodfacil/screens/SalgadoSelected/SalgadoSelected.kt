@@ -70,19 +70,22 @@ fun SalgadoSelected(
         print.log("id", id)
         val founded = salgadosViewModel.findSalgado(id)
 
-        print.log(founded)
-        salgadoSelected.value = founded
-        priceFormated.value = "R$ ${founded!!.priceInOffer}"
+        if(founded != null){
+            print.log(founded)
+            salgadoSelected.value = founded
 
-        total.value += founded.priceInOffer
+            val price = if(founded.inOffer) founded.priceInOffer else founded.price
+            total.value = price
 
-        //busca acompanhamentos
-        val acompanhamentosList = founded.acompanhamentos
-        print.log("acompanhamentos carregados", acompanhamentosList)
+            //busca acompanhamentos
+            val acompanhamentosList = founded.acompanhamentos
+            print.log("acompanhamentos carregados", acompanhamentosList)
 
-        acompanhamentosReceived.clear()
-        acompanhamentosReceived.addAll(acompanhamentosList)
-        checkboxesStates.add("Salgados Sortidos")
+            acompanhamentosReceived.clear()
+            acompanhamentosReceived.addAll(acompanhamentosList)
+            checkboxesStates.add("Salgados Sortidos")
+        }
+
     }
 
     val esteItemJaEstaMarcado: (acompanhamento:String)->Boolean = {acompanhamento->
@@ -100,6 +103,7 @@ fun SalgadoSelected(
             salgadoSelected.value = salgado.copy(
                 acompanhamentos = (acompanhamentosSelecionados) as List<Acompanhamento>,
                 price = total.value,
+                newPriceAux = total.value,
                 amount = 1
             )
         }

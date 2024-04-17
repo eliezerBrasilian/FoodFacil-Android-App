@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
@@ -55,6 +56,7 @@ import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.ui.theme.MainYellow
 import com.foodfacil.ui.theme.PinkSalgadoSelected
+import com.foodfacil.utils.toBrazilianCurrency
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.simpletext.SimpleText
@@ -92,8 +94,6 @@ fun ChartScreen(
 
     val cvm by chartViewModel.chartList.observeAsState()
 
-    val totalPrice = chartViewModel.getTotalPrice()
-
     val incrementOnClick: (salgadoId: String) -> Unit = { salgadoId ->
         print.log("cvm", cvm)
         chartViewModel.increment(salgadoId)
@@ -124,7 +124,7 @@ fun ChartScreen(
                 navController = navController,
                 title = "Carrinho de compras"
             )
-        }, bottomBar = { RowVerCarrinho(totalPrice = totalPrice, onClick = clickedOnFinalizarPedido) })
+        }, bottomBar = { RowVerCarrinho( cvm = chartViewModel, onClick = clickedOnFinalizarPedido) })
 
     { pv ->
         Surface(md.padding(pv), color = Color.White) {
@@ -135,7 +135,7 @@ fun ChartScreen(
                 if (cvm.isNullOrEmpty()) {
                     SimpleText("Seu carrinho está vazio")
                 } else {
-                    Top(navController = navController, cvm, incrementOnClick, decrementOnClick)
+                    Top(cvm, incrementOnClick, decrementOnClick)
                     Line()
                     MainContent(salgadosViewModel.adicionais.value, addAdicionalNoCarrinho, adicionaisSelected)
                 }
@@ -146,7 +146,7 @@ fun ChartScreen(
 
 @Composable
 private fun Top(
-    navController: NavHostController, cvm: List<Salgado>?,
+    cvm: List<Salgado>?,
     incrementOnClick: (salgadoId: String) -> Unit = { s: String -> },
     decrementOnClick: (salgadoId: String) -> Unit = { s: String -> }
 ) {
@@ -178,7 +178,7 @@ private fun Top(
 private fun MainContent(
     adicionais: List<AdicionalDto>,
     addAdicionalNoCarrinho: (item: AdicionalDto) -> Unit,
-    adicionaisSelected: SnapshotStateList<String>
+    adicionaisSelected: SnapshotStateList<String>,
 ) {
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -197,10 +197,11 @@ private fun MainContent(
 }
 
 @Composable
-fun RowVerCarrinho(totalPrice: Float, onClick: () -> Unit = {}) {
+fun RowVerCarrinho(onClick: () -> Unit = {}, cvm: ChartViewModel) {
     val md = Modifier
+    val totalPrice = cvm.priceTotal.collectAsState()
 
-    if (totalPrice == 0f)
+    if (totalPrice.value == 0f)
         Box(
             md
                 .height(0.dp)
@@ -216,7 +217,7 @@ fun RowVerCarrinho(totalPrice: Float, onClick: () -> Unit = {}) {
         ) {
             Column {
                 SimpleText("Total sem a entrega", fontSize = 15, color = Color.DarkGray)
-                SimpleText("R$ $totalPrice", fontSize = 16)
+                SimpleText(toBrazilianCurrency(totalPrice.value), fontSize = 16)
             }
             Button(
                 onClick = onClick,

@@ -91,10 +91,11 @@ fun Home(
     val notificationPermissionState = rememberPermissionState(
         permission = Manifest.permission.POST_NOTIFICATIONS
     )
-    if (showNotificationDialog.value) FirebaseMessagingNotificationPermissionDialog(
+
+    /*if (showNotificationDialog.value) FirebaseMessagingNotificationPermissionDialog(
         showNotificationDialog = showNotificationDialog,
         notificationPermissionState = notificationPermissionState
-    )
+    )*/
 
  
 
@@ -111,7 +112,6 @@ fun Home(
     }
 
     NavigationBarColor(color = MainYellow)
-
 
     val md = Modifier
     Scaffold(

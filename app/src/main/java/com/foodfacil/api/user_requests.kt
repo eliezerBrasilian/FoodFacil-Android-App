@@ -56,3 +56,32 @@ suspend fun getAllCuponsOfUser(token:String,userId:String): CupomsOfUserResponse
         return CupomsOfUserResponseDto(emptyList())
     }
 }
+
+suspend fun cadastrarMe(body: UserAuthDto): String? {
+    val print = Print("REQUESTS_CADASTRO")
+
+    try {
+        val response = httpClient.post("$baseUrl/auth/google-login") {
+            io.ktor.http.headers {
+                contentType(ContentType.Application.Json)
+            }
+            setBody(body)
+        }
+        print.log("Request finalizada")
+
+        if (response.status.isSuccess()) {
+            val responseBody = response.body<Map<String, String>>()
+            val token = responseBody["token"]
+            print.log("Token: $token")
+            return token
+        } else {
+            print.log(response.body())
+            print.log("Erro na requisição: ${response.status}")
+        }
+    } catch (e: Exception) {
+        print.log("Excessao na requisição: ${e.message}")
+    } finally {
+        httpClient.close()
+    }
+    return null
+}

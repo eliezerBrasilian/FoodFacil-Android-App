@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.foodfacil.ui.theme.MainRed
+import com.foodfacil.utils.toBrazilianCurrency
 import com.simpletext.SimpleText
 
 @Composable
@@ -38,7 +39,7 @@ fun ButtonAddItemWithPrice(total: Float, onClick:()->Unit = {}) {
                 verticalAlignment = Alignment.CenterVertically, modifier = md.fillMaxWidth()
             ) {
                 SimpleText("Adicionar", color = Color.White, fontSize = 17)
-                SimpleText("R$ $total", color = Color.White, fontWeight = "400", fontSize = 16)
+                SimpleText(toBrazilianCurrency(total), color = Color.White, fontWeight = "400", fontSize = 16)
             }
         }
     }

@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.foodfacil.ui.theme.MainRed
+import com.foodfacil.utils.toBrazilianCurrency
 import com.simpletext.SimpleText
 
 @Composable
@@ -32,6 +33,7 @@ fun RowVerCarrinho(totalPrice: Float, amount: Int, onClick: () -> Unit = {}) {
     val scale = remember {
         mutableStateOf(Animatable(0f))
     }
+
     LaunchedEffect(totalPrice) {
         scale.value.animateTo(1f, animationSpec = tween(900, easing = {
             OvershootInterpolator(2f).getInterpolation(it)
@@ -62,7 +64,7 @@ fun RowVerCarrinho(totalPrice: Float, amount: Int, onClick: () -> Unit = {}) {
             Column {
                 SimpleText("Total sem a entrega", fontSize = 15, color = Color.DarkGray)
                 Row {
-                    SimpleText("R$ $totalPrice", fontSize = 16)
+                    SimpleText(toBrazilianCurrency(totalPrice), fontSize = 16)
                     SimpleText("/ $amount $item", fontSize = 15, color = Color.DarkGray)
                 }
             }

@@ -3,15 +3,14 @@ package com.foodfacil.api
 import com.foodfacil.api.ktor.baseUrl
 import com.foodfacil.api.ktor.httpClient
 import com.foodfacil.api.ktor.json
-import com.foodfacil.dataclass.CupomResponseDto
+import com.foodfacil.dataclass.CuponsResponseDto
 import com.foodfacil.dataclass.UserCupomDto
 import com.foodfacil.services.Print
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 
-
-suspend fun getAllCupons(token:String): CupomResponseDto {
+suspend fun getAllCupons(token:String): CuponsResponseDto {
     val print = Print("getAllCupons")
     try {
         val response = httpClient.get("$baseUrl/cupom") {
@@ -19,12 +18,12 @@ suspend fun getAllCupons(token:String): CupomResponseDto {
             header("Authorization", "Bearer $token")
         }
         print.log("sucesso",response.body())
-        val list = json.decodeFromString<CupomResponseDto>(response.body())
-        print.log("cupons: $list")
+        val list = json.decodeFromString<CuponsResponseDto>(response.body())
+        print.log("cupons carregados: $list")
         return list;
     }catch (e:Exception){
         print.log("erro", e.message)
-        return CupomResponseDto(emptyList())
+        return CuponsResponseDto(emptyList())
     }
 }
 

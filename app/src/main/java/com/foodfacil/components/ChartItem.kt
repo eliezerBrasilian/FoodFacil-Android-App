@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.sp
 import com.foodfacil.R
 import com.foodfacil.dataclass.Salgado
 import com.foodfacil.ui.theme.MainYellow
+import com.foodfacil.utils.toBrazilianCurrency
 import com.simpletext.SimpleText
 
 @Composable
@@ -43,7 +44,7 @@ import com.simpletext.SimpleText
                 maxLength = 11
             )
             Text(
-                text = "R$ " +  salgado.newPriceAux,
+                text = toBrazilianCurrency(salgado.newPriceAux),
                 color = Color.Black,
                 fontWeight = FontWeight.Medium,
                 fontSize = 17.sp

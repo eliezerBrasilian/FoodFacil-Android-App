@@ -21,6 +21,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.foodfacil.dataclass.SalgadoResponseDto
 import com.foodfacil.graphs.DetailsScreen
+import com.foodfacil.utils.toBrazilianCurrency
 import com.simpletext.SimpleText
 
 @Composable
@@ -66,6 +67,6 @@ fun Description(text: String) {
 
 @Composable
 fun Price(price: Float) {
-    val formattedValue = "R$ $price"
-    SimpleText(formattedValue, fontSize = 17, fontWeight = "bold", color = Color(0xff28D84F))
+
+    SimpleText(toBrazilianCurrency(price), fontSize = 17, fontWeight = "bold", color = Color(0xff28D84F))
 }
