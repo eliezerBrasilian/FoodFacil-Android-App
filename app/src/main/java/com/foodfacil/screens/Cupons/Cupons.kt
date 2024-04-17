@@ -5,6 +5,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -34,6 +36,7 @@ fun Cupons(nav:NavHostController,
     val md = Modifier;
 
     val cupons by cuponsViewModel.cuponsList.observeAsState(initial = emptyList())
+    val loading by cuponsViewModel.loading.observeAsState(initial = true)
     val userToken by storeUserData.getToken.collectAsState(initial = "")
     val userId by storeUserData.getUid.collectAsState(initial = "")
 
@@ -60,7 +63,9 @@ fun Cupons(nav:NavHostController,
     Scaffold(topBar = { BackButtonWithTitle(navController = nav, title = "Cupons") },
         modifier = md.padding(paddingValues)) {pv->
         Surface(modifier = md.padding(pv)) {
-            Column(modifier = Modifier.padding(15.dp)) {
+            Column(modifier = Modifier
+                .padding(15.dp)
+                .verticalScroll(rememberScrollState())) {
                 SimpleText("Cupons de 15%")
                 Spacer(modifier = Modifier.height(15.dp))
                 cupons.forEach{cupom->
@@ -68,9 +73,22 @@ fun Cupons(nav:NavHostController,
                     val resgtado = if(cuponsResgatadosIds.contains(cupom.id) || cupom.resgatado) true else false
                     print.log("resgtado",resgtado)
 
+                   // if(cupom.porcentoDeDesconto == 15)
                     CupomItem(cupom,resgatarCupom,
                         resgatado = resgtado)
                 }
+                Spacer(modifier = Modifier.height(15.dp))
+                /*SimpleText("Cupons de 20%")
+                Spacer(modifier = Modifier.height(15.dp))
+                cupons.forEach{cupom->
+
+                    val resgtado = if(cuponsResgatadosIds.contains(cupom.id) || cupom.resgatado) true else false
+                    print.log("resgtado",resgtado)
+
+                    if(cupom.porcentoDeDesconto == 20)
+                        CupomItem(cupom,resgatarCupom,
+                            resgatado = resgtado)
+                }*/
             }
 
         }
@@ -95,7 +113,7 @@ fun CupomTop(porcentoDeDesconto: Int) {
     Row(verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(20.dp),
         modifier = Modifier.fillMaxWidth()) {
-        CupomTopLeftItem()
+        CupomTopLeftItem(porcentoDeDesconto)
         Column {
             SimpleText("Lanches verificados",color = Color.DarkGray, fontSize = 15)
             SimpleText("Cupom de ${porcentoDeDesconto}% de Desconto", fontSize = 17)
@@ -105,10 +123,10 @@ fun CupomTop(porcentoDeDesconto: Int) {
 }
 
 @Composable
-fun CupomTopLeftItem(){
+fun CupomTopLeftItem(porcentoDeDesconto: Int) {
     Circle(color = Color.Green,  size = 90.dp) {
         Box(modifier = Modifier,){
-            SimpleText("15%")
+            SimpleText("$porcentoDeDesconto%")
         }
     }
 }
@@ -122,7 +140,7 @@ fun CupomBottom(cupom: CupomDto, resgatarCupom: (cupom: CupomDto) -> Unit, resga
     val TAG = "CuponsScreen"
     val print = Print(TAG)
 
-    val detalhesExpaded = remember{
+    val detalhesExpanded = remember{
         mutableStateOf(false)
     }
 
@@ -138,7 +156,7 @@ fun CupomBottom(cupom: CupomDto, resgatarCupom: (cupom: CupomDto) -> Unit, resga
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(15.dp)){
                 SimpleText("Válido até $formattedDate",color = Color.DarkGray, fontSize = 12)
-                Box(modifier = Modifier.clickable { detalhesExpaded.value = !detalhesExpaded.value  }){
+                Box(modifier = Modifier.clickable { detalhesExpanded.value = !detalhesExpanded.value  }){
                     SimpleText("Detalhes",color = Color(0xFF2990BE), fontSize = 12)
                 }
             }
@@ -157,11 +175,10 @@ fun CupomBottom(cupom: CupomDto, resgatarCupom: (cupom: CupomDto) -> Unit, resga
             }
         }
 
-        if(detalhesExpaded.value)
+        if(detalhesExpanded.value)
         Box {
             SimpleText(description, fontSize = 15)
         }
     }
-
 }
 

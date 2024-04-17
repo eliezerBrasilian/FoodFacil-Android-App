@@ -37,7 +37,7 @@ class AuthViewModel : ViewModel(){
         onError:()->Unit = {}
     ) = viewModelScope.launch{
         print.log("userUid",userUid)
-       // _loading.value = true
+        _loading.value = true
 
         try {
             val response = httpClient.post("$baseUrl/auth/google-login") {
@@ -68,16 +68,18 @@ class AuthViewModel : ViewModel(){
                 storeData.saveToken(token.toString())
                 storeData.saveName(name)
                 storeData.savePhoto( if(profilePicture == null)"" else profilePicture)
-
+                _loading.value = false
                 onSuccess()
 
             } else {
                 print.log(response.body())
                 print.log("Erro na requisição: ${response.status}")
+                _loading.value = false
                // onError(Exception("Erro na requisição: ${response.status}"))
             }
         } catch (e: Exception) {
             print.log("Excessao na requisição: ${e.message}")
+            _loading.value = false
            // onError(e)
         }
     }

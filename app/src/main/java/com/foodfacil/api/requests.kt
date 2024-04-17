@@ -18,7 +18,7 @@ import io.ktor.http.isSuccess
 import kotlinx.serialization.json.Json
 
 suspend fun getAllAdicionais(token:String): List<AdicionalDto> {
-    val print = Print("REQUESTS_GET_ALL_ADICIONAIS")
+    val print = Print("SalgadosViewModel")
     try {
         val response = httpClient.get("$baseUrl/adicional") {
             contentType(ContentType.Application.Json)
@@ -51,7 +51,7 @@ suspend fun getByCategory(token:String, category:String): List<SalgadoResponseDt
     }
 }
 suspend fun getAllSalgados(token:String): List<SalgadoResponseDto> {
-    val print = Print("REQUESTS_GET_ALL_SALGADOS")
+    val print = Print("SalgadosViewModel")
     try {
         val response = httpClient.get("$baseUrl/salgado") {
             contentType(ContentType.Application.Json)

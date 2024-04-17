@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -14,12 +15,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -29,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -53,6 +58,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.messaging.messaging
 import com.simpletext.SimpleText
 import com.foodfacil.dataclass.SalgadoResponseDto
+
 @OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("InlinedApi")
 @RequiresApi(Build.VERSION_CODES.O)
@@ -77,6 +83,7 @@ fun Home(
     val cvm by chartViewModel.chartList.observeAsState(emptyList())
     val totalSalgadosNoCarrinho = chartViewModel.getTotalSalgados()
     val totalPrice = chartViewModel.getTotalPrice()
+    val loading = salgadosViewModel.loading.observeAsState(initial = true)
 
     val showNotificationDialog = remember { mutableStateOf(false) }
 
@@ -89,7 +96,9 @@ fun Home(
         notificationPermissionState = notificationPermissionState
     )
 
-    LaunchedEffect(key1=Unit){
+ 
+
+    LaunchedEffect(key1 = Unit) {
         if (notificationPermissionState.status.isGranted ||
             Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
         ) {
@@ -126,40 +135,51 @@ fun Home(
                 .padding(pV)
                 .fillMaxSize(), color = Color.White
         ) {
-            Column(
-                md.verticalScroll(rememberScrollState())
-            ) {
-                Spacer(md.height(30.dp))
-                SimpleText("Promoções Imperdíveis", fontSize = 22, fontWeight = "400", marginLeft = 15)
-                Spacer(md.height(20.dp))
-
+            if (loading.value) {
+                Box(modifier = md.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(color = MainYellow,
+                        trackColor = MaterialTheme.colorScheme.surfaceVariant, modifier = md.width(50.dp))
+                }
+            } else
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(15.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 10.dp),
-
+                    md.verticalScroll(rememberScrollState())
                 ) {
-                    salgadosViewModel.salgadosInOfferList().forEach{salgado->
-                        SalgadoItem(md = md, salgado = salgado, navController = navController)
-                    }
-                }
+                    Spacer(md.height(30.dp))
+                    SimpleText(
+                        "Promoções Imperdíveis",
+                        fontSize = 22,
+                        fontWeight = "400",
+                        marginLeft = 15
+                    )
+                    Spacer(md.height(20.dp))
 
-                Spacer(md.height(30.dp))
-                SimpleText("Batatas Rosti", fontSize = 22, fontWeight = "400", marginLeft = 15)
-                Spacer(md.height(20.dp))
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(15.dp)) {
-                    items(salgadosViewModel.batataRosti()){
-                        SalgadoItem(
-                            md = md.width(310.dp),
-                            salgado = it,
-                            navController = navController,
-                            leftWidth = 130.dp,
-                            imageWidth = 130.dp
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(15.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 10.dp),
+
+                        ) {
+                        salgadosViewModel.salgadosInOfferList().forEach { salgado ->
+                            SalgadoItem(md = md, salgado = salgado, navController = navController)
+                        }
+                    }
+
+                    Spacer(md.height(30.dp))
+                    SimpleText("Batatas Rosti", fontSize = 22, fontWeight = "400", marginLeft = 15)
+                    Spacer(md.height(20.dp))
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(15.dp)) {
+                        items(salgadosViewModel.batataRosti()) {
+                            SalgadoItem(
+                                md = md.width(310.dp),
+                                salgado = it,
+                                navController = navController,
+                                leftWidth = 130.dp,
+                                imageWidth = 130.dp
                             )
+                        }
                     }
                 }
-            }
         }
     }
 }

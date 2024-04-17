@@ -53,6 +53,9 @@ android {
 }
 
 dependencies {
+    //skeletum
+    implementation("com.valentinilk.shimmer:compose-shimmer:1.3.0")
+
     implementation(libs.firebase.storage.ktx)
     //ktor
     val ktorVersion = "2.3.2"
@@ -63,7 +66,6 @@ dependencies {
     implementation("org.slf4j:slf4j-android:1.7.36")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.0")
-
 
     //in app message (opcional)
     implementation("com.google.firebase:firebase-inappmessaging-display")

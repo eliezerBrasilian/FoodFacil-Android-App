@@ -39,15 +39,6 @@ class UserViewModel : ViewModel(){
         print.log("token",  sd.getToken.toString())
     }
 
-    fun userIsLogged():Boolean{
-        if(_user.value?.token == "" || _user.value?.token == null || _user.value?.token == "null"){
-            print.log("token is: ${_user.value?.token}")
-            print.log("esta logado")
-            return false
-        }
-        return true;
-    }
-
     fun addAddress(addressResponseDto: AddressResponseDto){
         _user.value?.addressResponseDto = addressResponseDto
 

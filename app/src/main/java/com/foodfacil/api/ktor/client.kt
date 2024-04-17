@@ -8,7 +8,7 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-val ip = "192.168.100.31"
+val ip = "192.168.0.105"
 val baseUrl = "http://$ip:8080/food-facil/api/v1"
 val json = Json { ignoreUnknownKeys = true }
 

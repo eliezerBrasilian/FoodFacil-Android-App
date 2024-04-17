@@ -22,6 +22,9 @@ class CuponsViewModel:ViewModel() {
     private val _cupons = MutableLiveData<List<CupomDto>>(emptyList())
     val cuponsList: LiveData<List<CupomDto>> = _cupons
 
+    private val _loading = MutableLiveData<Boolean>(true)
+    val loading:LiveData<Boolean> = _loading
+
     fun loadCupons(userToken:String, userId: String) = viewModelScope.launch{
         val cupons = getAllCupons(userToken)
         val cuponsOfUser = getAllCuponsOfUser(token = userToken.toString(), userId = userId)
@@ -35,6 +38,7 @@ class CuponsViewModel:ViewModel() {
             print.log("cupom resgatado", cupomResgatado)
         }
         _cupons.value = cupons.cupoms
+        _loading.value = false
     }
 
     fun addCupomToAccount(cupomDto: CupomDto, context:Context,

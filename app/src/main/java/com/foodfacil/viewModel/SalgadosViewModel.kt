@@ -1,6 +1,8 @@
 package com.foodfacil.viewModel
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.foodfacil.api.getAllAdicionais
@@ -19,8 +21,12 @@ class SalgadosViewModel : ViewModel(){
     val salgados = mutableStateOf<List<SalgadoResponseDto>>(emptyList())
     val adicionais = mutableStateOf<List<AdicionalDto>>(emptyList())
 
+    private val _loading = MutableLiveData<Boolean>(true)
+    val loading:LiveData<Boolean> = _loading
+
     fun getAllSalgados_(token:String) = viewModelScope.launch{
         print.log("token recebido",token)
+        _loading.value=true
 
        val salgadosList = getAllSalgados(token)
 
@@ -28,6 +34,7 @@ class SalgadosViewModel : ViewModel(){
             print.log("image", it.image)
         }
         salgados.value = salgadosList
+        _loading.value=false
     }
     fun getAllAdicionais_(token:String) = viewModelScope.launch{
         print.log("token recebido",token)

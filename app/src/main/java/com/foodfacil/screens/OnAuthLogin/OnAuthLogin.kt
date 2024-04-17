@@ -28,6 +28,7 @@ import androidx.navigation.NavHostController
 import com.foodfacil.R
 import com.foodfacil.components.TopBarOnAuth
 import com.foodfacil.enums.Graph
+import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.services.Print
 import com.foodfacil.services.getGoogleLoginAuth
 import com.foodfacil.ui.theme.MainRed
@@ -45,6 +46,7 @@ fun OnAuthLogin(navController: NavHostController, authViewModel: AuthViewModel) 
     val  clientId = "191389897644-f2qqgp4g23jsbu5f4sapr8o9n74f8gb7.apps.googleusercontent.com"
 
     val isLoading by authViewModel.loading.observeAsState(false)
+
     val context = LocalContext.current
     val googleSignInClient = getGoogleLoginAuth(clientId, LocalContext.current)
     val print = Print(TAG)
@@ -93,12 +95,15 @@ fun OnAuthLogin(navController: NavHostController, authViewModel: AuthViewModel) 
             Spacer(md.height(20.dp))
             ButtonWithLeftIcon(imageResource = R.drawable.google_icon, text = "Entrar com com Google", textColor = MainRed ,
                 padding = 5.dp, isOutline = true, background = Color.White, borderColor = MainRed,  marginHorizontal = 20.dp,
-                onClick = onClickGoogleSignIn, isLoading = isLoading
+                onClick = onClickGoogleSignIn, isLoading = isLoading, progressIndicatorColor = MainYellow
                 )
         }
 
     }
 }
+
+
+
 
 private fun handleGoogleSign(
     result: GoogleSignInAccount,
@@ -108,7 +113,8 @@ private fun handleGoogleSign(
 ) {
 
     val navigateToHome: ()->Unit = {
-        navController.navigate(Graph.HOME)
+       // navController.navigate(Graph.HOME)
+        navController.navigate(NavigationScreens.HOME)
     }
     authViewModel.googleSignIn(
         userUid = result.id!!,
