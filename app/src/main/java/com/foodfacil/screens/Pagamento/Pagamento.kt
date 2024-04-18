@@ -1,5 +1,4 @@
 package com.foodfacil.screens.Pagamento
-
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -30,13 +29,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.foodfacil.R
-import com.foodfacil.viewModel.ChartViewModel
-import com.simpletext.SimpleText
 import com.foodfacil.components.BackButtonWithTitle
 import com.foodfacil.components.Centralize
-import com.foodfacil.dataclass.AddressResponseDto
+import com.foodfacil.dataclass.AddressDto
 import com.foodfacil.services.Print
+import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.UserViewModel
+import com.simpletext.SimpleText
 
 
 @Composable
@@ -50,7 +49,7 @@ fun Pagamento(
     val coroutine = rememberCoroutineScope()
     val context = LocalContext.current
     
-    val address = userViewModel.user.value?.addressResponseDto
+    val address = AddressDto(cidade = "", rua = "", numero = 0, bairro = "", complemento = "")
 
     val codigoQR = "duiedbeuibuiuifbrfrbfrfubfuibfuibfuifbuefbufbeubfberufbuerfbuibyewvuv77438edbdbwi--dedbwiudbdbub874--dededwdbwuibiu"
 
@@ -121,7 +120,7 @@ private fun QRCode(){
     Image(painter = painterResource(id = R.drawable.qr_code_fake), contentDescription = null, md.size(120.dp))
 }
 
-@Composable fun PedidogeradoRow(addressResponseDto: AddressResponseDto?){
+@Composable fun PedidogeradoRow(addressResponseDto: AddressDto){
     val md = Modifier
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(20.dp)) {
         Image(painter = painterResource(id = R.drawable.selecionar), contentDescription = null, md.size(35.dp))

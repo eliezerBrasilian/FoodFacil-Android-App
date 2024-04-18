@@ -85,7 +85,6 @@ fun AddAddressDialog(
                     && bairro.toString().isNotEmpty())
                     Button(onClick = {
                         onClick()
-                        toogleDialogVisible()
                     }) {
                         SimpleText(
                             title = "Adicionar",

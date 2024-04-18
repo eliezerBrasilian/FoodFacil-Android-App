@@ -1,5 +1,7 @@
 package com.foodfacil.graphs
 
+import OnAuthLogin
+import OnAuthSignUp
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -20,21 +22,23 @@ import com.foodfacil.components.SalgadoSelected
 import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.enums.BottomBarScreen
 import com.foodfacil.enums.Graph
-import com.foodfacil.screens.Chart.ChartScreen
-import com.foodfacil.screens.FinalizarPedido.FinalizarPedido
-import com.foodfacil.screens.Home.Home
-import com.foodfacil.screens.Pedidos
-import com.foodfacil.screens.Profile.Profile
 import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.screens.Cardapio.Cardapio
+import com.foodfacil.screens.Chart.ChartScreen
+import com.foodfacil.screens.Cupons.Cupons
+import com.foodfacil.screens.FinalizarPedido.FinalizarPedido
+import com.foodfacil.screens.Home.Home
 import com.foodfacil.screens.Login.Login
 import com.foodfacil.screens.OnAuth.OnAuth
 import com.foodfacil.screens.Pagamento.Pagamento
+import com.foodfacil.screens.Pedidos
+import com.foodfacil.screens.Profile.Profile
 import com.foodfacil.screens.Splash.Splash
-import OnAuthLogin
-import OnAuthSignUp
-import com.foodfacil.screens.Cupons.Cupons
-import com.foodfacil.viewModel.*
+import com.foodfacil.viewModel.AuthViewModel
+import com.foodfacil.viewModel.ChartViewModel
+import com.foodfacil.viewModel.CuponsViewModel
+import com.foodfacil.viewModel.SalgadosViewModel
+import com.foodfacil.viewModel.UserViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -81,7 +85,7 @@ fun HomeNavGraph(
             }
 
             detailsNavGraph(navController = navController, salgadosViewModel,
-                paddingValues,chartViewModel, userViewModel)
+                paddingValues,chartViewModel, userViewModel, storeUserData)
 
            // chartNavGraph(navController,salgadosViewModel,acompanhamentosViewModel,paddingValues, chartViewModel)
 
@@ -103,7 +107,8 @@ fun NavGraphBuilder.detailsNavGraph(
     salgadosViewModel: SalgadosViewModel,
     paddingValues: PaddingValues,
     chartViewModel: ChartViewModel,
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel,
+    storeUserData: StoreUserData
 ) {
     navigation(
         route = Graph.DETAILS,
@@ -126,7 +131,7 @@ fun NavGraphBuilder.detailsNavGraph(
         }
 
         composable(route = NavigationScreens.FINALIZAR_PEDIDO) {
-            FinalizarPedido(navController, paddingValues,userViewModel, chartViewModel)
+            FinalizarPedido(navController, paddingValues,userViewModel, chartViewModel, storeUserData)
         }
 
         composable(route = NavigationScreens.PAGAMENTO) {

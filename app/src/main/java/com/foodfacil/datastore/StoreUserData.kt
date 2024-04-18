@@ -19,8 +19,34 @@ class StoreUserData(private val context: Context) {
         val USER_UID = stringPreferencesKey("user_uid")
         val USER_TOKEN = stringPreferencesKey("user_token")
         val USER_PHOTO = stringPreferencesKey("user_photo")
+        //address
+        val RUA = stringPreferencesKey("rua")
+        val CIDADE = stringPreferencesKey("cidade")
+        val BAIRRO = stringPreferencesKey("bairro")
+        val NUMERO_ENDERECO = stringPreferencesKey("numero_endereco")
+        val COMPLEMENTO = stringPreferencesKey("complemento")
     }
 
+    val getRua: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[RUA] ?: ""
+        }
+    val getCidade: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[CIDADE] ?: ""
+        }
+    val getBairro: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[BAIRRO] ?: ""
+        }
+    val getNumeroEndereco: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[NUMERO_ENDERECO] ?: ""
+        }
+    val getComplemento: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[COMPLEMENTO] ?: ""
+        }
     val getEmail: Flow<String?> = context.dataStore.data
         .map { preferences ->
             preferences[USER_EMAIL_KEY] ?: ""
@@ -30,7 +56,6 @@ class StoreUserData(private val context: Context) {
         .map { preferences ->
             preferences[USER_NAME_KEY] ?: ""
         }
-
 
     val getUid: Flow<String?> = context.dataStore.data
         .map { preferences ->
@@ -75,10 +100,36 @@ class StoreUserData(private val context: Context) {
         }
     }
 
+    suspend fun saveRua(str: String) {
+        context.dataStore.edit { preferences ->
+            preferences[RUA] = str
+        }
+    }
+    suspend fun saveNumeroEndereco(str: String) {
+        context.dataStore.edit { preferences ->
+            preferences[NUMERO_ENDERECO] = str
+        }
+    }
+
+    suspend fun saveCidade(str: String) {
+        context.dataStore.edit { preferences ->
+            preferences[CIDADE] = str
+        }
+    }
+    suspend fun saveBairro(str: String) {
+        context.dataStore.edit { preferences ->
+            preferences[BAIRRO] = str
+        }
+    }
+    suspend fun saveComplemento(str: String) {
+        context.dataStore.edit { preferences ->
+            preferences[COMPLEMENTO] = str
+        }
+    }
     suspend fun clearAllData() {
         context.dataStore.edit { preferences ->
             preferences.clear()
         }
     }
-
 }
+

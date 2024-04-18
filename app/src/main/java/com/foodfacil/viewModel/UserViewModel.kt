@@ -5,18 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.foodfacil.dataclass.AddressResponseDto
+import com.foodfacil.api.updateAddress
+import com.foodfacil.dataclass.AddressDto
 import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.services.Print
 import kotlinx.coroutines.launch
 
 class UserViewModel : ViewModel(){
-    private val addressResponseDto = AddressResponseDto(rua = "Bom Jesus", bairro = "Praça de esportes", numero = "50")
-    private val emptyAddress = null
     data class User(var userUid:String,
                     var name:String,
                     var token:String = "",
-                    var addressResponseDto: AddressResponseDto? = null,
                     var profilePicture:String = ""
         )
 
@@ -39,10 +37,12 @@ class UserViewModel : ViewModel(){
         print.log("token",  sd.getToken.toString())
     }
 
-    fun addAddress(addressResponseDto: AddressResponseDto){
-        _user.value?.addressResponseDto = addressResponseDto
+    fun addAddress(address: AddressDto,token: String,userId:String, onSuccess: () -> Unit) = viewModelScope.launch{
+        val atualizado = updateAddress(address,token,userId)
 
-        print.log(addressResponseDto)
+        if(atualizado){
+            onSuccess()
+        }
     }
 
 }

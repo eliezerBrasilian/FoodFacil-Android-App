@@ -4,14 +4,51 @@ import android.content.Context
 import com.foodfacil.api.ktor.baseUrl
 import com.foodfacil.api.ktor.httpClient
 import com.foodfacil.api.ktor.json
-import com.foodfacil.dataclass.*
+import com.foodfacil.dataclass.AddressDto
+import com.foodfacil.dataclass.CupomsOfUserResponseDto
+import com.foodfacil.dataclass.ProfilePhotoDto
+import com.foodfacil.dataclass.UserAuthDto
 import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.services.Print
 import com.foodfacil.utils.UploadFile
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.http.*
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 
+suspend fun updateAddress(
+    addressDto: AddressDto,
+    token: String?,
+    userId: String?,
+): Boolean {
+    val print = Print("USERVIEWMODEL")
+
+    try {
+        val response = httpClient.post("$baseUrl/user/address/update/${userId}") {
+            contentType(ContentType.Application.Json)
+            header("Authorization", "Bearer $token")
+            setBody(addressDto)
+        }
+        print.log("sucesso",response.body())
+        val responseBody = response.body<Map<String,String>>()
+        val message = responseBody["message"]
+        print.log(message)
+
+        if(message == "endereço atualizado"){
+            return true
+        }
+
+        else return false
+
+    }catch (e:Exception){
+        print.log("erro", e.message)
+        return false
+    }
+}
 suspend fun updateProfilePicture(
     imageSelected: String,
     token: String?,
