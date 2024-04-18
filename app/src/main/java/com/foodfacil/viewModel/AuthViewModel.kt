@@ -20,7 +20,7 @@ import io.ktor.http.headers
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.launch
 
-class AuthViewModel : ViewModel(){
+class AuthViewModel : ViewModel() {
     private val TAG = "AUTHVIEWMODEL"
 
     private val print = Print(TAG)
@@ -30,13 +30,13 @@ class AuthViewModel : ViewModel(){
 
     fun googleSignIn(
         userUid: String,
-        name:String, email:String,
+        name: String, email: String,
         profilePicture: Uri?,
         context: Context,
-        onSuccess:()->Unit = {},
-        onError:()->Unit = {}
-    ) = viewModelScope.launch{
-        print.log("userUid",userUid)
+        onSuccess: () -> Unit = {},
+        onError: () -> Unit = {}
+    ) = viewModelScope.launch {
+        print.log("userUid", userUid)
         _loading.value = true
 
         try {
@@ -44,12 +44,14 @@ class AuthViewModel : ViewModel(){
                 headers {
                     contentType(ContentType.Application.Json)
                 }
-                setBody(UserAuthDto(
-                    email = email,
-                    password = "12345",
-                    name = name,
-                    profilePicture = profilePicture.toString()
-                ))
+                setBody(
+                    UserAuthDto(
+                        email = email,
+                        password = "12345",
+                        name = name,
+                        profilePicture = profilePicture.toString()
+                    )
+                )
             }
             print.log("Request finalizada")
 
@@ -63,11 +65,11 @@ class AuthViewModel : ViewModel(){
                 print.log("userUid: $userUid")
 
                 val storeData = StoreUserData(context)
-                    storeData.saveUid(userUid.toString())
+                storeData.saveUid(userUid.toString())
                 storeData.saveEmail(email)
                 storeData.saveToken(token.toString())
                 storeData.saveName(name)
-                storeData.savePhoto( if(profilePicture == null)"" else profilePicture)
+                storeData.savePhoto(if (profilePicture == null) "" else profilePicture)
                 _loading.value = false
                 onSuccess()
 
@@ -75,12 +77,12 @@ class AuthViewModel : ViewModel(){
                 print.log(response.body())
                 print.log("Erro na requisição: ${response.status}")
                 _loading.value = false
-               // onError(Exception("Erro na requisição: ${response.status}"))
+                // onError(Exception("Erro na requisição: ${response.status}"))
             }
         } catch (e: Exception) {
             print.log("Excessao na requisição: ${e.message}")
             _loading.value = false
-           // onError(e)
+            // onError(e)
         }
     }
 

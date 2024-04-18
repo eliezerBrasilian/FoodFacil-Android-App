@@ -3,21 +3,25 @@ package com.foodfacil.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.foodfacil.R
-import com.simpletext.SimpleText
+import com.foodfacil.ui.theme.MainRed
 
 @Composable
 fun PixContainer() {
@@ -27,28 +31,31 @@ fun PixContainer() {
             .height(60.dp)
             .fillMaxWidth()
             .background(Color.White, RoundedCornerShape(12.dp))
-            .border(width = 1.dp, color = Color.Black, RoundedCornerShape(12.dp)),
+            .border(width = 1.dp, color = MainRed, RoundedCornerShape(12.dp))
+            .padding(vertical = 10.dp, horizontal = 20.dp),
         contentAlignment = Alignment.Center
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                painter = painterResource(id = R.drawable.simbolopix),
-                contentDescription = null,
-                md.size(40.dp)
-            )
-            Column {
-                SimpleText("PIX", fontWeight = "bold", fontSize = 19)
-                SimpleText(
-                    "Aprovação imediata",
-                    fontWeight = "300",
-                    fontSize = 16,
-                    color = Color.DarkGray
-                )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween, modifier = md.fillMaxWidth()
+        ) {
+
+            Row(verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+                Circle(size = 30.dp, color = Color(0xffF1F1F1)) {
+                    Image(
+                        painter = painterResource(id = R.drawable.pix),
+                        contentDescription = null,
+                        md.size(20.dp)
+                    )
+                }
+                Text("PIX", fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
+
             }
             Image(
-                painter = painterResource(id = R.drawable.selecionar),
+                painter = painterResource(id = R.drawable.custom_yellow_check),
                 contentDescription = null,
-                md.size(30.dp)
+                md.size(17.dp)
             )
         }
 

@@ -2,7 +2,6 @@ package com.foodfacil.screens.FinalizarPedido
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -11,15 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -30,22 +26,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.foodfacil.components.AddAddressDialog
 import com.foodfacil.components.AddressRow
-import com.foodfacil.viewModel.ChartViewModel
-import com.simpletext.SimpleText
 import com.foodfacil.components.BackButtonWithTitle
-import com.foodfacil.components.CustomIcon
-import com.foodfacil.components.PixContainer
-import com.foodfacil.dataclass.AddressResponseDto
+import com.foodfacil.components.MetodoDePagamentoColumn
+import com.foodfacil.components.NaoPossuiEnderecoColumn
+import com.foodfacil.components.ResumoDoPedidoItems
+import com.foodfacil.components.RowFinalizarCarrinho
+import com.foodfacil.components.TempoEstimadoDeEntregaRow
+import com.foodfacil.dataclass.AddressDto
+import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainRed
-import com.foodfacil.utils.toBrazilianCurrency
+import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.UserViewModel
 import com.gamestate.utils.Toast
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -53,11 +54,17 @@ fun FinalizarPedido(
     navController: NavHostController,
     paddingValues: PaddingValues,
     userViewModel: UserViewModel,
-    chartViewModel: ChartViewModel
+    chartViewModel: ChartViewModel,
+    storeUserData: StoreUserData
 ) {
     val coroutine = rememberCoroutineScope()
     val context = LocalContext.current
-    val user = userViewModel.user.observeAsState(initial = null)
+    val savedRua = storeUserData.getRua.collectAsState(initial = "")
+    val savedBairro = storeUserData.getBairro.collectAsState(initial = "")
+    val savedNumeroEndereco = storeUserData.getNumeroEndereco.collectAsState(initial = "")
+    val savedComplemento = storeUserData.getComplemento.collectAsState(initial = "")
+    val userId = storeUserData.getUid.collectAsState(initial = "")
+    val token = storeUserData.getToken.collectAsState(initial = "")
 
     var rua by remember {
         mutableStateOf<String?>("")
@@ -68,27 +75,23 @@ fun FinalizarPedido(
     var complememto by remember {
         mutableStateOf<String?>("")
     }
-    var cidade by remember {
-        mutableStateOf("")
-    }
+
     var numero by remember {
         mutableStateOf<String?>("")
     }
 
     LaunchedEffect(true) {
-        val address = user.value?.addressResponseDto
-        if(address == null){
+        if(savedRua.value.isNullOrEmpty()){
             rua = ""
             numero = ""
             bairro = ""
             complememto = ""
         }else{
-            rua = address.rua
-            numero = address.numero
-            bairro = address.bairro
-            complememto = address.complemento
+            rua = savedRua.value
+            numero = savedNumeroEndereco.value
+            bairro = savedBairro.value
+            complememto = savedComplemento.value
         }
-
     }
 
     val clickedOnFinalizarPedido: () -> Unit = {
@@ -113,17 +116,32 @@ fun FinalizarPedido(
     val md = Modifier
 
     val handleAddAddress: () -> Unit = {
-        val addressResponseDto = AddressResponseDto(
+        val address = AddressDto(
             cidade = "Brás Pires",
-            complemento = complememto, bairro = bairro, rua = rua, numero = numero )
+            complemento = complememto.toString(), bairro = bairro.toString(), rua = rua.toString(), numero = numero.toString().toInt() )
 
-        userViewModel.addAddress(addressResponseDto)
-        Toast(context).showToast("Endereço adicionado")
+        userViewModel.addAddress(address, token.toString(), userId.value.toString()) {
+            coroutine.launch {
+                storeUserData.saveRua(rua.toString().trim())
+                storeUserData.saveBairro(bairro.toString().trim())
+                if(complememto.toString().trim().isEmpty()){
+                    storeUserData.saveComplemento(complememto.toString().trim())
+                }
+                storeUserData.saveNumeroEndereco(numero.toString().trim())
+                storeUserData.saveCidade("Brás Pires")
+                Toast(context).showToast("Endereço adicionado")
+                toogleDialogVisible()
+            }
+        }
     }
 
     val handleEditAddress: () -> Unit = {
         toogleDialogVisible()
     }
+
+    val taxaEntrega = 2.00f
+    val cupomFreteGratisAplicado = false
+    val total = if(cupomFreteGratisAplicado)totalPrice else totalPrice + taxaEntrega
 
     Scaffold(modifier = md
         .padding(paddingValues)
@@ -131,28 +149,46 @@ fun FinalizarPedido(
         topBar = {
             BackButtonWithTitle(navController = navController, title = "Finalizar pedido")
         },
-        bottomBar = { DisplayTotal(subtotal = totalPrice, onClick = clickedOnFinalizarPedido) })
+        bottomBar = { RowFinalizarCarrinho(total = total, text = "Total com a entrega")})
     { pv ->
         Surface(md.padding(pv), color = Color.White) {
             Column(
                 modifier = md
                     .padding(horizontal = 20.dp)
             ) {
-                SimpleText("Método de Pagamento", fontWeight = "bold", fontSize = 20)
-                Spacer(md.height(10.dp))
-                PixContainer()
-                Spacer(md.height(15.dp))
-                if (user.value?.addressResponseDto == null) {
-                    Box(md.clickable { toogleDialogVisible() }) {
-                        Row {
-                            SimpleText("Adicionar endereço", fontWeight = "bold", fontSize = 20)
-                            CustomIcon(Icons.Default.Add)
-                        }
-                    }
 
-                } else {
-                    AddressRow(addressResponseDto = user.value?.addressResponseDto, onClick = handleEditAddress)
+                TempoEstimadoDeEntregaRow()
+                ResumoDoPedidoItems(subtotal = totalPrice)
+
+                if(savedRua.value == ""){
+                    NaoPossuiEnderecoColumn(onClick = toogleDialogVisible)
+                }else{
+                    Column(modifier = md.fillMaxWidth()){
+                        Spacer(md.height(20.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween, modifier = md.fillMaxWidth()){
+                            Text(
+                                text = "Entregar no endereço", color = Color.Black,
+                                fontSize = 17.sp, fontWeight = FontWeight.SemiBold
+                            )
+                            Text(
+                                text = "Trocar", color = MainRed,
+                                fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = md.clickable { toogleDialogVisible() }
+                            )
+                        }
+
+                        Spacer(md.height(10.dp))
+                        AddressRow(rua = savedRua.value.toString(),
+                            numero = savedNumeroEndereco.value.toString(),
+                            bairro = savedBairro.value.toString(),
+                            complemento = savedComplemento.value.toString()
+                            )
+                        Spacer(md.height(15.dp))
+                    }
                 }
+
+                MetodoDePagamentoColumn(md)
+
                 if (dialogIsVisible.value)
                     AddAddressDialog(
                         rua.toString(), numero.toString(), bairro.toString(), complememto.toString(),
@@ -168,56 +204,3 @@ fun FinalizarPedido(
     }
 }
 
-@Composable
-private fun DisplayTotal(subtotal: Float, onClick: () -> Unit = {}) {
-    val md = Modifier
-    val taxaEntrega = 2.00f
-    val totalPrice = subtotal + taxaEntrega
-
-    Box(
-        md
-            .fillMaxWidth()
-            .padding(vertical = 10.dp, horizontal = 20.dp), contentAlignment = Alignment.Center
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(15.dp)) {
-            Row(md.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                DisplayTotalItems(
-                    first = "Subtotal:",
-                    second = "Taxa de entrega:",
-                    third = "Valor total:"
-                )
-                DisplayTotalItems(
-                    first = toBrazilianCurrency(subtotal),
-                    second = toBrazilianCurrency(taxaEntrega),
-                    third = toBrazilianCurrency(totalPrice)
-                )
-            }
-            Button(
-                onClick = onClick,
-                modifier = md.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    MainRed
-                ),
-                contentPadding = PaddingValues(vertical = 15.dp),
-                shape = RoundedCornerShape(11.dp)
-            ) {
-                SimpleText(
-                    "Finalizar Compra",
-                    fontWeight = "bold",
-                    fontSize = 19,
-                    color = Color.White
-                )
-            }
-        }
-
-    }
-}
-
-@Composable
-private fun DisplayTotalItems(first: String, second: String, third: String) {
-    Column {
-        SimpleText(first, fontSize = 18)
-        SimpleText(second, fontSize = 18)
-        SimpleText(third, fontWeight = "bold", fontSize = 21)
-    }
-}
