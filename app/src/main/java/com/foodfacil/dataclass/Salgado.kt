@@ -5,6 +5,8 @@ data class Salgado(
     val title:String,
     val description:String,
     val price:Float, val image: String?,
+    val imageRetangular:String?,
+    val imageQuadrada:String?,
     val inOffer:Boolean = false,
     val priceInOffer:Float = price,
     var newPriceAux:Float = price,
@@ -18,6 +20,7 @@ data class Salgado(
                     price == other.price && image == other.image && inOffer == other.inOffer &&
                     priceInOffer == other.priceInOffer && isSalgadoNoCopo == other.isSalgadoNoCopo &&
                     acompanhamentos == other.acompanhamentos && newPriceAux == other.newPriceAux
+                    && imageRetangular == other.imageRetangular && imageQuadrada == other.imageQuadrada
         } else {
             false
         }

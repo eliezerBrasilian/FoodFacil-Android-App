@@ -2,12 +2,11 @@ package com.foodfacil.enums
 
  class NavigationScreens{
     companion object{
-        val LOGIN = Screens.LOGIN.name
-        val SIGN_UP = Screens.SIGN_UP.name
-        val HOME =  Screens.HOME.name
-        val PROFILE = Screens.PROFILE.name
-        val SPLASH = Screens.SPLASH.name
-        val GAME_SELECTED = Screens.GAME_SELECTED.name
+        val LOGIN = "Login"
+        val SIGN_UP = "SignUp"
+        val HOME =  "Home"
+        val PROFILE = "Profile"
+        val SPLASH = "Splash"
         val ON_AUTH = "OnAuth"
         val ON_AUTH_LOGIN = "OnAuthLogin"
         val ON_AUTH_SIGN_UP = "OnAuthSignUp"
@@ -18,11 +17,6 @@ package com.foodfacil.enums
     }
 
       enum class Screens {
-          LOGIN,
-          SIGN_UP,
           HOME,
-          PROFILE,
-          SPLASH,
-          GAME_SELECTED
      }
 }

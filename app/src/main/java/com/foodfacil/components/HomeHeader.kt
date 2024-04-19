@@ -56,7 +56,7 @@ fun FuncionamentoColumn(md: Modifier) {
 fun Dot(md: Modifier) {
     Box(
         md
-            .size(13.dp)
+            .size(8.dp)
             .background(color = GreenDot, shape = CircleShape))
 }
 

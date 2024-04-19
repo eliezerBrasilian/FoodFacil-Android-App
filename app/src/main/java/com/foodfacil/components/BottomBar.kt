@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,7 +20,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.wear.compose.material.ContentAlpha
 import com.foodfacil.enums.BottomBarScreen
 import com.foodfacil.services.Print
-import com.foodfacil.ui.theme.MainYellow
 
 @Composable
 fun BottomBar(navController: NavHostController) {
@@ -37,8 +35,8 @@ fun BottomBar(navController: NavHostController) {
     val bottomBarDestination = screens.any { it.route == currentDestination?.route }
 
     if (bottomBarDestination) {
-        BottomNavigation(modifier = Modifier.navigationBarsPadding() , backgroundColor = Color.White,
-            elevation = 0.dp) {
+        BottomNavigation(modifier = Modifier.navigationBarsPadding(), backgroundColor = Color.White,
+            elevation = 0.dp,) {
             screens.forEach { screen ->
                 AddItem(
                     screen = screen,
@@ -68,15 +66,15 @@ fun RowScope.AddItem(
         label = {
             Text(text = screen.title,
                 color = if(selected)Color(0xffFF0303) else LocalContentColor.current,
-                fontSize = 14.sp
-                )
+                fontSize = 10.sp)
         },
         icon = {
-            Icon(
+            LocalImage(imageResource = if(selected) screen.imageIconSelected else screen.imageIcon, size = 21.dp)
+            /*Icon(
                 imageVector = screen.icon,
                 contentDescription = "Navigation Icon",
                 tint = if(selected) MainYellow else Color(0xffd8d8d8)
-            )
+            )*/
         },
         selected = selected,
         unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
@@ -85,6 +83,6 @@ fun RowScope.AddItem(
                 popUpTo(navController.graph.findStartDestination().id)
                 launchSingleTop = true
             }
-        }
+        },
     )
 }

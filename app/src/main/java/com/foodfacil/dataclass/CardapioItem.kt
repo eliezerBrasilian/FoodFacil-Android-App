@@ -1,16 +1,14 @@
-package com.foodfacil.components
+package com.foodfacil.dataclass
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,40 +22,42 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.foodfacil.dataclass.SalgadoDto
+import com.foodfacil.components.Line
 import com.foodfacil.graphs.DetailsScreen
 import com.foodfacil.utils.toBrazilianCurrency
 
 @Composable
-fun SalgadoItem(
+fun CardapioItem(
     md: Modifier, salgado: SalgadoDto,
     navController: NavHostController,
-    leftWidth:Dp = 180.dp,
-    imageWidth:Dp = 100.dp
-                ){
-   Box(
-       modifier = md.height(125.dp).background(Color(0xffF1F1F1),
-       shape = RoundedCornerShape(12.dp)).clickable{
-       navController.navigate(DetailsScreen.Information.route + "/${salgado.id}")
-   }){
-       Row(horizontalArrangement = Arrangement.SpaceBetween,
-           verticalAlignment = Alignment.CenterVertically,
-           modifier = Modifier.fillMaxWidth(1f).padding(15.dp)) {
-           Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-               Title(salgado.name)
-               Box(modifier = Modifier.width(250.dp)){
-                   Description(text = salgado.description)
-               }
-               Price(price = salgado.priceInOffer)
-           }
-        Box(modifier = Modifier.width(100.dp)){
-            AsyncImage(model = salgado.image,
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.width(imageWidth))
+    leftWidth: Dp = 180.dp,
+    imageWidth: Dp = 100.dp
+){
+    Box(
+        modifier = md
+            .clickable {
+                navController.navigate(DetailsScreen.Information.route + "/${salgado.id}")
+            }){
+        Column {
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()) {
+                AsyncImage(model = salgado.imageQuadrada,
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(110.dp))
+
+                Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
+                    Title(salgado.name)
+                    Description(text = salgado.description)
+                    Price(price = if(salgado.inOffer) salgado.priceInOffer else salgado.price)
+                }
+            }
+            Spacer(modifier = md.height(15.dp))
+            Line()
         }
-       }
-   }
+
+    }
 }
 
 @Composable

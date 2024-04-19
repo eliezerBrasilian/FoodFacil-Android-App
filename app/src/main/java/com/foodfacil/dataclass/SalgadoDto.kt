@@ -2,10 +2,7 @@ package com.foodfacil.dataclass
 
 import com.foodfacil.enums.Categoria
 import com.foodfacil.enums.Disponibilidade
-import kotlinx.serialization.Serializable
-
-@Serializable
-public data class SalgadoResponseDto(
+data class SalgadoDto(
     val id: String,
     val name: String,
     val categoria: Categoria,

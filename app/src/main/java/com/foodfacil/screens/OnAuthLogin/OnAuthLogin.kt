@@ -1,3 +1,4 @@
+
 import android.app.Activity
 import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -27,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.foodfacil.R
 import com.foodfacil.components.TopBarOnAuth
-import com.foodfacil.enums.Graph
 import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.services.Print
 import com.foodfacil.services.getGoogleLoginAuth
@@ -91,18 +91,16 @@ fun OnAuthLogin(navController: NavHostController, authViewModel: AuthViewModel) 
             SimpleText("Bem-vindo de volta!", fontSize = 22, fontWeight = "bold")
             Spacer(md.height(20.dp))
             ButtonWithLeftIcon(imageResource = R.drawable.email_icon, text = "Entrar com E-mail", textColor = Color.White ,
-                padding = 5.dp,  marginHorizontal = 20.dp)
+                padding = 5.dp,  marginHorizontal = 20.dp,
+                onClick = {navController.navigate(NavigationScreens.LOGIN)})
             Spacer(md.height(20.dp))
             ButtonWithLeftIcon(imageResource = R.drawable.google_icon, text = "Entrar com com Google", textColor = MainRed ,
                 padding = 5.dp, isOutline = true, background = Color.White, borderColor = MainRed,  marginHorizontal = 20.dp,
                 onClick = onClickGoogleSignIn, isLoading = isLoading, progressIndicatorColor = MainYellow
                 )
         }
-
     }
 }
-
-
 
 
 private fun handleGoogleSign(

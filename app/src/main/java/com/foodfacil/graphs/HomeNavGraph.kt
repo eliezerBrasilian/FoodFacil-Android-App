@@ -2,6 +2,7 @@ package com.foodfacil.graphs
 
 import OnAuthLogin
 import OnAuthSignUp
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -33,6 +34,7 @@ import com.foodfacil.screens.OnAuth.OnAuth
 import com.foodfacil.screens.Pagamento.Pagamento
 import com.foodfacil.screens.Pedidos
 import com.foodfacil.screens.Profile.Profile
+import com.foodfacil.screens.SignUp.Signup
 import com.foodfacil.screens.Splash.Splash
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.ChartViewModel
@@ -40,6 +42,7 @@ import com.foodfacil.viewModel.CuponsViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.viewModel.UserViewModel
 
+@SuppressLint("NewApi")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeNavGraph(
@@ -68,7 +71,12 @@ fun HomeNavGraph(
                 OnAuth(navController)
             }
             composable(NavigationScreens.LOGIN) {
-                Login(navController, authViewModel)
+                Login(navController = navController,
+                    authViewModel = authViewModel, paddingValues = paddingValues, storeUserData = storeUserData)
+            }
+            composable(NavigationScreens.SIGN_UP){
+                Signup(navController = navController,
+                    authViewModel = authViewModel, paddingValues = paddingValues, storeUserData = storeUserData)
             }
             composable(NavigationScreens.ON_AUTH_SIGN_UP) {
                 OnAuthSignUp(navController,authViewModel)
@@ -81,7 +89,7 @@ fun HomeNavGraph(
                 Home(navController, authViewModel, userViewModel, salgadosViewModel,chartViewModel ,paddingValues, storeUserData)
             }
             composable(BottomBarScreen.Cardapio.route) {
-                Cardapio(navController, authViewModel, userViewModel, salgadosViewModel,chartViewModel ,paddingValues, storeUserData)
+                Cardapio(navController, salgadosViewModel,chartViewModel ,paddingValues)
             }
 
             detailsNavGraph(navController = navController, salgadosViewModel,
@@ -98,6 +106,7 @@ fun HomeNavGraph(
             composable(NavigationScreens.CUPONS){
                 Cupons(nav = navController, paddingValues = paddingValues, cuponsViewModel = cuponsViewModel, storeUserData = storeUserData)
             }
+
         }
     )
 }

@@ -53,6 +53,9 @@ android {
 }
 
 dependencies {
+    //feather
+    implementation(libs.composeIcons.feather)
+
     //skeletum
     implementation("com.valentinilk.shimmer:compose-shimmer:1.3.0")
 

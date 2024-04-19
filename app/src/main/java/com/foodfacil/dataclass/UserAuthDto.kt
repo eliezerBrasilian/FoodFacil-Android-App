@@ -7,4 +7,4 @@ data class UserAuthDto (val email:String,
                         val password:String,
                         val name:String,
                         val profilePicture:String?,
-                        val role:String = "USER")
+                        val role:UserRole = UserRole.USER)

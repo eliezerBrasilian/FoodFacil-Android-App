@@ -1,4 +1,4 @@
-package com.foodfacil.utils
+package com.foodfacil.services
 
 import androidx.core.net.toUri
 import com.foodfacil.dataclass.StorageFileResponse

@@ -1,9 +1,12 @@
 package com.foodfacil.screens.Profile
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +25,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -44,19 +46,24 @@ import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.azmithabet.circleimageviewcompose.CircleImage
-import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.R
 import com.foodfacil.api.updateProfilePicture
 import com.foodfacil.components.Line
 import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.services.Print
+import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.UserViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.simpletext.SimpleText
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalPermissionsApi::class)
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @SuppressLint("CoroutineCreationDuringComposition")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Profile(
     navController: NavHostController,
@@ -78,14 +85,17 @@ fun Profile(
     val goBackToAuthScreen = {
         navController.navigate(NavigationScreens.ON_AUTH)
     }
-
-    LaunchedEffect(Unit) {
-        logAvailableGraphsAndRoutes(navController)
-    }
-    logAvailableGraphsAndRoutes(navController)
-
     val TAG = "Profile"
     val print = Print(TAG)
+
+
+    val readImagePermissionState = rememberPermissionState(
+        permission = Manifest.permission.READ_MEDIA_IMAGES
+    )
+
+    LaunchedEffect(Unit) {
+        print.log(userPhoto)
+    }
 
     val logout:()->Unit = {
         print.log("logout")
@@ -99,7 +109,8 @@ fun Profile(
         .padding(paddingValues)
         .fillMaxSize()
         .background(Color.White)) {
-        Top(md = md, userViewModel.user.value?.name, userPhoto,userName,userToken,userId)
+        Top(md = md, userViewModel.user.value?.name, userPhoto,userName,userToken,userId, storeUserData,
+            readImagePermissionState)
         Line()
 
         ProfileMenuItem(md = md, title = "Dados da conta", destination = NavigationScreens.CUPONS, nav = navController)
@@ -114,6 +125,9 @@ fun Profile(
     }
 }
 
+@SuppressLint("PermissionLaunchedDuringComposition")
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun Top(
     md: Modifier,
@@ -121,7 +135,9 @@ private fun Top(
     userPhoto: String?,
     userName: String?,
     userToken: String?,
-    userId: String?
+    userId: String?,
+    storeUserData: StoreUserData,
+    readImagePermissionState: PermissionState
 ){
     val TAG = "Profile"
     val print = Print(TAG)
@@ -130,15 +146,39 @@ private fun Top(
         mutableStateOf<Uri?>(null)
     }
 
+    val PERMISSAO_READ_IMAGES = storeUserData.getPermissaoReadImageStatus.collectAsState(initial = "NEGADO")
+
+    val scope = rememberCoroutineScope()
+
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri->
         selectedImage = uri
         print.log("CAPA", uri.toString())
     }
 
-    val escolheFotoDePerfil: ()->Unit = {
-        print.log("escolher imagem")
-        launcher.launch(arrayOf("image/*"))
+    val launcherPermission = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            launcher.launch(arrayOf("image/*"))
+            print.log("PERMISSION JÁ GRANTED")
+        } else {
+            scope.launch {
+                    print.log("PERMISSION GRANTED")
+                    storeUserData.savePermissionReadImage("PERMITIDO")
+            }
+        }
     }
+
+    val escolheFotoDePerfil: ()->Unit = {
+        if (readImagePermissionState.status.isGranted ||
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || PERMISSAO_READ_IMAGES.value == "PERMITIDO"
+        ) {
+            launcher.launch(arrayOf("image/*"))
+        } else {
+            launcherPermission.launch(Manifest.permission.READ_MEDIA_IMAGES)
+        }
+    }
+
     val coroutineScope = rememberCoroutineScope()
 
     val context = LocalContext.current
@@ -154,8 +194,6 @@ private fun Top(
         selectedImage = null
     }
 
-
-
     Box(modifier = md
         .height(180.dp)
         .fillMaxWidth()
@@ -166,7 +204,7 @@ private fun Top(
 
             if(userPhoto == null || userPhoto == ""){
                 CircleImage(
-                    painter = painterResource(id = R.drawable.combo_g),
+                    painter = painterResource(id = R.drawable.user),
                     contentDescription = null, size = 70.dp, clickable = true,
                     onClickImage = escolheFotoDePerfil
                 )

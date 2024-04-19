@@ -10,7 +10,7 @@ import kotlinx.serialization.json.Json
 
 val ip = "192.168.0.105"
 val baseUrl = "http://$ip:8080/food-facil/api/v1"
-val json = Json { ignoreUnknownKeys = true }
+val json = Json { ignoreUnknownKeys = true; coerceInputValues = true }
 
 val httpClient = HttpClient(Android){
     install(Logging){
@@ -19,6 +19,7 @@ val httpClient = HttpClient(Android){
     install(ContentNegotiation){
         json(Json{
           ignoreUnknownKeys = true
+            coerceInputValues = true
         })
     }
 }

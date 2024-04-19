@@ -2,34 +2,41 @@ package com.foodfacil.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Checkbox
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
+import com.foodfacil.R
 import com.foodfacil.dataclass.Acompanhamento
 import com.foodfacil.dataclass.Salgado
 import com.foodfacil.services.Print
+import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.ui.theme.PinkSalgadoSelected
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
@@ -62,7 +69,15 @@ fun SalgadoSelected(
     }
 
     val checkboxesStates = remember{
-        mutableStateListOf<String>()
+        mutableStateListOf<Acompanhamento>()
+    }
+
+    val observacaoInput = remember{
+        mutableStateOf("")
+    }
+
+    val onChangeObservacaoInput:(text:String)->Unit = {
+        observacaoInput.value = it
     }
 
     LaunchedEffect(null) {
@@ -83,16 +98,9 @@ fun SalgadoSelected(
 
             acompanhamentosReceived.clear()
             acompanhamentosReceived.addAll(acompanhamentosList)
-            checkboxesStates.add("Salgados Sortidos")
+            //checkboxesStates.add("Salgados Sortidos")
         }
 
-    }
-
-    val esteItemJaEstaMarcado: (acompanhamento:String)->Boolean = {acompanhamento->
-        val existe =  checkboxesStates.contains(acompanhamento)
-        print.log("checkboxesStates",checkboxesStates.contains(acompanhamento))
-        print.log("existe",existe)
-        existe
     }
 
     val addSalgadoIntoChart:()->Unit = {
@@ -113,73 +121,108 @@ fun SalgadoSelected(
         navController.popBackStack()
     }
 
-    Scaffold(md.padding(paddingValues)) { pv ->
+    Scaffold(md.padding(paddingValues), bottomBar = { ButtonAddItemWithPrice(total = total.value, addSalgadoIntoChart)}) { pv ->
         Surface(md.padding(pv), color = PinkSalgadoSelected
         ) {
             Column(
-                md
-                    .padding(top = 20.dp)
-                    .background(Color.White)) {
-                Top(md, navController, salgadoSelected)
+                md.background(Color.White)) {
+                TopSalgadoSelected(md, navController, salgadoSelected)
                 CurrentSalgadoDetails(md, salgadoSelected, priceFormated)
                 MonteSeuPedido(md = md)
-                Spacer(md.height(15.dp))
-                LazyColumn(
-                    md
-                        .weight(1f)
-                        .fillMaxWidth()
-                        .padding(horizontal = 15.dp, vertical = 10.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    items(acompanhamentosReceived){ acompanhamento->
-                        ItemWithCheckBox(text = acompanhamento.name, onClick = {isActive->
+                Column(modifier = md
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp)
+                    .verticalScroll(rememberScrollState())) {
+                    Spacer(md.height(15.dp))
+                    acompanhamentosReceived.forEach {
+                            acompanhamento->
+                        Column {
+                            Spacer(modifier = md.height(5.dp))
+                            Row(modifier =Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(text = acompanhamento.name, color = Color(0xff4C4C4C),
+                                    fontWeight = FontWeight.Normal, fontSize = 16.sp)
+                                Checkbox(checked = checkboxesStates.contains(acompanhamento),
+                                    onCheckedChange = {
+                                    if(it){
+                                        checkboxesStates.add(acompanhamento)
+                                    }else{
+                                        checkboxesStates.remove(acompanhamento)
+                                    }
+                                }, colors = androidx.compose.material.CheckboxDefaults.colors(checkedColor = MainRed))
+                            }
+                            Spacer(modifier = md.height(5.dp))
+                            Line()
+                        }
+
+
+                    /*    ItemWithCheckBox(text = acompanhamento.name, onClick = {isActive->
                             print.log("clicked",isActive)
                             print.log("acompanhamento",isActive)
 
                             if(isActive) {
-                               // total.value += acompanhamento.precoPorUnidade
+                                // total.value += acompanhamento.precoPorUnidade
                                 checkboxesStates.add(acompanhamento.name)
                             }
                             else {
                                 //desmarcou
-                              //  total.value -= acompanhamento.precoPorUnidade
+                                //  total.value -= acompanhamento.precoPorUnidade
                                 checkboxesStates.remove(acompanhamento.name)
-
                             }
                             print.log("total",total.value)
-                        }, isActive = esteItemJaEstaMarcado(acompanhamento.name))
+                        }, isActive = esteItemJaEstaMarcado(acompanhamento.name))*/
                     }
+                    Spacer(md.height(18.dp))
+                    Observacao(observacaoInput.value,onChangeObservacaoInput)
+                    Spacer(md.height(20.dp))
                 }
-                ButtonAddItemWithPrice(total = total.value, addSalgadoIntoChart)
             }
         }
     }
 }
 
-
 @Composable
-private fun Top(md: Modifier, navController: NavHostController, salgadoSelected: MutableState<Salgado?>) {
-    Column(modifier = md.fillMaxWidth()
-    ) {
-        Box(md.fillMaxWidth().background(PinkSalgadoSelected), contentAlignment = Alignment.BottomStart){
-            BackIcon(md.background(PinkSalgadoSelected),navController)
-        }
-
-        Box(
-            md
-                .height(240.dp)
-                .fillMaxWidth()
-                .background(color = PinkSalgadoSelected),
-            contentAlignment = Alignment.Center
-        ) {
-
-            AsyncImage(
-                        model = salgadoSelected.value?.image,
-                        contentDescription = null,
-                        modifier = md.width(260.dp),
-                        contentScale = ContentScale.Crop
-                    )
-        }
+fun Observacao(value: String, onChangeObservacaoInput: (text: String) -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        ObservacaoTopRow(value = value)
+        ObservacaoCaixaDeTexto(value,onChangeObservacaoInput)
     }
 }
 
 
+@Composable
+fun ObservacaoTopRow(value: String) {
+        Row(modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically){
+            //left
+            Row(verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)){
+                LocalImage(imageResource = R.drawable.message, size = 17.dp)
+                Text(text = "Alguma observação?", color = Color(0xff4C4C4C),
+                    fontWeight = FontWeight.Bold, fontSize = 14.sp)
+            }
+            Text(text = "${value.length}/140", color = Color(0xff4C4C4C),
+                fontWeight = FontWeight.Bold, fontSize = 14.sp)
+        }
+}
+
+@Composable
+fun ObservacaoCaixaDeTexto(value: String, onChangeObservacaoInput: (text: String) -> Unit) {
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(140.dp),
+        placeholder = { Text(text = "Escreva sua obervação aqui...", fontSize = 17.sp, color = Color.LightGray) },
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color(0xfff1f1f1),
+            unfocusedContainerColor = Color.White,
+            unfocusedIndicatorColor = Color(0xffBCBABA),
+            focusedIndicatorColor = Color(0xffBCBABA)
+        ),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        value = value,
+        onValueChange = onChangeObservacaoInput,
+        shape = RoundedCornerShape(10.dp))
+}

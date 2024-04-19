@@ -1,3 +1,4 @@
+
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -28,8 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.foodfacil.R
 import com.foodfacil.components.TopBarOnAuth
-import com.foodfacil.datastore.StoreUserData
-import com.foodfacil.enums.Graph
 import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.services.Print
 import com.foodfacil.services.getGoogleLoginAuth
@@ -94,7 +93,7 @@ fun OnAuthSignUp(navController: NavHostController, authViewModel: AuthViewModel)
                 Spacer(md.height(20.dp))
                 ButtonWithLeftIcon(imageResource = R.drawable.email_icon, text = "Cadastrar E-mail", textColor = Color.White ,
                     padding = 5.dp,
-                    marginHorizontal = 20.dp
+                    marginHorizontal = 20.dp, onClick = {navController.navigate(NavigationScreens.SIGN_UP)}
                     )
                 Spacer(md.height(20.dp))
                 ButtonWithLeftIcon(imageResource = R.drawable.google_icon, text = "Cadastrar com Google", textColor = MainRed ,
