@@ -15,7 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.foodfacil.dataclass.Salgado
 import com.simpletext.SimpleText
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
@@ -25,13 +27,17 @@ import compose.icons.fontawesomeicons.solid.Plus
 @Composable
 fun Contador(
     modifier: Modifier = Modifier,
-    iconColor: Color = Color.Red,
     iconSize: Int = 40,
+    iconSubtract: ImageVector = FontAwesomeIcons.Solid.Minus,
+    iconAdd: ImageVector = FontAwesomeIcons.Solid.Plus,
+    iconAddColor: Color = Color.Red,
+    iconSubtractColor: Color = Color.Red,
     value: Int = 0,
     backgroundColor: Color = Color.Green,
-    increment: (salgadoId: String) -> Unit = { s: String -> },
-    decrement: (salgadoId: String) -> Unit = { s: String -> },
+    increment: (salgadoId: String, salgado:Salgado) -> Unit = { s,salg -> },
+    decrement: (salgadoId: String,salgado:Salgado) -> Unit = { s, salg -> },
     salgadoId: String,
+    salgado: Salgado,
 ) {
     Box(
         modifier = modifier.background(backgroundColor, RoundedCornerShape(10.dp))
@@ -43,17 +49,17 @@ fun Contador(
             modifier = modifier.fillMaxWidth()
         ) {
             Icon(
-                imageVector = FontAwesomeIcons.Solid.Minus,
+                imageVector = iconSubtract,
                 contentDescription = null,
-                tint = iconColor,
-                modifier = modifier.size(iconSize.dp).clickable(onClick = { decrement(salgadoId) })
+                tint = iconSubtractColor,
+                modifier = modifier.size(iconSize.dp).clickable(onClick = { decrement(salgadoId, salgado) })
             )
             SimpleText(value.toString(), fontWeight = "400", fontSize = 17)
             Icon(
-                imageVector = FontAwesomeIcons.Solid.Plus,
+                imageVector = iconAdd,
                 contentDescription = null,
-                tint = iconColor,
-                modifier = modifier.size(iconSize.dp).clickable(onClick = { increment(salgadoId) })
+                tint = iconAddColor,
+                modifier = modifier.size(iconSize.dp).clickable(onClick = { increment(salgadoId,salgado) })
             )
         }
     }

@@ -36,8 +36,10 @@ class SalgadosViewModel : ViewModel(){
 
             salgadosDtoList.add(
                 SalgadoDto(
-                    id = it.id, image = it.image,
-                    imageQuadrada = it.imageQuadrada, imageRetangular = it.imageRetangular,
+                    id = it.id,
+                    image = it.image,
+                    imageQuadrada = it.imageQuadrada,
+                    imageRetangular = it.imageRetangular,
                     categoria = it.categoria,
                     description = it.description, name = it.name, inOffer = it.inOffer,
                     priceInOffer = it.priceInOffer, price = it.price,
@@ -50,6 +52,7 @@ class SalgadosViewModel : ViewModel(){
         salgados.value = salgadosDtoList
         _loading.value=false
     }
+
     fun getAllAdicionais_(token:String) = viewModelScope.launch{
         print.log("token recebido",token)
 
@@ -73,15 +76,20 @@ class SalgadosViewModel : ViewModel(){
     }
 
     fun findSalgado(id: String?): Salgado? {
-        var founded =  salgados.value.find { it.id == id }
+        val founded =  salgados.value.find { it.id == id }
 
         if(founded != null){
-            var salgado = Salgado(
-                id = founded.id, title = founded.name, description = founded.description,
-                price = founded.price, image = founded.image,
-                imageQuadrada = founded.imageQuadrada, imageRetangular = founded.imageRetangular,
+            val salgado = Salgado(
+                id = founded.id,
+                title = founded.name,
+                description = founded.description,
+                price = founded.price,
+                priceInOffer = founded.priceInOffer,
+                image = founded.image,
+                imageQuadrada = founded.imageQuadrada,
+                imageRetangular = founded.imageRetangular,
                 inOffer = founded.inOffer,
-                priceInOffer = founded.priceInOffer, acompanhamentos = founded.acompanhamentos)
+                acompanhamentos = founded.acompanhamentos)
             return salgado;
         }
         return null;

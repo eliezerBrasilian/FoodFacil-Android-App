@@ -21,9 +21,11 @@ import com.simpletext.SimpleText
 @Composable
  fun ChartItem(
     salgado: Salgado, modifier: Modifier = Modifier,
-    increment: (salgadoId: String) -> Unit = { s: String -> },
-    decrement: (salgadoId: String) -> Unit = { s: String -> }
+    increment: (salgadoId: String, salgado: Salgado) -> Unit = { s,salg -> },
+    decrement: (salgadoId: String, salgado: Salgado) -> Unit = { s,salg -> }
 ) {
+     val preco = if(salgado.inOffer)salgado.priceInOffer else salgado.price
+
     Row(
         modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -44,25 +46,30 @@ import com.simpletext.SimpleText
                 maxLength = 11
             )
             Text(
-                text = toBrazilianCurrency(salgado.newPriceAux),
+                text = toBrazilianCurrency(preco * salgado.amount),
                 color = Color.Black,
                 fontWeight = FontWeight.Medium,
                 fontSize = 17.sp
             )
         }
-        Right(salgado, increment, decrement)
+        Right(MainYellow, MainYellow, salgado, increment, decrement)
     }
 }
 
 @Composable
 fun Right(
+    iconAddColor:Color,
+    iconSubtractColor:Color,
     salgado: Salgado,
-    increment: (salgadoId: String) -> Unit = { s: String -> },
-    decrement: (salgadoId: String) -> Unit = { s: String -> }) {
+    increment: (salgadoId: String, salgado: Salgado) -> Unit = { s,s1 -> },
+    decrement: (salgadoId: String, salgado: Salgado) -> Unit = { s,s1 -> }) {
     Contador(
-        iconColor = MainYellow,
+        iconAddColor = iconAddColor,
+        iconSubtractColor = iconSubtractColor,
         backgroundColor = Color(0xffF6F6F6), iconSize = 20,
         value = salgado.amount,
         salgadoId = salgado.id,
-        increment = increment, decrement = decrement)
+        salgado = salgado,
+        increment = increment,
+        decrement = decrement)
 }

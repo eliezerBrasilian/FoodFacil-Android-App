@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -30,8 +29,6 @@ import com.foodfacil.utils.toBrazilianCurrency
 fun CardapioItem(
     md: Modifier, salgado: SalgadoDto,
     navController: NavHostController,
-    leftWidth: Dp = 180.dp,
-    imageWidth: Dp = 100.dp
 ){
     Box(
         modifier = md

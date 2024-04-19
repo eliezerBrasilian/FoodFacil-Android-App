@@ -11,13 +11,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.foodfacil.dataclass.Salgado
 import com.foodfacil.ui.theme.GreenDot
+import com.foodfacil.utils.toBrazilianCurrency
 import com.simpletext.SimpleText
 
 @Composable
 fun CurrentSalgadoDetails(
     md: Modifier.Companion,
     salgadoSelected: MutableState<Salgado?>,
-    priceFormated: MutableState<String>
+    price: Float?
 ) {
     Column(
         md
@@ -36,7 +37,7 @@ fun CurrentSalgadoDetails(
             fontSize = 16
         )
         SimpleText(
-            priceFormated.value,
+            toBrazilianCurrency(if(price == null)0f else price),
             fontWeight = "bold",
             fontSize = 16,
             color = GreenDot

@@ -21,92 +21,51 @@ class ChartViewModel : ViewModel(){
 
     val print = Print("CHARTVIEWMODEL")
 
-    fun increment(salgadoId: String){
-        val salgadoFounded = _chartList.value?.find { salgado -> salgadoId == salgado.id }
-        print.log("---encontrado",salgadoFounded)
+    fun increment(salgadoId: String, salg: Salgado){
+        if(_chartList.value?.contains(salg) == true){
+            val atualCharList = (_chartList.value?: emptyList()).toMutableList()
+            val index = atualCharList.indexOf(salg)
+            print.log("index: ", index)
 
-        val atualChartList = (_chartList.value?: emptyList()).toMutableList()
-        val index = atualChartList.indexOf(salgadoFounded)
+            val atualAmountSalgado = atualCharList[index].amount
 
-        val atualAmount = atualChartList[index].amount
+            val atualSalgadoAlterado =  atualCharList[index].copy(amount =  atualAmountSalgado + 1)
+            atualCharList[index] = atualSalgadoAlterado
 
-        val salgadoPrice: Float = if(salgadoFounded?.inOffer == true){
-            atualChartList[index].priceInOffer
-        }else{
-            atualChartList[index].newPriceAux
-        }
+            _chartList.value = atualCharList //lista atual + o salgado
+            //incrementar 1 no carrinho
 
-        _priceTotal.value += salgadoPrice
-        print.log("_priceTotal.value",_priceTotal.value)
-
-        val newAmount = atualAmount + 1
-        val newPrice = salgadoPrice * newAmount
-
-        val atualSalgadoAlterado =  atualChartList[index].copy(
-            amount =  newAmount,
-            newPriceAux = newPrice
-            )
-
-         atualChartList[index] = atualSalgadoAlterado
-        _chartList.value = atualChartList //lista atual + o salgado
-
-        print.log("salgado alterado",atualChartList[index])
-    }
-
-    fun decrement(salgadoId: String){
-        val salgadoFounded = _chartList.value?.find { salgado -> salgadoId == salgado.id }
-        print.log("---encontrado",salgadoFounded)
-
-        val atualChartList = (_chartList.value?: emptyList()).toMutableList()
-        val index = atualChartList.indexOf(salgadoFounded)
-
-        val atualAmount = atualChartList[index].amount
-
-        val salgadoPrice: Float = if(salgadoFounded?.inOffer == true){
-            atualChartList[index].priceInOffer
-        }else{
-            atualChartList[index].newPriceAux
-        }
-
-        _priceTotal.value -= salgadoPrice
-
-        //logica
-        val newAmount = atualAmount - 1
-        val newPrice = salgadoPrice * newAmount
-
-        print.log("atual amount", newAmount)
-        if(newAmount == 0){
-            //remove
-            print.log("vazio")
-            atualChartList.removeAt(index)
-            _chartList.value = atualChartList
-
-           /* val contem = _chartList.value.contains(salgadoFounded)*/
-        }else{
-            //só atualiza
-            val atualSalgadoAlterado =  atualChartList[index].copy(
-                amount =  newAmount,
-                newPriceAux = newPrice
-            )
-
-            atualChartList[index] = atualSalgadoAlterado
-            _chartList.value = atualChartList //lista atual + o salgado
-
-            print.log("salgado alterado",atualChartList[index])
+            val salgadoPrice = if(salg.inOffer)salg.priceInOffer else salg.price
+            print.log("salgadoPreço",salgadoPrice)
+            _priceTotal.value += salgadoPrice
         }
     }
 
-    fun findPrice(salgadoId:String): Float {
-        print.log("id recebido",salgadoId)
-        //encontrar o salgado
-        val salgadoFounded = _chartList.value?.find { salgado -> salgadoId == salgado.id }
-        print.log("---encontrado",salgadoFounded)
+    fun decrement(salgadoId: String, salg: Salgado){
+        if(_chartList.value?.contains(salg) == true){
+            val atualCharList = (_chartList.value?: emptyList()).toMutableList()
+            val index = atualCharList.indexOf(salg)
+            print.log("index: ", index)
 
-        val atualCharList = (_chartList.value?: emptyList()).toMutableList()
-        val index = atualCharList.indexOf(salgadoFounded)
-        print.log("index: ", index)
+            val salgadoPrice = if(salg.inOffer)salg.priceInOffer else salg.price
+            _priceTotal.value -= salgadoPrice
 
-        return atualCharList[index].newPriceAux
+            val atualAmountSalgado = atualCharList[index].amount
+            val newAmount = atualAmountSalgado - 1
+
+            if(newAmount == 0){
+                //remove
+                print.log("vazio")
+                atualCharList.removeAt(index)
+                _chartList.value = atualCharList
+                return
+            }
+
+            val atualSalgadoAlterado =  atualCharList[index].copy(amount =  newAmount)
+            atualCharList[index] = atualSalgadoAlterado
+
+            _chartList.value = atualCharList //lista atual + o salgado
+        }
     }
 
     fun addSalgadoToChart(salgado: Salgado?){
@@ -145,9 +104,8 @@ class ChartViewModel : ViewModel(){
             print.log("id", salgado.id)
             print.log("amount", salgado.amount)
 
-            val salgadoPrice = if(salgado.inOffer)salgado.priceInOffer else salgado.price
-            print.log("salgadoPreço",salgadoPrice)
-            _priceTotal.value += salgadoPrice
+            val auxPrice = if(salgado.inOffer)salgado.priceInOffer else salgado.price
+            _priceTotal.value += auxPrice
             print.log("_priceTotal.value",_priceTotal.value)
 
             //print.log("added to chartlist",_chartList.value!!)
@@ -165,7 +123,8 @@ class ChartViewModel : ViewModel(){
     fun getTotalPrice():Float{
          var total = 0F
         _chartList.value?.forEach { salgado ->
-            total += salgado.newPriceAux
+            val priceAux = if(salgado.inOffer)salgado.priceInOffer else salgado.price
+            total += priceAux
         }
 
         return total;

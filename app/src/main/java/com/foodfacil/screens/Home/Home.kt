@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -45,7 +46,6 @@ import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainYellow
-import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.viewModel.UserViewModel
@@ -61,7 +61,6 @@ import com.google.firebase.messaging.messaging
 @Composable
 fun Home(
     navController: NavHostController,
-    authViewModel: AuthViewModel,
     userViewModel: UserViewModel,
     salgadosViewModel: SalgadosViewModel,
     chartViewModel: ChartViewModel,
@@ -91,8 +90,7 @@ fun Home(
             Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
         ) {
             Firebase.messaging.subscribeToTopic("Tutorial")
-        }
-        else {
+        } else {
             //  showNotificationDialog.value = true
             notificationPermissionState.launchPermissionRequest()
         }
@@ -101,7 +99,7 @@ fun Home(
         salgadosViewModel.getAllAdicionais_(userToken.toString())
     }
 
-    NavigationBarColor(color = MainYellow)
+    NavigationBarColor(color = Color.White)
 
     val md = Modifier
     Scaffold(
@@ -125,45 +123,74 @@ fun Home(
                 .padding(pV)
                 .fillMaxSize(), color = Color.White
         ) {
-            if (loading.value) {
-                Box(modifier = md.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = MainYellow,
-                        trackColor = MaterialTheme.colorScheme.surfaceVariant, modifier = md.width(50.dp))
-                }
-            } else
-                Column(
-                    md.verticalScroll(rememberScrollState()).padding(horizontal = 10.dp)
-                ) {
 
-                    Spacer(md.height(20.dp))
-                    Text("Tá no app", color = Color.Black, fontSize = 18.sp, fontWeight = FontWeight.Medium)
-                    Spacer(md.height(20.dp))
-                    Carrousel(
-                        imagesResources = listOf(
-                            R.drawable.banner1,
-                            R.drawable.salgados_img_on_auth,
-                            R.drawable.salgados_img_on_auth
-                        ),
-                        imageActiveColor = MainYellow,
-                        imageInactiveColor = Color(0xffE0E0E0),
-                        isCircle = true,
-                        dotHeight = 8.dp,
-                        dotWidth = 8.dp
-                    )
-                    Spacer(md.height(30.dp))
+            Column(
+                md
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 10.dp)
+            ) {
 
-                    Text("Promoções Imperdíveis", color = Color.Black, fontSize = 18.sp, fontWeight = FontWeight.Medium)
-                    Spacer(md.height(10.dp))
+                Spacer(md.height(20.dp))
+                Text(
+                    "Tá no app",
+                    color = Color.Black,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Spacer(md.height(20.dp))
+                Carrousel(
+                    imagesResources = listOf(
+                        R.drawable.banner1,
+                        R.drawable.salgados_img_on_auth,
+                        R.drawable.salgados_img_on_auth
+                    ),
+                    imageActiveColor = MainYellow,
+                    imageInactiveColor = Color(0xffE0E0E0),
+                    isCircle = true,
+                    dotHeight = 8.dp,
+                    dotWidth = 8.dp
+                )
+                Spacer(md.height(30.dp))
+
+                Text(
+                    "Promoções Imperdíveis",
+                    color = Color.Black,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Spacer(md.height(10.dp))
+                if (loading.value) {
+                    Box(modifier = md.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(
+                            color = MainYellow,
+                            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                            modifier = md.width(50.dp)
+                        )
+                    }
+                } else {
+                    if(salgadosViewModel.salgadosInOfferList().isEmpty()){
+                        Column(modifier = md.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+                            Text(
+                                "Não temos promoções no momento, mas fique ligado(a) :) no app",
+                                color = Color.Black,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
                     Column(
                         verticalArrangement = Arrangement.spacedBy(10.dp),
                         modifier = Modifier
                             .fillMaxWidth(),
-                        ) {
+                    ) {
                         salgadosViewModel.salgadosInOfferList().forEach { salgado ->
                             SalgadoItem(md = md, salgado = salgado, navController = navController)
                         }
                     }
+
                 }
+            }
         }
     }
 }

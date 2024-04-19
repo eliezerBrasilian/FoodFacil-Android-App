@@ -86,7 +86,7 @@ fun HomeNavGraph(
             }
 
             composable(BottomBarScreen.Home.route) {
-                Home(navController, authViewModel, userViewModel, salgadosViewModel,chartViewModel ,paddingValues, storeUserData)
+                Home(navController, userViewModel, salgadosViewModel,chartViewModel ,paddingValues, storeUserData)
             }
             composable(BottomBarScreen.Cardapio.route) {
                 Cardapio(navController, salgadosViewModel,chartViewModel ,paddingValues)
@@ -160,7 +160,6 @@ fun NavGraphBuilder.detailsNavGraph(
 
 sealed class DetailsScreen(val route: String) {
     object Information : DetailsScreen(route = "INFORMATION")
-    object Overview : DetailsScreen(route = "OVERVIEW")
 }
 
 

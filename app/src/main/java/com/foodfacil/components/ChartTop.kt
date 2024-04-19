@@ -17,8 +17,8 @@ import com.foodfacil.dataclass.Salgado
 @Composable
  fun ChartTop(
     cvm: List<Salgado>?,
-    incrementOnClick: (salgadoId: String) -> Unit = { s: String -> },
-    decrementOnClick: (salgadoId: String) -> Unit = { s: String -> }
+    incrementOnClick: (salgadoId: String, salgado: Salgado) -> Unit = { s,salg -> },
+    decrementOnClick: (salgadoId: String, salgado: Salgado) -> Unit = { s,salg -> }
 ) {
     Column(
         modifier = Modifier
