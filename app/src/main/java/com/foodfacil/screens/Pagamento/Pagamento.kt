@@ -1,41 +1,47 @@
 package com.foodfacil.screens.Pagamento
+import NavigationBarColor
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.foodfacil.R
 import com.foodfacil.components.BackButtonWithTitle
 import com.foodfacil.components.Centralize
+import com.foodfacil.components.ChavePixContainerCopiaECola
+import com.foodfacil.components.Circle
+import com.foodfacil.components.CopiarCodigoPixButton
 import com.foodfacil.dataclass.AddressDto
 import com.foodfacil.services.Print
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.UserViewModel
-import com.simpletext.SimpleText
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -48,10 +54,10 @@ fun Pagamento(
 
     val coroutine = rememberCoroutineScope()
     val context = LocalContext.current
-    
+
     val address = AddressDto(cidade = "", rua = "", numero = 0, bairro = "", complemento = "")
 
-    val codigoQR = "duiedbeuibuiuifbrfrbfrfubfuibfuibfuifbuefbufbeubfberufbuerfbuibyewvuv77438edbdbwi--dedbwiudbdbub874--dededwdbwuibiu"
+    val codigoPix = "duiedbeuibuiuifbrfrbfrfubfuibfuibfuifbuefbufbeubfberufbuerfbuibyewvuv77438edbdbwi--dedbwiudbdbub874--dededwdbwuibiu"
 
     val clickedOnFinalizarPedido: () -> Unit = {
         Toast.makeText(context, "Chave pix, copiada", Toast.LENGTH_SHORT).show()
@@ -75,87 +81,72 @@ fun Pagamento(
     val totalPrice = chartViewModel.getTotalPrice()
     val md = Modifier
 
+    NavigationBarColor(color = Color.White)
+
+    var progress by remember { mutableStateOf(0f) }
+    var isRunning by remember { mutableStateOf(true) }
+
+
+        // Iniciar o temporizador
+        LaunchedEffect(Unit) {
+            val startTime = System.currentTimeMillis() // Obter o tempo atual em milissegundos
+
+            while (progress < 1f) { // Até que o progresso seja 100%
+                val currentTime = System.currentTimeMillis() // Obter o tempo atual em milissegundos
+                val elapsedTime = (currentTime - startTime).toFloat() // Calcular o tempo decorrido
+                progress = elapsedTime / 60000f // Atualizar o progresso (60.000 milissegundos em 1 minuto)
+                delay(1000) // Aguardar 1 segundo
+            }
+            isRunning = false
+        }
+
+
     Scaffold(modifier = md
         .padding(paddingValues)
         .fillMaxSize(),
-        topBar = { BackButtonWithTitle(navController = navController, title = "Pix")
-        },
-        bottomBar = { CopiarCodigoPix(codigoQr = codigoQR, onClick = clickedOnFinalizarPedido) })
+        topBar = { BackButtonWithTitle(navController = navController, title = "Confirme seu pagamento", marginRight = 0.dp) },
+        bottomBar = {  })
     { pv ->
         Surface(md.padding(pv), color = Color.White) {
             Column(
                 modifier = md
                     .padding(horizontal = 20.dp)
             ) {
-                PedidogeradoRow(addressResponseDto = address)
+
                 Spacer(md.height(20.dp))
                 Centralize {
-                    SimpleText("Pague com", fontWeight = "bold", fontSize = 24)
-                }
-                Spacer(md.height(15.dp))
-                Row(md.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                    Image(painter = painterResource(id = R.drawable.simbolopix), contentDescription = null, md.size(35.dp))
-                    SimpleText("PIX", fontSize = 24)
-                }
-                Spacer(md.height(15.dp))
-                Column(verticalArrangement = Arrangement.spacedBy(15.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = md.fillMaxWidth()){
-                    QRCode()
-                    SimpleText("Copie ou escaneie o QR CODE", fontWeight = "bold", fontSize = 22)
-                    Centralize(modifier = Modifier.fillMaxWidth()) {
-                        SimpleText("Ao copiar abra o seu aplicativo cadastrado no pixe realize o seu pagamento de forma rápida", fontSize = 20)
+                    Circle(color = Color(0xffEAE5E5), size = 170.dp) {
+                        Image(painter = painterResource(id = R.drawable.qr_code), contentDescription = null, md.size(120.dp))
                     }
+                }
+                Spacer(md.height(20.dp))
+                Text(text = "Pedido aguardando pagamento",
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black, fontSize = 18.sp,
+                    textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+                Spacer(md.height(20.dp))
 
+                Text(text = "Copie o código abaixo e cole no aplicativo de sua preferência para realizar o pagamento",
+                    fontWeight = FontWeight.Normal,
+                    color = Color.Black, fontSize = 16.sp,  textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+
+                Spacer(md.height(15.dp))
+
+                ChavePixContainerCopiaECola(codigoPix){
+                    clickedOnFinalizarPedido()
                 }
 
+                Spacer(md.height(15.dp))
+
+                LinearProgressIndicator(
+                    progress = if (isRunning) progress else 1f, // Se o temporizador está em execução, use o progresso atual
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(md.height(15.dp))
+                CopiarCodigoPixButton(onClick = clickedOnFinalizarPedido)
             }
         }
     }
 }
 
-@Composable
-private fun QRCode(){
-    val md = Modifier
-    Image(painter = painterResource(id = R.drawable.qr_code_fake), contentDescription = null, md.size(120.dp))
-}
-
-@Composable fun PedidogeradoRow(addressResponseDto: AddressDto){
-    val md = Modifier
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-        Image(painter = painterResource(id = R.drawable.selecionar), contentDescription = null, md.size(35.dp))
-        Column {
-            SimpleText("Pedido Gerado", fontWeight = "bold", fontSize = 24)
-            SimpleText("Agora você só precisa finalizar o pagamento", fontWeight = "300", fontSize = 16)
-        }
-
-    }
-}
-@Composable
-private fun CopiarCodigoPix(codigoQr: String, onClick: () -> Unit = {}) {
-    val md = Modifier
-
-    Box(
-        md
-            .fillMaxWidth()
-            .padding(vertical = 10.dp, horizontal = 20.dp), contentAlignment = Alignment.Center){
-        Column(verticalArrangement = Arrangement.spacedBy(15.dp)) {
-            Row(md.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                SimpleText("Código Válido até", fontWeight = "bold", fontSize = 19)
-                SimpleText("22 horas  e 50 minutos", color = Color.Red , fontWeight = "bold", fontSize = 19)
-            }
-            Button(
-                onClick = onClick,
-                modifier = md.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    Color(0xFF2BE484)
-                ),
-                contentPadding = PaddingValues(vertical = 15.dp),
-                shape = RoundedCornerShape(11.dp)
-            ) {
-                SimpleText("Copiar chave PIX", fontWeight = "bold", fontSize = 19, color = Color.White)
-            }
-        }
-
-    }
-}

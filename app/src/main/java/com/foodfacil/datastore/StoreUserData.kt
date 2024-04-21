@@ -26,7 +26,15 @@ class StoreUserData(private val context: Context) {
         val NUMERO_ENDERECO = stringPreferencesKey("numero_endereco")
         val COMPLEMENTO = stringPreferencesKey("complemento")
         val PERMISSAO_READ_IMAGES = stringPreferencesKey("permissao_read_images")
+
+        val METODO_PAGAMENTO = stringPreferencesKey("metodo_pagamento")
     }
+
+
+    val getMetodoDePagamento: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[METODO_PAGAMENTO] ?: ""
+        }
 
     val getPermissaoReadImageStatus: Flow<String?> = context.dataStore.data
         .map { preferences ->
@@ -135,6 +143,11 @@ class StoreUserData(private val context: Context) {
     suspend fun savePermissionReadImage(str: String) {
         context.dataStore.edit { preferences ->
             preferences[PERMISSAO_READ_IMAGES] = str
+        }
+    }
+    suspend fun saveMetodoDePagamento(str: String) {
+        context.dataStore.edit { preferences ->
+            preferences[METODO_PAGAMENTO] = str
         }
     }
     suspend fun clearAllData() {

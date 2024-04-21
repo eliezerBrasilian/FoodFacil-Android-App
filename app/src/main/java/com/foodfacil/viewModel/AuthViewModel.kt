@@ -74,7 +74,7 @@ class AuthViewModel : ViewModel() {
                 storeData.saveEmail(email)
                 storeData.saveToken(token.toString())
                 storeData.saveName(name)
-                storeData.savePhoto(if (profilePicture == null) "" else profilePicture)
+                storeData.savePhoto(profilePicture ?: "")
                 _loading.value = false
                 onSuccess()
 
@@ -85,13 +85,15 @@ class AuthViewModel : ViewModel() {
                 // onError(Exception("Erro na requisição: ${response.status}"))
             }
         } catch (e: Exception) {
-            print.log("Excessao na requisição: ${e.message}")
+            print.log("Excessao na requisição: ${e}")
             _loading.value = false
             // onError(e)
         }
     }
 
-    fun signUp(name:String,email: String, password:String, onSuccess: (token:String,userId:String) -> Unit, onError: () -> Unit = {})=viewModelScope.launch{
+    fun signUp(name:String,email: String, password:String,
+               onSuccess: (token:String,userId:String) -> Unit,
+               onError: () -> Unit = {})=viewModelScope.launch{
         _loading.value = true
 
         val getUserData:(token:String?, userId:String?)->Unit = {t,u->

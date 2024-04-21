@@ -3,7 +3,7 @@ package com.foodfacil.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.foodfacil.dataclass.AdicionalDto
+import com.foodfacil.dataclass.Adicional
 import com.foodfacil.dataclass.Salgado
 import com.foodfacil.services.Print
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,15 +13,15 @@ class ChartViewModel : ViewModel(){
     private val _chartList = MutableLiveData<List<Salgado>>(emptyList())
     val chartList:LiveData<List<Salgado>> = _chartList
 
-    private val _adicionais = MutableLiveData<List<AdicionalDto>>(emptyList())
-    val adicionais:LiveData<List<AdicionalDto>> = _adicionais
+    private val _adicionais = MutableLiveData<List<Adicional>>(emptyList())
+    val adicionais:LiveData<List<Adicional>> = _adicionais
 
     private val _priceTotal = MutableStateFlow<Float>(0f)
     val priceTotal:StateFlow<Float> = _priceTotal
 
     val print = Print("CHARTVIEWMODEL")
 
-    fun increment(salgadoId: String, salg: Salgado){
+    fun increment(salg: Salgado){
         if(_chartList.value?.contains(salg) == true){
             val atualCharList = (_chartList.value?: emptyList()).toMutableList()
             val index = atualCharList.indexOf(salg)
@@ -40,8 +40,7 @@ class ChartViewModel : ViewModel(){
             _priceTotal.value += salgadoPrice
         }
     }
-
-    fun decrement(salgadoId: String, salg: Salgado){
+    fun decrement(salg: Salgado){
         if(_chartList.value?.contains(salg) == true){
             val atualCharList = (_chartList.value?: emptyList()).toMutableList()
             val index = atualCharList.indexOf(salg)
@@ -79,13 +78,11 @@ class ChartViewModel : ViewModel(){
                 print.log("index: ", index)
 
                val atualAmountSalgado = atualCharList[index].amount
-
+            //incrementar 1 no carrinho
                val atualSalgadoAlterado =  atualCharList[index].copy(amount =  atualAmountSalgado + 1)
                atualCharList[index] = atualSalgadoAlterado
 
                 _chartList.value = atualCharList //lista atual + o salgado
-                //incrementar 1 no carrinho
-
 
             val salgadoPrice = if(salgado.inOffer)salgado.priceInOffer else salgado.price
             print.log("salgadoPreço",salgadoPrice)
@@ -130,19 +127,10 @@ class ChartViewModel : ViewModel(){
         return total;
     }
 
-    fun addItemAdicional(itemAdicional: AdicionalDto){
-        val atualAdicionaisList = _adicionais.value ?: emptyList()
-
-        print.log("lista adicionais agora:", _adicionais.value )
-
-        _adicionais.value = atualAdicionaisList + itemAdicional
-
-        print.log("lista adicionais depois:", _adicionais.value )
-    }
     fun removeItemAdicional(id:String){
         val atualAdicionaisList = _adicionais.value ?: emptyList()
 
-        val newList:MutableList<AdicionalDto> = atualAdicionaisList.toMutableList()
+        val newList:MutableList<Adicional> = atualAdicionaisList.toMutableList()
         print.log("newList", newList)
 
         atualAdicionaisList.forEach {
@@ -152,5 +140,54 @@ class ChartViewModel : ViewModel(){
         _adicionais.value = newList
 
         print.log("lista adicionais depois:", _adicionais.value )
+    }
+
+    fun addAdicionalToChart(adicional: Adicional){
+        val atualList = _adicionais.value ?: emptyList()
+
+        adicional.amount = 1
+        _adicionais.value = atualList + adicional
+
+        _priceTotal.value += adicional.preco
+    }
+
+    fun decrementAdicional(a: Adicional) {
+        if(_adicionais.value?.contains(a) == true){
+            val atualCharList = (_adicionais.value?: emptyList()).toMutableList()
+            val index = atualCharList.indexOf(a)
+            print.log("index: ", index)
+
+            _priceTotal.value -= a.preco
+
+            val newAmount = atualCharList[index].amount - 1
+
+            if(newAmount == 0){
+                //remove
+                print.log("vazio")
+                atualCharList.removeAt(index)
+                _adicionais.value = atualCharList
+                return
+            }
+
+            val atualSalgadoAlterado =  atualCharList[index].copy(amount =  newAmount)
+            atualCharList[index] = atualSalgadoAlterado
+
+            _adicionais.value = atualCharList
+        }
+    }
+
+    fun incrementAdicional(a: Adicional) {
+        if(_adicionais.value?.contains(a) == true){
+            val atualCharList = (_adicionais.value?: emptyList()).toMutableList()
+            val index = atualCharList.indexOf(a)
+            print.log("index: ", index)
+
+            val newAmount = atualCharList[index].amount + 1
+            val atualSalgadoAlterado =  atualCharList[index].copy(amount =  newAmount)
+            atualCharList[index] = atualSalgadoAlterado
+
+            _adicionais.value = atualCharList
+            _priceTotal.value += a.preco
+        }
     }
 }

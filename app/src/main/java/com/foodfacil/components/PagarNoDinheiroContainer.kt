@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,21 +20,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.foodfacil.R
 import com.foodfacil.ui.theme.MainRed
-
+@Preview
 @Composable
-fun PixContainer(borderColor:Color = MainRed, trailingIconVisible:Boolean = true, onClick:()->Unit = {}) {
+fun PagarNoDinheiroContainer(borderColor: Color = MainRed, onClick:()->Unit = {}) {
     val md = Modifier
     Box(
         modifier = md
-            .height(60.dp)
+            .height(70.dp)
             .fillMaxWidth()
             .background(Color.White, RoundedCornerShape(12.dp))
             .border(width = 1.dp, color = borderColor, RoundedCornerShape(12.dp))
-            .padding(vertical = 10.dp, horizontal = 20.dp).clickable { onClick() },
+            .padding(vertical = 15.dp, horizontal = 20.dp).clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
         Row(
@@ -45,20 +47,17 @@ fun PixContainer(borderColor:Color = MainRed, trailingIconVisible:Boolean = true
                 horizontalArrangement = Arrangement.spacedBy(20.dp)) {
                 Circle(size = 30.dp, color = Color(0xffF1F1F1)) {
                     Image(
-                        painter = painterResource(id = R.drawable.pix),
+                        painter = painterResource(id = R.drawable.dinheiro),
                         contentDescription = null,
                         md.size(20.dp)
                     )
                 }
-                Text("PIX", fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
-
+                Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                    Text("Dinheiro", color = Color.Black, fontWeight = FontWeight.Normal, fontSize = 16.sp)
+                    Text("Entregue ao entregador", color = Color.DarkGray, fontWeight = FontWeight.Normal, fontSize = 14.sp)
+                }
             }
-            if(trailingIconVisible)
-                Image(
-                    painter = painterResource(id = R.drawable.custom_yellow_check),
-                    contentDescription = null,
-                    md.size(17.dp)
-                )
+
         }
 
     }

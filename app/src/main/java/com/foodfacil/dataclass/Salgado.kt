@@ -12,6 +12,7 @@ data class Salgado(
     val priceInOffer:Float,
     var amount:Int = 0,
     val acompanhamentos:List<Acompanhamento> = emptyList(),
+    var observacao:String = "",
     ){
     override fun equals(other: Any?): Boolean {
         return if (other is Salgado) {
@@ -20,7 +21,9 @@ data class Salgado(
                     priceInOffer == other.priceInOffer &&
                     amount == other.amount &&
                     acompanhamentos == other.acompanhamentos
-                    && imageRetangular == other.imageRetangular && imageQuadrada == other.imageQuadrada
+                    && imageRetangular == other.imageRetangular
+                    && imageQuadrada == other.imageQuadrada
+                    && observacao == other.observacao
         } else {
             false
         }

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.foodfacil.api.getAllAdicionais
 import com.foodfacil.api.getAllSalgados
-import com.foodfacil.dataclass.AdicionalDto
+import com.foodfacil.dataclass.Adicional
 import com.foodfacil.dataclass.Salgado
 import com.foodfacil.dataclass.SalgadoDto
 import com.foodfacil.enums.Categoria
@@ -19,7 +19,7 @@ class SalgadosViewModel : ViewModel(){
     private val print = Print(TAG)
 
     val salgados = mutableStateOf<List<SalgadoDto>>(emptyList())
-    val adicionais = mutableStateOf<List<AdicionalDto>>(emptyList())
+    val adicionais = mutableStateOf<List<Adicional>>(emptyList())
 
     private val _loading = MutableLiveData<Boolean>(true)
     val loading:LiveData<Boolean> = _loading
@@ -58,10 +58,14 @@ class SalgadosViewModel : ViewModel(){
 
         val list = getAllAdicionais(token)
 
+        val adicionaisListMapped = mutableListOf<Adicional>()
+
         list.forEach{
-            print.log("name", it.titulo)
+            val adicionalItem = Adicional(id = it.id, imagem = it.imagem, titulo = it.titulo,
+                descricao = it.descricao, preco = it.preco, disponibilidade = it.disponibilidade)
+            adicionaisListMapped.add(adicionalItem)
         }
-        adicionais.value = list
+        adicionais.value = adicionaisListMapped
     }
 
     fun salgadosInOfferList(): List<SalgadoDto> {

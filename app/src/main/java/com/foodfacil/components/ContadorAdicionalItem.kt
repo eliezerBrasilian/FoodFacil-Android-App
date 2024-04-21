@@ -22,14 +22,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.foodfacil.dataclass.Salgado
+import com.foodfacil.dataclass.Adicional
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.Minus
 import compose.icons.fontawesomeicons.solid.Plus
 
 @Composable
-fun Contador(
+fun ContadorAdicionalItem(
     modifier: Modifier = Modifier,
     iconSize: Dp = 40.dp,
     iconSubtract: ImageVector = FontAwesomeIcons.Solid.Minus,
@@ -41,10 +41,9 @@ fun Contador(
     borderRadius: Dp = 10.dp,
     value: Int = 0,
     backgroundColor: Color = Color.Green,
-    increment: (salgado: Salgado) -> Unit = { s -> },
-    decrement: (salgado: Salgado) -> Unit = { s -> },
-    salgadoId: String,
-    salgado: Salgado,
+    increment: (adicional: Adicional) -> Unit = { a -> },
+    decrement: (adicional: Adicional) -> Unit = { a -> },
+    adicional: Adicional,
 ) {
     Box(
         modifier = modifier.background(backgroundColor, RoundedCornerShape(borderRadius))
@@ -59,7 +58,7 @@ fun Contador(
                 imageVector = iconSubtract,
                 contentDescription = null,
                 tint = iconSubtractColor,
-                modifier = modifier.size(iconSize).clickable(onClick = { decrement( salgado) })
+                modifier = modifier.size(iconSize).clickable(onClick = { decrement( adicional) })
             )
             Text(
                 text = value.toString(),
@@ -72,7 +71,7 @@ fun Contador(
                 imageVector = iconAdd,
                 contentDescription = null,
                 tint = iconAddColor,
-                modifier = modifier.size(iconSize).clickable(onClick = { increment(salgado) })
+                modifier = modifier.size(iconSize).clickable(onClick = { increment(adicional) })
             )
         }
     }

@@ -93,7 +93,6 @@ fun SalgadoSelected(
         }
     }
 
-
     val addSalgadoIntoChart:()->Unit = {
         val acompanhamentosSelecionados = checkboxesStates.toList()
         print.log("acompanhamentos",acompanhamentosSelecionados)
@@ -101,7 +100,8 @@ fun SalgadoSelected(
         salgadoSelected.value?.let { salgado->
             salgadoSelected.value = salgado.copy(
                 acompanhamentos = (acompanhamentosSelecionados),
-                amount = 1
+                amount = 1,
+                observacao = observacaoInput.value.trim()
             )
         }
 

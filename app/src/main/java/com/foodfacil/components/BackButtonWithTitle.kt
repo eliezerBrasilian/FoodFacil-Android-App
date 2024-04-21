@@ -1,5 +1,6 @@
 package com.foodfacil.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -23,13 +25,16 @@ import androidx.navigation.NavHostController
 fun BackButtonWithTitle(
     icon: ImageVector = Icons.Default.ArrowBack,
     navController: NavHostController,
-    title: String
+    title: String,
+    marginRight:Dp = 20.dp
 ){
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
-            .padding(end = 20.dp), horizontalArrangement = Arrangement.SpaceBetween,
+            .padding(end = marginRight)
+            .background(Color.White),
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         BackIcon(md = Modifier, navController = navController)

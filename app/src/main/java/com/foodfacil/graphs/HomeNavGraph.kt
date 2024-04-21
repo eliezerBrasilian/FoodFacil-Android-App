@@ -27,6 +27,7 @@ import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.screens.Cardapio.Cardapio
 import com.foodfacil.screens.Chart.ChartScreen
 import com.foodfacil.screens.Cupons.Cupons
+import com.foodfacil.screens.EscolherFormaDePagamento.EscolherFormaDePagamento
 import com.foodfacil.screens.FinalizarPedido.FinalizarPedido
 import com.foodfacil.screens.Home.Home
 import com.foodfacil.screens.Login.Login
@@ -105,6 +106,14 @@ fun HomeNavGraph(
             }
             composable(NavigationScreens.CUPONS){
                 Cupons(nav = navController, paddingValues = paddingValues, cuponsViewModel = cuponsViewModel, storeUserData = storeUserData)
+            }
+
+            composable(NavigationScreens.ESCOLHER_FORMA_DE_PAGAMENTO){
+                EscolherFormaDePagamento(navController = navController, paddingValues = paddingValues, storeUserData = storeUserData)
+            }
+
+            composable(route = NavigationScreens.PAGAMENTO) {
+                Pagamento(navController, paddingValues,userViewModel, chartViewModel)
             }
 
         }

@@ -1,45 +1,50 @@
 package com.foodfacil.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.foodfacil.dataclass.Adicional
 import com.foodfacil.dataclass.Salgado
 
 @Composable
  fun ChartTop(
     cvm: List<Salgado>?,
-    incrementOnClick: (salgadoId: String, salgado: Salgado) -> Unit = { s,salg -> },
-    decrementOnClick: (salgadoId: String, salgado: Salgado) -> Unit = { s,salg -> }
+    adicionaisSelectedStateList: State<List<Adicional>?>,
+    incrementOnClick: (salgado: Salgado) -> Unit = { s -> },
+    decrementOnClick: (salgado: Salgado) -> Unit = { s -> },
+    incrementAdicionalOnClick: (adicional: Adicional) -> Unit = { a -> },
+    decrementAdicionalOnClick: (adicional: Adicional) -> Unit = { a -> }
 ) {
     Column(
         modifier = Modifier
             .padding(horizontal = 15.dp)
-            .heightIn(max = 250.dp)
     ) {
         //lazycolumn
         if (!cvm.isNullOrEmpty()) {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                items(cvm) { salgado ->
-                    ChartItem(
-                        salgado,
-                        increment = incrementOnClick, decrement = decrementOnClick
-                    )
+            cvm.forEach{
+                Column {
+                    ChartItem(it, increment = incrementOnClick, decrement = decrementOnClick)
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
             }
-            Spacer(modifier = Modifier.height(20.dp))
+        }
+
+        if(adicionaisSelectedStateList.value?.isNotEmpty() == true){
+            adicionaisSelectedStateList.value?.forEach{adicionalItem->
+                    Column {
+                        AdicionalItem(adicionalItem,
+                            increment = incrementAdicionalOnClick,
+                            decrement = decrementAdicionalOnClick)
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
+
+            }
         }
     }
+    Spacer(modifier = Modifier.height(10.dp))
 }

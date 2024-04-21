@@ -66,6 +66,8 @@ fun FinalizarPedido(
     val userId = storeUserData.getUid.collectAsState(initial = "")
     val token = storeUserData.getToken.collectAsState(initial = "")
 
+    val totalPrice = chartViewModel.priceTotal.collectAsState(0f)
+
     var rua by remember {
         mutableStateOf<String?>("")
     }
@@ -112,7 +114,6 @@ fun FinalizarPedido(
     val cvm by chartViewModel.chartList.observeAsState()
     print.log("cvm", cvm)
 
-    val totalPrice = chartViewModel.getTotalPrice()
     val md = Modifier
 
     val handleAddAddress: () -> Unit = {
@@ -141,7 +142,7 @@ fun FinalizarPedido(
 
     val taxaEntrega = 2.00f
     val cupomFreteGratisAplicado = false
-    val total = if(cupomFreteGratisAplicado)totalPrice else totalPrice + taxaEntrega
+    val total = if(cupomFreteGratisAplicado)totalPrice.value else totalPrice.value + taxaEntrega
 
     Scaffold(modifier = md
         .padding(paddingValues)
@@ -158,7 +159,7 @@ fun FinalizarPedido(
             ) {
 
                 TempoEstimadoDeEntregaRow()
-                ResumoDoPedidoItems(subtotal = totalPrice)
+                ResumoDoPedidoItems(subtotal = totalPrice.value)
 
                 if(savedRua.value == ""){
                     NaoPossuiEnderecoColumn(onClick = toogleDialogVisible)
@@ -187,7 +188,9 @@ fun FinalizarPedido(
                     }
                 }
 
-                MetodoDePagamentoColumn(md)
+                MetodoDePagamentoColumn(md){
+                    navController.navigate(NavigationScreens.ESCOLHER_FORMA_DE_PAGAMENTO)
+                }
 
                 if (dialogIsVisible.value)
                     AddAddressDialog(
