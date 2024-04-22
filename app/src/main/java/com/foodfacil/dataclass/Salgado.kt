@@ -11,7 +11,7 @@ data class Salgado(
     val inOffer:Boolean,
     val priceInOffer:Float,
     var amount:Int = 0,
-    val acompanhamentos:List<Acompanhamento> = emptyList(),
+    val acompanhamentos:List<IngredienteDto> = emptyList(),
     var observacao:String = "",
     ){
     override fun equals(other: Any?): Boolean {

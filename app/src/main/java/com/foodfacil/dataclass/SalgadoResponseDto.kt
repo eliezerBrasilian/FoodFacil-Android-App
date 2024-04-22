@@ -5,17 +5,19 @@ import com.foodfacil.enums.Disponibilidade
 import kotlinx.serialization.Serializable
 
 @Serializable
-public data class SalgadoResponseDto(
+ data class SalgadoResponseDto(
     val id: String,
-    val name: String,
+    val nome: String,
     val categoria: Categoria,
-    val description: String,
-    val price: Float,
-    val image: String?,
-    val imageRetangular:String?,
-    val imageQuadrada:String?,
-    val inOffer: Boolean,
-    val priceInOffer: Float,
+    val descricao: String,
+    val preco: Float,
+    val imagem: String?,
+    val imagemRetangular:String?,
+    val imagemQuadrada:String?,
+    val emOferta: Boolean,
+    val precoEmOferta: Float,
     val disponibilidade: Disponibilidade,
-    val acompanhamentos: List<Acompanhamento>
+    val createdAt:Long,
+    val observacao:String?,
+    val ingredientes: List<IngredienteDto>
 )

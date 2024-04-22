@@ -39,15 +39,15 @@ fun CardapioItem(
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()) {
-                AsyncImage(model = salgado.imageQuadrada,
+                AsyncImage(model = salgado.imagemQuadrada,
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
                     modifier = Modifier.size(110.dp))
 
                 Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
-                    Title(salgado.name)
-                    Description(text = salgado.description)
-                    Price(price = if(salgado.inOffer) salgado.priceInOffer else salgado.price)
+                    Title(salgado.nome)
+                    Description(text = salgado.descricao)
+                    Price(price = if(salgado.emOferta) salgado.precoEmOferta else salgado.preco)
                 }
             }
             Spacer(modifier = md.height(15.dp))

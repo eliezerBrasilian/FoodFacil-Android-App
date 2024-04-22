@@ -28,7 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.foodfacil.dataclass.Acompanhamento
+import com.foodfacil.dataclass.IngredienteDto
 import com.foodfacil.dataclass.Salgado
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainRed
@@ -56,11 +56,11 @@ fun SalgadoSelected(
     }
 
     val acompanhamentosReceived = remember {
-        mutableStateListOf<Acompanhamento>()
+        mutableStateListOf<IngredienteDto>()
     }
 
     val checkboxesStates = remember{
-        mutableStateListOf<Acompanhamento>()
+        mutableStateListOf<IngredienteDto>()
     }
 
     val observacaoInput = remember{
@@ -132,7 +132,7 @@ fun SalgadoSelected(
                             Row(modifier =Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(text = acompanhamento.name, color = Color(0xff4C4C4C),
+                                Text(text = acompanhamento.nome, color = Color(0xff4C4C4C),
                                     fontWeight = FontWeight.Normal, fontSize = 16.sp)
                                 Checkbox(checked = checkboxesStates.contains(acompanhamento),
                                     onCheckedChange = {

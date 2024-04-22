@@ -44,14 +44,14 @@ fun SalgadoItem(
            verticalAlignment = Alignment.CenterVertically,
            modifier = Modifier.fillMaxWidth(1f).padding(15.dp)) {
            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-               Title(salgado.name)
+               Title(salgado.nome)
                Box(modifier = Modifier.width(250.dp)){
-                   Description(text = salgado.description)
+                   Description(text = salgado.descricao)
                }
-               Price(price = salgado.priceInOffer)
+               Price(price = salgado.precoEmOferta)
            }
         Box(modifier = Modifier.width(100.dp)){
-            AsyncImage(model = salgado.image,
+            AsyncImage(model = salgado.imagem,
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.width(imageWidth))

@@ -4,9 +4,9 @@ import com.foodfacil.enums.Disponibilidade
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Acompanhamento(val id:String = "",
-                          val name:String,
-                          val precoPorUnidade:Float = 0f,
+data class IngredienteDto(val nome:String,
+                          val imagem:String?,
+                          val preco:Float = 0f,
+                          val createdAt:Long,
                           val disponibilidade:Disponibilidade
     )
-

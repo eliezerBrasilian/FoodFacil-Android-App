@@ -19,8 +19,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.foodfacil.dataclass.CardapioItem
+import com.foodfacil.dataclass.SalgadoDto
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainGray
 import com.foodfacil.ui.theme.MainRed
@@ -48,14 +47,10 @@ fun Cardapio(
     paddingValues: PaddingValues,
 ) {
 
-    val TAG = "CARDAPIO"
-    val print = Print(TAG);
+    val print = Print();
 
-
-
-    val salgadosList = remember {
-        mutableStateOf(salgadosViewModel.salgados.value)
-    }
+    print.log("combosList",salgadosViewModel.combosList())
+    print.log("salgadosList",salgadosViewModel.salgados.value)
 
     val md = Modifier
 
@@ -77,24 +72,83 @@ fun Cardapio(
 
                 Column(md.padding(horizontal = 10.dp)) {
                     Spacer(md.height(30.dp))
-                    Text(
-                        "COMBOS",
-                        color = Color.Black,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Spacer(md.height(27.dp))
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(15.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
 
-                    ) {
-                        salgadosViewModel.combosList().forEach { salgado ->
-                            CardapioItem(md = md, salgado = salgado, navController = navController)
-                        }
+
+                    if(salgadosViewModel.salgadosNoCopoList().isNotEmpty()){
+                        CardapioItemList(md,"SALGADOS NO COPO", salgadosViewModel.salgadosNoCopoList(), navController)
                     }
+
+                    Spacer(md.height(10.dp))
+
+                    if(salgadosViewModel.risoleList().isNotEmpty()){
+                        CardapioItemList(md,"RISOLES", salgadosViewModel.risoleList(), navController)
+                    }
+
+                    Spacer(md.height(10.dp))
+
+                    if(salgadosViewModel.coxinhaList().isNotEmpty()){
+                        CardapioItemList(md,"COXINHAS", salgadosViewModel.coxinhaList(), navController)
+                    }
+
+                    Spacer(md.height(10.dp))
+
+                    if(salgadosViewModel.pastelList().isNotEmpty()){
+                        CardapioItemList(md, "PASTÉIS", salgadosViewModel.pastelList(), navController)
+                    }
+
+                    Spacer(md.height(10.dp))
+
+                    if(salgadosViewModel.hotDogList().isNotEmpty()){
+                        CardapioItemList(md, "HOT-DOGs", salgadosViewModel.hotDogList(), navController)
+                    }
+
+                    Spacer(md.height(10.dp))
+
+                    if(salgadosViewModel.combosList().isNotEmpty()){
+                        CardapioItemList(md,"COMBOS", salgadosViewModel.combosList(), navController)
+                    }
+
+                    Spacer(md.height(10.dp))
+
+                    if(salgadosViewModel.congeladoList().isNotEmpty()){
+                        CardapioItemList(md,"CONGELADOS", salgadosViewModel.congeladoList(), navController)
+                    }
+
+                    Spacer(md.height(10.dp))
+
+                    if(salgadosViewModel.batataRostiList().isNotEmpty()){
+                        CardapioItemList(md,"BATATAS-ROSTI", salgadosViewModel.batataRostiList(), navController)
+                    }
+
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CardapioItemList(
+    md: Modifier.Companion,
+    titulo:String,
+    list: List<SalgadoDto>,
+    navController: NavHostController
+) {
+    Column {
+        Text(
+            titulo,
+            color = Color.Black,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+        Spacer(md.height(27.dp))
+        Column(
+            verticalArrangement = Arrangement.spacedBy(15.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+
+        ) {
+            list.forEach { salgado ->
+                CardapioItem(md = md, salgado = salgado, navController = navController)
             }
         }
     }
