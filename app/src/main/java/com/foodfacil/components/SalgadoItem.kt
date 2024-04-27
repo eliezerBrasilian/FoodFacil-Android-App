@@ -24,13 +24,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.foodfacil.dataclass.SalgadoDto
+import com.foodfacil.dataclass.Salgado
 import com.foodfacil.graphs.DetailsScreen
 import com.foodfacil.utils.toBrazilianCurrency
 
 @Composable
 fun SalgadoItem(
-    md: Modifier, salgado: SalgadoDto,
+    md: Modifier, salgado: Salgado,
     navController: NavHostController,
     leftWidth:Dp = 180.dp,
     imageWidth:Dp = 100.dp

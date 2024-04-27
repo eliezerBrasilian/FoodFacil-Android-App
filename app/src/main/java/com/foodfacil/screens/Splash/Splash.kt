@@ -30,29 +30,22 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.foodfacil.R
 import com.foodfacil.datastore.StoreUserData
-import com.foodfacil.enums.Graph
 import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.ui.theme.MainRed
-import com.foodfacil.viewModel.UserViewModel
 import kotlinx.coroutines.delay
 
 
 @Composable
 fun Splash(
     nav: NavHostController,
-    userViewModel: UserViewModel,
     storeUserData: StoreUserData,
     onLogin: () -> Unit
 ) {
-   // val authViewModel: AuthViewModel = viewModel()
-
     val scale by remember {
         mutableStateOf(Animatable(0f))
     }
 
     val userToken by storeUserData.getToken.collectAsState(initial = "")
-
-    val context_ = LocalContext.current
 
     val context = LocalContext.current as ComponentActivity
     LaunchedEffect(key1 = true, block = {
@@ -64,9 +57,8 @@ fun Splash(
         }))
 
         delay(1500L)
-        userViewModel.loadUserData(context_)
+
          if (userToken != null && userToken!= "") {
-           // nav.navigate(Graph.HOME) (antes)
              nav.navigate(NavigationScreens.HOME)
         }
          else {

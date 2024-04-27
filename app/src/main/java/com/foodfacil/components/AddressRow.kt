@@ -51,10 +51,12 @@ fun AddressRow(complemento: String, numero: String, rua: String, bairro: String)
 }
 
 @Composable
-private fun Left(rua:String, numero:String, bairro:String, complemento:String){
+private fun Left(rua: String, numero: String, bairro: String, complemento: String) {
     val md = Modifier
-    Row(verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
         Circle(size = 30.dp, color = Color(0xffF1F1F1)) {
             Image(
                 painter = painterResource(id = R.drawable.localizacao_yellow),
@@ -64,11 +66,14 @@ private fun Left(rua:String, numero:String, bairro:String, complemento:String){
         }
 
         Column(verticalArrangement = Arrangement.spacedBy(7.dp)) {
-            Text(if(rua.contains("rua") || rua.contains("Rua"))" $rua, $numero" else "Rua $rua, $numero",
-                fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
-            Text(bairro, fontWeight = FontWeight.Normal, fontSize = 15.sp)
-            if(complemento.isNotEmpty())
-            Text(complemento, fontWeight = FontWeight.Normal, fontSize = 15.sp)
+            Text(
+                if (rua.lowercase().contains("rua")) " $rua, $numero" else "Rua $rua, $numero",
+                fontWeight = FontWeight.SemiBold, fontSize = 15.sp
+            )
+            Text(
+                if(bairro.lowercase().contains("bairro")) bairro else "Bairro $bairro" , fontWeight = FontWeight.Normal, fontSize = 15.sp)
+            if (complemento.isNotEmpty())
+                Text(complemento, fontWeight = FontWeight.Normal, fontSize = 15.sp)
         }
 
     }

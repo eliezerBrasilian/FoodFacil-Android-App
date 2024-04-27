@@ -12,22 +12,6 @@ import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
-suspend fun getByCategory(token:String, category:String): List<SalgadoResponseDto> {
-    val print = Print()
-    try {
-        val response = httpClient.get("$baseUrl/salgado/category/$category") {
-            contentType(ContentType.Application.Json)
-            header("Authorization", "Bearer $token")
-        }
-        print.log("sucesso",response.body())
-        val salgadosResponse = json.decodeFromString<SalgadosResponse>(response.body())
-        print.log("salgados: $salgadosResponse")
-        return salgadosResponse.lista;
-    }catch (e:Exception){
-        print.log("erro", e.message)
-        return emptyList()
-    }
-}
 suspend fun getAllSalgados(token:String): List<SalgadoResponseDto> {
     val print = Print()
     try {

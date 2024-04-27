@@ -23,7 +23,7 @@ suspend fun updateAddress(
     token: String?,
     userId: String?,
 ): Boolean {
-    val print = Print("USERVIEWMODEL")
+    val print = Print()
 
     try {
         val response = httpClient.post("$baseUrl/user/address/update/${userId}") {

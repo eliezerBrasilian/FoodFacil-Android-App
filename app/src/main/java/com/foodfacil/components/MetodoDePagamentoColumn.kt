@@ -18,7 +18,11 @@ import androidx.compose.ui.unit.sp
 import com.foodfacil.ui.theme.MainRed
 
 @Composable
-fun MetodoDePagamentoColumn(md: Modifier = Modifier, onClick:()->Unit = {}) {
+fun MetodoDePagamentoColumn(
+    md: Modifier = Modifier,
+    pixEstaSelecionado: Boolean,
+    onClick: () -> Unit = {}
+) {
     Column(modifier = md.fillMaxWidth()){
         Spacer(md.height(20.dp))
         Row(verticalAlignment = Alignment.CenterVertically,
@@ -34,7 +38,14 @@ fun MetodoDePagamentoColumn(md: Modifier = Modifier, onClick:()->Unit = {}) {
         }
 
         Spacer(md.height(10.dp))
-        PixContainer()
+
+        if(pixEstaSelecionado){
+            PixContainer()
+        }
+
+        else{
+            PagarNoDinheiroContainer(borderColor = Color.LightGray)
+        }
         Spacer(md.height(15.dp))
     }
 }

@@ -59,14 +59,14 @@ fun HomeNavGraph(
         navController = navController,
         route = Graph.HOME,
        // startDestination = BottomBarScreen.Home.route, (original antes)
-        startDestination = NavigationScreens.SPLASH,
+        startDestination = NavigationScreens.HOME,
         modifier = Modifier
             .padding(0.dp)
             .background(Color.White),
         builder = {
 
             composable(NavigationScreens.SPLASH) {
-                Splash(navController, userViewModel,storeUserData){navController.navigate(NavigationScreens.ON_AUTH)}
+                Splash(navController,storeUserData){navController.navigate(NavigationScreens.ON_AUTH)}
             }
             composable(NavigationScreens.ON_AUTH) {
                 OnAuth(navController)
@@ -109,7 +109,11 @@ fun HomeNavGraph(
             }
 
             composable(NavigationScreens.ESCOLHER_FORMA_DE_PAGAMENTO){
-                EscolherFormaDePagamento(navController = navController, paddingValues = paddingValues, storeUserData = storeUserData)
+                EscolherFormaDePagamento(navController = navController,
+                    paddingValues = paddingValues, storeUserData = storeUserData,
+                    userViewModel = userViewModel,
+                    chartViewModel = chartViewModel
+                    )
             }
 
             composable(route = NavigationScreens.PAGAMENTO) {

@@ -27,12 +27,12 @@ fun CurrentSalgadoDetails(
             .fillMaxWidth()
     ) {
         SimpleText(
-            salgadoSelected.value?.title.toString(),
+            salgadoSelected.value?.nome.toString(),
             fontWeight = "400",
             fontSize = 23
         )
         SimpleText(
-            salgadoSelected.value?.description.toString(),
+            salgadoSelected.value?.descricao.toString(),
             fontWeight = "300",
             fontSize = 16
         )

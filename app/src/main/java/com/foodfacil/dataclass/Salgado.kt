@@ -1,29 +1,40 @@
 package com.foodfacil.dataclass
 
+import com.foodfacil.enums.Categoria
+import com.foodfacil.enums.Disponibilidade
+
 data class Salgado(
     val id:String,
-    val title:String,
-    val description:String,
-    val price:Float,
-    val image: String?,
-    val imageRetangular:String?,
-    val imageQuadrada:String?,
-    val inOffer:Boolean,
-    val priceInOffer:Float,
+    val nome:String,
+    val categoria:Categoria,
+    val descricao:String,
+    val preco: Float,
+    val imagem: String?,
+    val imagemRetangular:String?,
+    val imagemQuadrada:String?,
+    val emOferta: Boolean,
+    val precoEmOferta: Float,
+    val disponibilidade: Disponibilidade,
+    val sabores: List<String>,
     var amount:Int = 0,
-    val acompanhamentos:List<IngredienteDto> = emptyList(),
     var observacao:String = "",
     ){
     override fun equals(other: Any?): Boolean {
         return if (other is Salgado) {
-            id == other.id && title == other.title && description == other.description &&
-                    price == other.price && image == other.image && inOffer == other.inOffer &&
-                    priceInOffer == other.priceInOffer &&
+            id == other.id &&
+                    nome == other.nome &&
+                    categoria == other.categoria &&
+                    descricao == other.descricao &&
+                    preco == other.preco &&
+                    imagem == other.imagem &&
+                    imagemRetangular == other.imagemRetangular &&
+                    imagemQuadrada == other.imagemQuadrada &&
+                    emOferta == other.emOferta &&
+                    precoEmOferta == other.precoEmOferta &&
+                    disponibilidade == other.disponibilidade &&
+                    sabores == other.sabores &&
                     amount == other.amount &&
-                    acompanhamentos == other.acompanhamentos
-                    && imageRetangular == other.imageRetangular
-                    && imageQuadrada == other.imageQuadrada
-                    && observacao == other.observacao
+                    observacao == other.observacao
         } else {
             false
         }

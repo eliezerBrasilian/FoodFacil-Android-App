@@ -53,6 +53,9 @@ android {
 }
 
 dependencies {
+    //moeda brasileira
+    implementation("com.github.eliezerBrasilian:jetpack-compose-brazilian-currency-visual-transformation:v1.0.1")
+
     //feather
     implementation(libs.composeIcons.feather)
 

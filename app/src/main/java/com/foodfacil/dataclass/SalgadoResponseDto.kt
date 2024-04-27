@@ -17,7 +17,5 @@ import kotlinx.serialization.Serializable
     val emOferta: Boolean,
     val precoEmOferta: Float,
     val disponibilidade: Disponibilidade,
-    val createdAt:Long,
-    val observacao:String?,
-    val ingredientes: List<IngredienteDto>
+    val sabores: List<String>
 )

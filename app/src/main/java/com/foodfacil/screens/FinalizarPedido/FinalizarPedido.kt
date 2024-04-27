@@ -66,6 +66,11 @@ fun FinalizarPedido(
     val userId = storeUserData.getUid.collectAsState(initial = "")
     val token = storeUserData.getToken.collectAsState(initial = "")
 
+    val pixSelecionado = userViewModel.pixSelecionado.collectAsState()
+
+    val print = Print()
+    print.log("rua salva",savedRua.value)
+
     val totalPrice = chartViewModel.priceTotal.collectAsState(0f)
 
     var rua by remember {
@@ -108,12 +113,7 @@ fun FinalizarPedido(
         dialogIsVisible.value = !dialogIsVisible.value
     }
 
-    val tag = "CHART"
-    val print = Print(tag)
-
     val cvm by chartViewModel.chartList.observeAsState()
-    print.log("cvm", cvm)
-
     val md = Modifier
 
     val handleAddAddress: () -> Unit = {
@@ -121,6 +121,7 @@ fun FinalizarPedido(
             cidade = "Brás Pires",
             complemento = complememto.toString(), bairro = bairro.toString(), rua = rua.toString(), numero = numero.toString().toInt() )
 
+        print.log("endereco digitado",address)
         userViewModel.addAddress(address, token.toString(), userId.value.toString()) {
             coroutine.launch {
                 storeUserData.saveRua(rua.toString().trim())
@@ -188,7 +189,7 @@ fun FinalizarPedido(
                     }
                 }
 
-                MetodoDePagamentoColumn(md){
+                MetodoDePagamentoColumn(md,pixSelecionado.value){
                     navController.navigate(NavigationScreens.ESCOLHER_FORMA_DE_PAGAMENTO)
                 }
 

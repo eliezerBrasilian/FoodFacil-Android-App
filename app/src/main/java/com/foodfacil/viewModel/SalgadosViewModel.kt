@@ -9,7 +9,6 @@ import com.foodfacil.api.getAllAdicionais
 import com.foodfacil.api.getAllSalgados
 import com.foodfacil.dataclass.Adicional
 import com.foodfacil.dataclass.Salgado
-import com.foodfacil.dataclass.SalgadoDto
 import com.foodfacil.enums.Categoria
 import com.foodfacil.services.Print
 import kotlinx.coroutines.launch
@@ -17,7 +16,7 @@ import kotlinx.coroutines.launch
 class SalgadosViewModel : ViewModel(){
     private val print = Print()
 
-    val salgados = mutableStateOf<List<SalgadoDto>>(emptyList())
+    val salgados = mutableStateOf<List<Salgado>>(emptyList())
     val adicionais = mutableStateOf<List<Adicional>>(emptyList())
 
     private val _loading = MutableLiveData<Boolean>(true)
@@ -27,14 +26,14 @@ class SalgadosViewModel : ViewModel(){
         print.log("token recebido",token)
         _loading.value=true
 
-       val salgadosList = getAllSalgados(token)
+       val salgadosResponseList = getAllSalgados(token)
+        val salgadosList = mutableListOf<Salgado>()
 
-        val salgadosDtoList = mutableListOf<SalgadoDto>()
-        salgadosList.forEach{
+        salgadosResponseList.forEach{
             print.log("image", it.imagem)
 
-            salgadosDtoList.add(
-                SalgadoDto(
+            salgadosList.add(
+                Salgado(
                     id = it.id,
                     nome = it.nome,
                     categoria = it.categoria,
@@ -45,15 +44,13 @@ class SalgadosViewModel : ViewModel(){
                     imagemQuadrada = it.imagemQuadrada,
                     emOferta = it.emOferta,
                     precoEmOferta = it.precoEmOferta,
-                    createdAt = it.createdAt,
-                    observacao = it.observacao,
                     disponibilidade = it.disponibilidade,
-                    ingredientes = it.ingredientes
+                    sabores = it.sabores
                 )
             )
         }
 
-        salgados.value = salgadosDtoList
+        salgados.value = salgadosList
         _loading.value=false
     }
 
@@ -72,33 +69,33 @@ class SalgadosViewModel : ViewModel(){
         adicionais.value = adicionaisListMapped
     }
 
-    fun salgadosNoCopoList(): List<SalgadoDto> {
+    fun salgadosNoCopoList(): List<Salgado> {
         return salgados.value.filter { it.categoria == Categoria.SALGADONOCOPO }
     }
-    fun risoleList(): List<SalgadoDto> {
+    fun risoleList(): List<Salgado> {
         return salgados.value.filter { it.categoria == Categoria.RISOLE }
     }
-    fun coxinhaList(): List<SalgadoDto> {
+    fun coxinhaList(): List<Salgado> {
         return salgados.value.filter { it.categoria == Categoria.COXINHA }
     }
-    fun pastelList(): List<SalgadoDto> {
+    fun pastelList(): List<Salgado> {
         return salgados.value.filter { it.categoria == Categoria.PASTEL }
     }
-    fun hotDogList(): List<SalgadoDto> {
+    fun hotDogList(): List<Salgado> {
         return salgados.value.filter { it.categoria == Categoria.HOTDOG }
     }
-    fun combosList():List<SalgadoDto>{
+    fun combosList():List<Salgado>{
         return salgados.value.filter { it.categoria == Categoria.COMBO }
     }
-    fun congeladoList(): List<SalgadoDto> {
+    fun congeladoList(): List<Salgado> {
         return salgados.value.filter { it.categoria == Categoria.CONGELADOS }
     }
 
-    fun batataRostiList(): List<SalgadoDto> {
+    fun batataRostiList(): List<Salgado> {
         return salgados.value.filter { it.categoria == Categoria.BATATAS }
     }
 
-    fun salgadosInOfferList(): List<SalgadoDto> {
+    fun salgadosInOfferList(): List<Salgado> {
         return salgados.value.filter { it.emOferta == true }
     }
 
@@ -108,15 +105,17 @@ class SalgadosViewModel : ViewModel(){
         if(founded != null){
             val salgado = Salgado(
                 id = founded.id,
-                title = founded.nome,
-                description = founded.descricao,
-                price = founded.preco,
-                priceInOffer = founded.precoEmOferta,
-                image = founded.imagem,
-                imageQuadrada = founded.imagemQuadrada,
-                imageRetangular = founded.imagemRetangular,
-                inOffer = founded.emOferta,
-                acompanhamentos = founded.ingredientes)
+                nome = founded.nome,
+                categoria = founded.categoria,
+                descricao = founded.descricao,
+                preco = founded.preco,
+                imagem = founded.imagem,
+                imagemQuadrada = founded.imagemQuadrada,
+                imagemRetangular = founded.imagemRetangular,
+                emOferta = founded.emOferta,
+                precoEmOferta = founded.precoEmOferta,
+                disponibilidade = founded.disponibilidade,
+                sabores = founded.sabores)
             return salgado;
         }
         return null;

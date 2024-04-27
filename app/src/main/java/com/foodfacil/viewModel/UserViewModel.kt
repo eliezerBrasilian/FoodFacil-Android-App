@@ -1,14 +1,14 @@
 package com.foodfacil.viewModel
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.foodfacil.api.updateAddress
 import com.foodfacil.dataclass.AddressDto
-import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.services.Print
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class UserViewModel : ViewModel(){
@@ -18,24 +18,33 @@ class UserViewModel : ViewModel(){
                     var profilePicture:String = ""
         )
 
-    //private val _user = MutableLiveData(User("123456","Eliezer Assunção de Paulo paulo paulo paulo",emptyAddress))
-    private val _user = MutableLiveData<User>()
 
+    private val _user = MutableLiveData<User>()
     val user:LiveData<User> = _user
 
-    val TAG = "USERVIEWMODEL"
-    val print = Print(TAG)
+    private val _pixSelecionado:MutableStateFlow<Boolean>  = MutableStateFlow(true)
+    val pixSelecionado:StateFlow<Boolean> = _pixSelecionado
 
-    fun loadUserData(context: Context) = viewModelScope.launch{
-        val sd = StoreUserData(context)
+    private val _valorApagarEmDinheiro:MutableStateFlow<Float>  = MutableStateFlow(0f)
+    val valorApagarEmDinheiro:StateFlow<Float> = _valorApagarEmDinheiro
 
-        _user.value?.userUid = sd.getUid.toString()
-        _user.value?.token = sd.getToken.toString()
-        _user.value?.profilePicture = sd.getPhoto.toString()
+    private val _precisaDeTroco:MutableStateFlow<Boolean>  = MutableStateFlow(false)
+    val precisaDeTroco:StateFlow<Boolean> = _precisaDeTroco
 
-        print.log("userUid", _user.value?.userUid)
-        print.log("token",  sd.getToken.toString())
+    val print = Print()
+
+    val handleEscolhePix: (ehPix:Boolean) -> Unit = { ehPix->
+        _pixSelecionado.value = ehPix
     }
+
+    val handlePrecisaDeTroco: (precisa:Boolean) -> Unit = {precisa->
+        _precisaDeTroco.value = precisa
+    }
+
+    val handlePagaNoDinheiro: (valor:Float) -> Unit = {valor->
+        _valorApagarEmDinheiro.value = valor
+    }
+
 
     fun addAddress(address: AddressDto,token: String,userId:String, onSuccess: () -> Unit) = viewModelScope.launch{
         val atualizado = updateAddress(address,token,userId)

@@ -28,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.foodfacil.dataclass.IngredienteDto
 import com.foodfacil.dataclass.Salgado
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainRed
@@ -56,11 +55,11 @@ fun SalgadoSelected(
     }
 
     val acompanhamentosReceived = remember {
-        mutableStateListOf<IngredienteDto>()
+        mutableStateListOf<String>()
     }
 
     val checkboxesStates = remember{
-        mutableStateListOf<IngredienteDto>()
+        mutableStateListOf<String>()
     }
 
     val observacaoInput = remember{
@@ -82,10 +81,10 @@ fun SalgadoSelected(
             print.log(founded)
             salgadoSelected.value = founded
 
-            precoProduto.floatValue =  if(founded.inOffer) founded.priceInOffer else founded.price
+            precoProduto.floatValue =  if(founded.emOferta) founded.precoEmOferta else founded.preco
 
             //busca acompanhamentos
-            val acompanhamentosList = founded.acompanhamentos
+            val acompanhamentosList = founded.sabores
             print.log("acompanhamentos carregados", acompanhamentosList)
 
             acompanhamentosReceived.clear()
@@ -99,7 +98,7 @@ fun SalgadoSelected(
 
         salgadoSelected.value?.let { salgado->
             salgadoSelected.value = salgado.copy(
-                acompanhamentos = (acompanhamentosSelecionados),
+                sabores = (acompanhamentosSelecionados),
                 amount = 1,
                 observacao = observacaoInput.value.trim()
             )
@@ -118,7 +117,7 @@ fun SalgadoSelected(
                 md.background(Color.White)) {
                 TopSalgadoSelected(md, navController, salgadoSelected)
                 CurrentSalgadoDetails(md, salgadoSelected,
-                    if(salgadoSelected.value?.inOffer == true) salgadoSelected.value?.priceInOffer else salgadoSelected.value?.price)
+                    if(salgadoSelected.value?.emOferta == true) salgadoSelected.value?.precoEmOferta else salgadoSelected.value?.preco)
                 MonteSeuPedido(md = md)
                 Column(modifier = md
                     .fillMaxWidth()
@@ -132,7 +131,7 @@ fun SalgadoSelected(
                             Row(modifier =Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(text = acompanhamento.nome, color = Color(0xff4C4C4C),
+                                Text(text = acompanhamento, color = Color(0xff4C4C4C),
                                     fontWeight = FontWeight.Normal, fontSize = 16.sp)
                                 Checkbox(checked = checkboxesStates.contains(acompanhamento),
                                     onCheckedChange = {

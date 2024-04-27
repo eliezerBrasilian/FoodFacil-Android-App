@@ -27,7 +27,7 @@ import com.foodfacil.utils.toBrazilianCurrency
 
 @Composable
 fun CardapioItem(
-    md: Modifier, salgado: SalgadoDto,
+    md: Modifier, salgado: Salgado,
     navController: NavHostController,
 ){
     Box(

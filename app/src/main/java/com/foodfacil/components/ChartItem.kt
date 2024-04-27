@@ -22,22 +22,22 @@ import com.foodfacil.utils.toBrazilianCurrency
     increment: (salgado: Salgado) -> Unit = { s -> },
     decrement: (salgado: Salgado) -> Unit = { s -> }
 ) {
-     val preco = if(salgado.inOffer)salgado.priceInOffer else salgado.price
+     val preco = if(salgado.emOferta)salgado.precoEmOferta else salgado.preco
 
     Row(
         modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        RoundedImage(imageUrl = salgado.image, size = 79.dp)
+        RoundedImage(imageUrl = salgado.imagem, size = 79.dp)
         Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Text(
-                text = salgado.title,
+                text = salgado.nome,
                 color = Color.Black,
                 fontWeight = FontWeight.Medium,
                 fontSize = 17.sp
             )
             Text(
-                text = salgado.description.take(25 - 3) + "...",
+                text = salgado.descricao.take(25 - 3) + "...",
                 color = Color(0xff555353),
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp

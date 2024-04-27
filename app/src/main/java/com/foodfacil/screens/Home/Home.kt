@@ -80,7 +80,6 @@ fun Home(
     val totalPrice = chartViewModel.getTotalPrice()
     val loading = salgadosViewModel.loading.observeAsState(initial = true)
 
-    // Android 13 Api 33 - runtime notification permission has been added
     val notificationPermissionState = rememberPermissionState(
         permission = Manifest.permission.POST_NOTIFICATIONS
     )
@@ -91,7 +90,6 @@ fun Home(
         ) {
             Firebase.messaging.subscribeToTopic("Tutorial")
         } else {
-            //  showNotificationDialog.value = true
             notificationPermissionState.launchPermissionRequest()
         }
 
@@ -141,8 +139,8 @@ fun Home(
                 Carrousel(
                     imagesResources = listOf(
                         R.drawable.banner1,
-                        R.drawable.salgados_img_on_auth,
-                        R.drawable.salgados_img_on_auth
+                        R.drawable.banner2,
+                        R.drawable.banner3
                     ),
                     imageActiveColor = MainYellow,
                     imageInactiveColor = Color(0xffE0E0E0),

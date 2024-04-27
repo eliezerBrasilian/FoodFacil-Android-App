@@ -78,7 +78,7 @@ fun Login(
         mutableStateOf(false)
     }
 
-    val print = Print("AUTHVIEWMODEL")
+    val print = Print()
 
     val isLoading by authViewModel.loading.observeAsState(false)
 

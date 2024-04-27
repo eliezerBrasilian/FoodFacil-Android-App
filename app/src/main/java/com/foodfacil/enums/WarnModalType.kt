@@ -1,4 +1,4 @@
-package com.gamestate.enums
+package com.foodfacil.enums
 
 enum class WarnModalType {
     SUCCESS,

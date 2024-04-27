@@ -24,7 +24,7 @@ fun TopSalgadoSelected(md: Modifier, navController: NavHostController, salgadoSe
             .background(color = PinkSalgadoSelected),
     ) {
         AsyncImage(
-            model = salgadoSelected.value?.imageRetangular,
+            model = salgadoSelected.value?.imagemRetangular,
             contentDescription = null,
             modifier = md.fillMaxWidth(),
             contentScale = ContentScale.FillBounds

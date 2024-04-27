@@ -16,10 +16,10 @@ class ChartViewModel : ViewModel(){
     private val _adicionais = MutableLiveData<List<Adicional>>(emptyList())
     val adicionais:LiveData<List<Adicional>> = _adicionais
 
-    private val _priceTotal = MutableStateFlow<Float>(0f)
+    private val _priceTotal = MutableStateFlow(0f)
     val priceTotal:StateFlow<Float> = _priceTotal
 
-    val print = Print("CHARTVIEWMODEL")
+    val print = Print()
 
     fun increment(salg: Salgado){
         if(_chartList.value?.contains(salg) == true){
@@ -35,7 +35,7 @@ class ChartViewModel : ViewModel(){
             _chartList.value = atualCharList //lista atual + o salgado
             //incrementar 1 no carrinho
 
-            val salgadoPrice = if(salg.inOffer)salg.priceInOffer else salg.price
+            val salgadoPrice = if(salg.emOferta)salg.precoEmOferta else salg.preco
             print.log("salgadoPreço",salgadoPrice)
             _priceTotal.value += salgadoPrice
         }
@@ -46,7 +46,7 @@ class ChartViewModel : ViewModel(){
             val index = atualCharList.indexOf(salg)
             print.log("index: ", index)
 
-            val salgadoPrice = if(salg.inOffer)salg.priceInOffer else salg.price
+            val salgadoPrice = if(salg.emOferta)salg.precoEmOferta else salg.preco
             _priceTotal.value -= salgadoPrice
 
             val atualAmountSalgado = atualCharList[index].amount
@@ -84,7 +84,7 @@ class ChartViewModel : ViewModel(){
 
                 _chartList.value = atualCharList //lista atual + o salgado
 
-            val salgadoPrice = if(salgado.inOffer)salgado.priceInOffer else salgado.price
+            val salgadoPrice = if(salgado.emOferta)salgado.precoEmOferta else salgado.preco
             print.log("salgadoPreço",salgadoPrice)
             _priceTotal.value += salgadoPrice
             print.log("_priceTotal.value",_priceTotal.value)
@@ -101,7 +101,7 @@ class ChartViewModel : ViewModel(){
             print.log("id", salgado.id)
             print.log("amount", salgado.amount)
 
-            val auxPrice = if(salgado.inOffer)salgado.priceInOffer else salgado.price
+            val auxPrice = if(salgado.emOferta)salgado.precoEmOferta else salgado.preco
             _priceTotal.value += auxPrice
             print.log("_priceTotal.value",_priceTotal.value)
 
@@ -120,7 +120,7 @@ class ChartViewModel : ViewModel(){
     fun getTotalPrice():Float{
          var total = 0F
         _chartList.value?.forEach { salgado ->
-            val priceAux = if(salgado.inOffer)salgado.priceInOffer else salgado.price
+            val priceAux = if(salgado.emOferta)salgado.precoEmOferta else salgado.preco
             total += priceAux
         }
 

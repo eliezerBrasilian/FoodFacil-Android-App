@@ -26,7 +26,7 @@ fun NavGraphBuilder.authNavGraph(
         startDestination = NavigationScreens.SPLASH
     ) {
         composable(NavigationScreens.SPLASH) {
-            Splash(navController, userViewModel,storeUserData){navController.navigate(NavigationScreens.ON_AUTH)}
+            Splash(navController,storeUserData){navController.navigate(NavigationScreens.ON_AUTH)}
         }
         composable(NavigationScreens.ON_AUTH) {
             OnAuth(navController)

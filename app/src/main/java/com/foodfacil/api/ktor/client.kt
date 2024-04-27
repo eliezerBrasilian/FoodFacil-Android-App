@@ -9,7 +9,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 val localIp = "192.168.0.105"
-val producaoIp = "191.252.92.39"
+val producaoIp = "foodfacil.site"
 
 val ip = localIp
 val baseUrl = "http://$ip:8080/food-facil/api/v1"
