@@ -15,12 +15,16 @@ import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.graphs.RootNavigationGraph
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.FoodFacilTheme
-import com.foodfacil.viewModel.*
+import com.foodfacil.viewModel.AuthViewModel
+import com.foodfacil.viewModel.ChartViewModel
+import com.foodfacil.viewModel.CuponsViewModel
+import com.foodfacil.viewModel.SalgadosViewModel
+import com.foodfacil.viewModel.UserViewModel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : ComponentActivity() {
-    private val print = Print("MAINACTIVITY")
+    private val print = Print()
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 

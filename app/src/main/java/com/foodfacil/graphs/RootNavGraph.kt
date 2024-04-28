@@ -9,7 +9,11 @@ import androidx.navigation.compose.composable
 import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.enums.Graph
 import com.foodfacil.navigation.MainAppNavigation
-import com.foodfacil.viewModel.*
+import com.foodfacil.viewModel.AuthViewModel
+import com.foodfacil.viewModel.ChartViewModel
+import com.foodfacil.viewModel.CuponsViewModel
+import com.foodfacil.viewModel.SalgadosViewModel
+import com.foodfacil.viewModel.UserViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -19,7 +23,7 @@ fun RootNavigationGraph(
     salgadosViewModel: SalgadosViewModel,
     chartViewModel: ChartViewModel,
     storeUserData: StoreUserData,
-    cuponsViewModel: CuponsViewModel,) {
+    cuponsViewModel: CuponsViewModel) {
     NavHost(
         navController = navController,
         route = Graph.ROOT,
@@ -30,7 +34,9 @@ fun RootNavigationGraph(
         composable(route = Graph.HOME) {
             MainAppNavigation(authViewModel = authViewModel, userViewModel = userViewModel,
                 salgadosViewModel = salgadosViewModel,
-                chartViewModel = chartViewModel, storeUserData = storeUserData, cuponsViewModel = cuponsViewModel)
+                chartViewModel = chartViewModel, storeUserData = storeUserData,
+                cuponsViewModel = cuponsViewModel,
+                )
         }
     }
 }

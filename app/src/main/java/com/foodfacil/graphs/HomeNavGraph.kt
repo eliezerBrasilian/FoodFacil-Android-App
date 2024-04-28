@@ -54,11 +54,12 @@ fun HomeNavGraph(
     chartViewModel: ChartViewModel,
     paddingValues: PaddingValues,
     storeUserData: StoreUserData,
-    cuponsViewModel: CuponsViewModel,) {
+    cuponsViewModel: CuponsViewModel
+) {
     NavHost(
         navController = navController,
         route = Graph.HOME,
-       // startDestination = BottomBarScreen.Home.route, (original antes)
+        // startDestination = BottomBarScreen.Home.route, (original antes)
         startDestination = NavigationScreens.HOME,
         modifier = Modifier
             .padding(0.dp)
@@ -66,71 +67,85 @@ fun HomeNavGraph(
         builder = {
 
             composable(NavigationScreens.SPLASH) {
-                Splash(navController,storeUserData){navController.navigate(NavigationScreens.ON_AUTH)}
+                Splash(
+                    navController,
+                    storeUserData
+                ) { navController.navigate(NavigationScreens.ON_AUTH) }
             }
             composable(NavigationScreens.ON_AUTH) {
                 OnAuth(navController)
             }
             composable(NavigationScreens.LOGIN) {
-                Login(navController = navController,
-                    authViewModel = authViewModel, paddingValues = paddingValues, storeUserData = storeUserData)
+                Login(
+                    navController = navController,
+                    authViewModel = authViewModel,
+                    paddingValues = paddingValues,
+                    storeUserData = storeUserData
+                )
             }
-            composable(NavigationScreens.SIGN_UP){
-                Signup(navController = navController,
-                    authViewModel = authViewModel, paddingValues = paddingValues, storeUserData = storeUserData)
+            composable(NavigationScreens.SIGN_UP) {
+                Signup(
+                    navController = navController,
+                    authViewModel = authViewModel,
+                    paddingValues = paddingValues,
+                    storeUserData = storeUserData
+                )
             }
             composable(NavigationScreens.ON_AUTH_SIGN_UP) {
-                OnAuthSignUp(navController,authViewModel)
+                OnAuthSignUp(navController, authViewModel)
             }
             composable(NavigationScreens.ON_AUTH_LOGIN) {
-                OnAuthLogin(navController,authViewModel)
+                OnAuthLogin(navController, authViewModel)
             }
 
             composable(BottomBarScreen.Home.route) {
-                Home(navController, userViewModel, salgadosViewModel,chartViewModel ,paddingValues, storeUserData)
+                Home(
+                    navController,
+                    userViewModel,
+                    salgadosViewModel,
+                    chartViewModel,
+                    paddingValues,
+                    storeUserData
+                )
             }
             composable(BottomBarScreen.Cardapio.route) {
-                Cardapio(navController, salgadosViewModel,chartViewModel ,paddingValues)
+                Cardapio(navController, salgadosViewModel, chartViewModel, paddingValues)
             }
 
-            detailsNavGraph(navController = navController, salgadosViewModel,
-                paddingValues,chartViewModel, userViewModel, storeUserData)
+            detailsNavGraph(
+                navController = navController, salgadosViewModel,
+                paddingValues, chartViewModel, userViewModel, storeUserData
+            )
 
-           // chartNavGraph(navController,salgadosViewModel,acompanhamentosViewModel,paddingValues, chartViewModel)
+            // chartNavGraph(navController,salgadosViewModel,acompanhamentosViewModel,paddingValues, chartViewModel)
 
             composable(BottomBarScreen.Pedidos.route) {
                 Pedidos(navController, salgadosViewModel, paddingValues)
             }
             composable(BottomBarScreen.Perfil.route) {
-                Profile(navController, authViewModel,userViewModel, paddingValues,storeUserData)
+                Profile(navController, authViewModel, userViewModel, paddingValues, storeUserData)
             }
-            composable(NavigationScreens.CUPONS){
-                Cupons(nav = navController, paddingValues = paddingValues, cuponsViewModel = cuponsViewModel, storeUserData = storeUserData)
-            }
-
-            composable(NavigationScreens.ESCOLHER_FORMA_DE_PAGAMENTO){
-                EscolherFormaDePagamento(navController = navController,
-                    paddingValues = paddingValues, storeUserData = storeUserData,
-                    userViewModel = userViewModel,
-                    chartViewModel = chartViewModel
-                    )
-            }
-
-            composable(route = NavigationScreens.PAGAMENTO) {
-                Pagamento(navController, paddingValues,userViewModel, chartViewModel)
+            composable(NavigationScreens.CUPONS) {
+                Cupons(
+                    nav = navController,
+                    paddingValues = paddingValues,
+                    cuponsViewModel = cuponsViewModel,
+                    storeUserData = storeUserData
+                )
             }
 
         }
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun NavGraphBuilder.detailsNavGraph(
     navController: NavHostController,
     salgadosViewModel: SalgadosViewModel,
     paddingValues: PaddingValues,
     chartViewModel: ChartViewModel,
     userViewModel: UserViewModel,
-    storeUserData: StoreUserData
+    storeUserData: StoreUserData,
 ) {
     navigation(
         route = Graph.DETAILS,
@@ -138,26 +153,46 @@ fun NavGraphBuilder.detailsNavGraph(
         //DetailsScreen.Information.route
     ) {
 
-        composable(route = DetailsScreen.Information.route + "/{id}",
-            arguments = listOf(navArgument(name = "id"){type = NavType.StringType})
-        ) {route->
+        composable(
+            route = DetailsScreen.Information.route + "/{id}",
+            arguments = listOf(navArgument(name = "id") { type = NavType.StringType })
+        ) { route ->
             val id = route.arguments?.getString("id")
 
-            SalgadoSelected(navController, id,salgadosViewModel,
-                paddingValues,chartViewModel)
+            SalgadoSelected(
+                navController, id, salgadosViewModel,
+                paddingValues, chartViewModel
+            )
         }
 
-        composable(route = NavigationScreens.CHART){
-            ChartScreen(navController,salgadosViewModel,
-                paddingValues,chartViewModel)
+        composable(route = NavigationScreens.CHART) {
+            ChartScreen(
+                navController, salgadosViewModel,
+                paddingValues, chartViewModel
+            )
+        }
+
+        composable(NavigationScreens.ESCOLHER_FORMA_DE_PAGAMENTO) {
+            EscolherFormaDePagamento(
+                navController = navController,
+                paddingValues = paddingValues, storeUserData = storeUserData,
+                userViewModel = userViewModel,
+                chartViewModel = chartViewModel
+            )
+        }
+
+        composable(route = NavigationScreens.PAGAMENTO + "/{pedidoId}",
+            arguments = listOf(navArgument(name="pedidoId"){type = NavType.StringType})
+        ) {  backStackEntry->
+            val pedidoId = backStackEntry.arguments?.getString("pedidoId")
+            Pagamento(navController, paddingValues, userViewModel, chartViewModel, pedidoId)
         }
 
         composable(route = NavigationScreens.FINALIZAR_PEDIDO) {
-            FinalizarPedido(navController, paddingValues,userViewModel, chartViewModel, storeUserData)
-        }
-
-        composable(route = NavigationScreens.PAGAMENTO) {
-            Pagamento(navController, paddingValues,userViewModel, chartViewModel)
+            FinalizarPedido(
+                navController, paddingValues, userViewModel, chartViewModel,
+                storeUserData
+            )
         }
 
         /*composable(route = DetailsScreen.Overview.route) {

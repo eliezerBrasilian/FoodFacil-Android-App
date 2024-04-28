@@ -1,5 +1,4 @@
 package com.foodfacil.utils
-
 import android.os.Build
 import androidx.annotation.RequiresApi
 import kotlinx.datetime.Instant
@@ -21,7 +20,7 @@ class AppDateTime{
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getBrazilianDate(date: Instant): String? {
+    fun getBrazilianDate(date: kotlinx.datetime.Instant): String? {
         // Define o formato desejado para a data
         val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
@@ -37,5 +36,13 @@ class AppDateTime{
         val formattedDate = formatter.format(javaLocalDateTime)
 
         return formattedDate;
+    }
+
+    fun obterMilisegundos(): Long {
+        val currentTimeMillis = System.currentTimeMillis()
+
+        println("Milissegundos atuais: $currentTimeMillis")
+
+        return currentTimeMillis
     }
 }

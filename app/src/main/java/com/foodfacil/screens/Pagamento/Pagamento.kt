@@ -49,7 +49,8 @@ fun Pagamento(
     navController: NavHostController,
     paddingValues: PaddingValues,
     userViewModel: UserViewModel,
-    chartViewModel: ChartViewModel
+    chartViewModel: ChartViewModel,
+    pedidoId: String?
 ) {
 
     val coroutine = rememberCoroutineScope()
