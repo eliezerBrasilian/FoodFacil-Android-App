@@ -13,13 +13,13 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
 suspend fun getAllAdicionais(token:String): List<AdicionalDto> {
-    val print = Print("SalgadosViewModel")
+    val print = Print()
     try {
-        val response = httpClient.get("$baseUrl/adicional") {
+        val response = httpClient.get("$baseUrl/acompanhamento") {
             contentType(ContentType.Application.Json)
             header("Authorization", "Bearer $token")
         }
-        print.log("sucesso",response.body())
+        print.log("sucesso acompanhamento",response.body())
         val list = json.decodeFromString<AdicionalResponse>(response.body())
         print.log("adicionais: $list")
         return list.lista;

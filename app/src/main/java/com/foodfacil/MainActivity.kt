@@ -18,6 +18,7 @@ import com.foodfacil.ui.theme.FoodFacilTheme
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.CuponsViewModel
+import com.foodfacil.viewModel.PedidosViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.viewModel.UserViewModel
 import com.google.android.gms.tasks.OnCompleteListener
@@ -51,10 +52,11 @@ class MainActivity : ComponentActivity() {
                     val salgadosViewModel: SalgadosViewModel = viewModel()
                     val chartViewModel:ChartViewModel = viewModel()
                     val cuponsViewModel:CuponsViewModel = viewModel()
+                    val pedidosViewModel:PedidosViewModel = viewModel()
 
                     RootNavigationGraph(rememberNavController(),
                         authViewModel, userViewModel, salgadosViewModel,
-                        chartViewModel,storeUserData, cuponsViewModel)
+                        chartViewModel,storeUserData, cuponsViewModel,pedidosViewModel)
                 }
             }
         }

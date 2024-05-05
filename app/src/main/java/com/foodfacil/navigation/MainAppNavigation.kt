@@ -16,6 +16,7 @@ import com.foodfacil.graphs.HomeNavGraph
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.CuponsViewModel
+import com.foodfacil.viewModel.PedidosViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.viewModel.UserViewModel
 
@@ -30,6 +31,7 @@ fun MainAppNavigation(
     navController: NavHostController = rememberNavController(),
     storeUserData: StoreUserData,
     cuponsViewModel: CuponsViewModel,
+    pedidosViewModel: PedidosViewModel,
 ) {
 
     Scaffold(
@@ -38,7 +40,7 @@ fun MainAppNavigation(
         bottomBar = { BottomBar(navController = navController) },
         content = {paddingValues ->
             HomeNavGraph( navController, authViewModel, userViewModel,salgadosViewModel,
-                chartViewModel, paddingValues, storeUserData,cuponsViewModel)
+                chartViewModel, paddingValues, storeUserData,cuponsViewModel, pedidosViewModel)
 
         }
     )

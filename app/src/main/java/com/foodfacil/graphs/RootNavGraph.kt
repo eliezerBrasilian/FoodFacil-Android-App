@@ -12,6 +12,7 @@ import com.foodfacil.navigation.MainAppNavigation
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.CuponsViewModel
+import com.foodfacil.viewModel.PedidosViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.viewModel.UserViewModel
 
@@ -23,7 +24,9 @@ fun RootNavigationGraph(
     salgadosViewModel: SalgadosViewModel,
     chartViewModel: ChartViewModel,
     storeUserData: StoreUserData,
-    cuponsViewModel: CuponsViewModel) {
+    cuponsViewModel: CuponsViewModel,
+    pedidosViewModel: PedidosViewModel
+) {
     NavHost(
         navController = navController,
         route = Graph.ROOT,
@@ -36,6 +39,7 @@ fun RootNavigationGraph(
                 salgadosViewModel = salgadosViewModel,
                 chartViewModel = chartViewModel, storeUserData = storeUserData,
                 cuponsViewModel = cuponsViewModel,
+                pedidosViewModel = pedidosViewModel
                 )
         }
     }

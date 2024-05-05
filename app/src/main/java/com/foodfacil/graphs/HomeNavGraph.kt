@@ -40,6 +40,7 @@ import com.foodfacil.screens.Splash.Splash
 import com.foodfacil.viewModel.AuthViewModel
 import com.foodfacil.viewModel.ChartViewModel
 import com.foodfacil.viewModel.CuponsViewModel
+import com.foodfacil.viewModel.PedidosViewModel
 import com.foodfacil.viewModel.SalgadosViewModel
 import com.foodfacil.viewModel.UserViewModel
 
@@ -54,13 +55,14 @@ fun HomeNavGraph(
     chartViewModel: ChartViewModel,
     paddingValues: PaddingValues,
     storeUserData: StoreUserData,
-    cuponsViewModel: CuponsViewModel
+    cuponsViewModel: CuponsViewModel,
+    pedidosViewModel: PedidosViewModel
 ) {
     NavHost(
         navController = navController,
         route = Graph.HOME,
-        // startDestination = BottomBarScreen.Home.route, (original antes)
-        startDestination = NavigationScreens.HOME,
+         startDestination = BottomBarScreen.Home.route,
+        //startDestination = NavigationScreens.HOME,
         modifier = Modifier
             .padding(0.dp)
             .background(Color.White),
@@ -120,7 +122,7 @@ fun HomeNavGraph(
             // chartNavGraph(navController,salgadosViewModel,acompanhamentosViewModel,paddingValues, chartViewModel)
 
             composable(BottomBarScreen.Pedidos.route) {
-                Pedidos(navController, salgadosViewModel, paddingValues)
+                Pedidos(navController, salgadosViewModel, paddingValues,pedidosViewModel,storeUserData)
             }
             composable(BottomBarScreen.Perfil.route) {
                 Profile(navController, authViewModel, userViewModel, paddingValues, storeUserData)

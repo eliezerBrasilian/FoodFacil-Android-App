@@ -47,6 +47,7 @@ import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.enums.PagamentoStatus
 import com.foodfacil.enums.PedidoStatus
 import com.foodfacil.enums.Plataforma
+import com.foodfacil.enums.TipoDePagamento
 import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.utils.AppDateTime
@@ -57,10 +58,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
 
-enum class TipoDePagamento{
-    PIX,
-    DINHEIRO
-}
+
 
 @Composable
 fun FinalizarPedido(
@@ -78,6 +76,7 @@ fun FinalizarPedido(
     val savedComplemento = storeUserData.getComplemento.collectAsState(initial = "")
     val userId = storeUserData.getUid.collectAsState(initial = "")
     val token = storeUserData.getToken.collectAsState(initial = "")
+    val email = storeUserData.getEmail.collectAsState(initial = "")
 
     val pixSelecionado = userViewModel.pixSelecionado.collectAsState()
     val valorApagarEmDinheiroSnap = userViewModel.valorApagarEmDinheiro.collectAsState()
@@ -198,11 +197,10 @@ fun FinalizarPedido(
         val pagamentoEscolhido = if(pixSelecionado.value) TipoDePagamento.PIX else  TipoDePagamento.DINHEIRO
         val quantiaReservada = if(!pixSelecionado.value) valorApagarEmDinheiroSnap.value else 0f
 
-        val userId_ = userId.value
         val userToken = token.value
 
         val pedido = Pedido(salgados = simplesSalgadoList,
-            adicionais = simplesAdicionaisList,
+            acompanhamentos = simplesAdicionaisList,
             endereco = endereco,
             pagamentoEscolhido = pagamentoEscolhido,
             quantiaReservada = quantiaReservada,
@@ -212,7 +210,9 @@ fun FinalizarPedido(
             createdAt = AppDateTime().obterMilisegundos(),
             status = PedidoStatus.AGUARDANDO_PREPARO,
             pagamentoStatus = PagamentoStatus.AGUARDANDO_PAGAMENTO,
-            userId = userId_.toString())
+            userId = userId.value.toString(),
+            userEmail = email.value.toString()
+            )
 
         print.log("Pedido",pedido)
         scope.launch {

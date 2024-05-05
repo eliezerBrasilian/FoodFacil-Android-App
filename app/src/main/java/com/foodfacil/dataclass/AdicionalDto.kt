@@ -6,9 +6,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AdicionalDto(
     val id:String,
-    val imagem: String,
-    val titulo: String,
+    val nome: String,
     val descricao: String,
     val preco: Float,
-    val disponibilidade: Disponibilidade
+    val imagem: String,
+    val disponibilidade: Disponibilidade,
+    val createdAt: Long
 )

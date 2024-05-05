@@ -62,7 +62,7 @@ class SalgadosViewModel : ViewModel(){
         val adicionaisListMapped = mutableListOf<Adicional>()
 
         list.forEach{
-            val adicionalItem = Adicional(id = it.id, imagem = it.imagem, titulo = it.titulo,
+            val adicionalItem = Adicional(id = it.id, imagem = it.imagem, titulo = it.nome,
                 descricao = it.descricao, preco = it.preco, disponibilidade = it.disponibilidade)
             adicionaisListMapped.add(adicionalItem)
         }
