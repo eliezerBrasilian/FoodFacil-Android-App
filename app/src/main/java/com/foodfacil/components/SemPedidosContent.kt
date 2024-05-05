@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -22,10 +23,9 @@ import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.Text
 import com.foodfacil.R
 import com.foodfacil.ui.theme.MainRed
-import com.simpletext.SimpleText
 
 @Composable
-fun SemPedidosContent(md: Modifier) {
+fun SemPedidosContent(md: Modifier, verCardapioClick: () -> Unit) {
     Box(
         modifier = md
             .fillMaxWidth()
@@ -42,7 +42,15 @@ fun SemPedidosContent(md: Modifier) {
                 painter = painterResource(id = R.drawable.sem_pedidos_image),
                 contentDescription = null
             )
-            SimpleText("Você ainda não realizou um pedido!", fontSize = 17, fontWeight = "400")
+            Text(
+                text = "Você ainda não realizou nenhum pedido!",
+                color = Color.Black,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(start = 20.dp)
+            )
+
             Text(
                 text = "Bora Pedir? Acesse o cardápio para ver as opções disponíveis",
                 textAlign = TextAlign.Center,
@@ -51,13 +59,19 @@ fun SemPedidosContent(md: Modifier) {
             )
             Spacer(modifier = md.height(20.dp))
             Button(
-                onClick = { /*TODO*/ },
-                modifier = md.fillMaxWidth(),
+                onClick = { verCardapioClick() },
+                modifier = md.fillMaxWidth().height(50.dp),
                 colors = ButtonDefaults.buttonColors(
                     MainRed
                 )
             ) {
-                SimpleText("Ver cardápio", color = Color.White, fontSize = 16)
+                Text(
+                    text = "Ver cardápio",
+                    color = Color.White,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center,
+                )
             }
         }
     }

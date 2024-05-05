@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.foodfacil.dataclass.Salgado
-import com.foodfacil.graphs.DetailsScreen
+import com.foodfacil.navigation.DetailsScreen
 import com.foodfacil.utils.toBrazilianCurrency
 
 @Composable

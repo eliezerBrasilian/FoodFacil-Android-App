@@ -19,59 +19,54 @@ import com.foodfacil.components.PedidoItem
 import com.foodfacil.components.SemPedidosContent
 import com.foodfacil.components.TopPedidos
 import com.foodfacil.datastore.StoreUserData
+import com.foodfacil.enums.BottomBarScreen
 import com.foodfacil.viewModel.PedidosViewModel
-import com.foodfacil.viewModel.SalgadosViewModel
 
 @Composable
 fun Pedidos(
-    navController: NavHostController,
-    salgadosViewModel: SalgadosViewModel,
+    nav: NavHostController,
     paddingValues: PaddingValues,
     pedidosViewModel: PedidosViewModel,
     storeUserData: StoreUserData
 ) {
+    val userToken = storeUserData.getToken.collectAsState("")
+    val userId = storeUserData.getUid.collectAsState(initial = "")
+    val pedidos = pedidosViewModel.pedidos.collectAsState(emptyList())
     val md = Modifier
+
+    LaunchedEffect(Unit) {
+        pedidosViewModel.getAllPedidos(userToken.value.toString(), userId.value.toString())
+    }
+
+    val verCardapioClick:()->Unit = {
+        nav.navigate(BottomBarScreen.Cardapio.route)
+    }
+
     Column(
         md
             .padding(paddingValues)
             .background(Color.White)
     ) {
         TopPedidos(md)
-        MainContent(md = md, pedidosViewModel, storeUserData)
-    }
-}
 
-@Composable
-private fun MainContent(
-    md: Modifier, pedidosViewModel: PedidosViewModel, storeUserData: StoreUserData
-) {
+        if (pedidos.value.isEmpty()) {
+            SemPedidosContent(md, verCardapioClick)
+        } else {
+            Column(
+                md
+                    .fillMaxSize()
+                    .padding(10.dp)
+            ) {
+                Text(
+                    text = "Histórico",
+                    style = MaterialTheme.typography.body2,
+                    color = Color.Black,
+                    fontSize = 17.sp
+                )
 
-    val userToken = storeUserData.getToken.collectAsState("")
-    val userId = storeUserData.getUid.collectAsState(initial = "")
-
-    val pedidos = pedidosViewModel.pedidos.collectAsState(emptyList())
-
-    LaunchedEffect(Unit) {
-        pedidosViewModel.getAllPedidos(userToken.value.toString(), userId.value.toString())
-    }
-
-    if (pedidos.value.isEmpty()) {
-        SemPedidosContent(md)
-    } else {
-        Column(
-            md
-                .fillMaxSize()
-                .padding(10.dp)) {
-            Text(
-                text = "Histórico",
-                style = MaterialTheme.typography.body2,
-                color = Color.Black,
-                fontSize = 17.sp
-            )
-
-            pedidos.value.forEach{
-                pedido->
-                PedidoItem(pedido, md)
+                pedidos.value.forEach { pedido ->
+                    PedidoItem(pedido, md)
+                }
             }
         }
     }

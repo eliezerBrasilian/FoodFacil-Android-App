@@ -1,4 +1,4 @@
-package com.gamestate.components
+package com.foodfacil.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

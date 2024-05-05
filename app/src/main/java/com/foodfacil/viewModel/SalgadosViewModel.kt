@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.foodfacil.api.getAllAdicionais
+import com.foodfacil.api.getAllAcompanhamentos
 import com.foodfacil.api.getAllSalgados
 import com.foodfacil.dataclass.Adicional
 import com.foodfacil.dataclass.Salgado
@@ -57,7 +57,7 @@ class SalgadosViewModel : ViewModel(){
     fun getAllAdicionais_(token:String) = viewModelScope.launch{
         print.log("token recebido",token)
 
-        val list = getAllAdicionais(token)
+        val list = getAllAcompanhamentos(token)
 
         val adicionaisListMapped = mutableListOf<Adicional>()
 

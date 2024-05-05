@@ -26,9 +26,7 @@ import kotlinx.coroutines.launch
 
 
 class AuthViewModel : ViewModel() {
-    private val TAG = "AUTHVIEWMODEL"
-
-    private val print = Print(TAG)
+    private val print = Print()
 
     private val _loading = MutableLiveData(false)
     val loading: LiveData<Boolean> = _loading
@@ -107,8 +105,9 @@ class AuthViewModel : ViewModel() {
             }
         }
 
-        cadastrarMe(UserAuthDto(email = email, password = password, name = name, profilePicture = null,
-            role = UserRole.USER),
+        cadastrarMe(UserAuthDto(
+            email = email, password = password, name = name, profilePicture = null,
+            role = UserRole.USER.toString()),
             getUserData)
     }
 

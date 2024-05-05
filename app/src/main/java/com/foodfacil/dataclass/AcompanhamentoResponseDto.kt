@@ -4,7 +4,7 @@ import com.foodfacil.enums.Disponibilidade
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AdicionalDto(
+data class AcompanhamentoResponseDto(
     val id:String,
     val nome: String,
     val descricao: String,

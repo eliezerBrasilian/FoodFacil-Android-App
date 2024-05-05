@@ -15,9 +15,8 @@ package com.foodfacil.enums
         val PAGAMENTO = "Pagamento"
         val CUPONS = "Cupons"
         val ESCOLHER_FORMA_DE_PAGAMENTO = "EscolherFormaDePagamento"
+        val DADOS_DA_CONTA = "DadosDaConta"
+        val ENDERECO = "Endereco"
     }
 
-      enum class Screens {
-          HOME,
-     }
 }

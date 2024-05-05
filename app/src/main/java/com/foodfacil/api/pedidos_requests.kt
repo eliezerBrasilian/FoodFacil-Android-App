@@ -16,7 +16,8 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
 suspend fun registraPedido(token:String,
-                           pedido: Pedido, onSuccess:(id: String?)->Unit = {}) {
+                           pedido: Pedido,
+                           onSuccess:(id: String?)->Unit = {}) {
     val print = Print()
     try {
         val response = httpClient.post("$baseUrl/user/pedido") {
@@ -26,6 +27,9 @@ suspend fun registraPedido(token:String,
         }
         print.log("sucesso",response.body())
         val responseBody = response.body<Map<String,String>>()
+
+        print.log("respponse body-------------")
+        print.log(responseBody)
         val message = responseBody["message"]
         val id = responseBody["id"]
         print.log(message)
@@ -45,6 +49,9 @@ suspend fun getPedidos(token: String, userId:String): List<PedidoDoUsuarioRespon
             header("Authorization", "Bearer $token")
         }
         print.log("sucesso",response.body())
+        val responseBody = response.body<Map<String,String>>()
+        print.log("respponse body-------------")
+        print.log(responseBody)
 
         val responsta = json.decodeFromString<PedidosResponse>(response.body())
         print.log("pedidos: $responsta")

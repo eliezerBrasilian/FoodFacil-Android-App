@@ -7,6 +7,7 @@ import com.foodfacil.api.ktor.json
 import com.foodfacil.dataclass.AddressDto
 import com.foodfacil.dataclass.CupomsOfUserResponseDto
 import com.foodfacil.dataclass.ProfilePhotoDto
+import com.foodfacil.dataclass.TokenDoDispositivoRequestDto
 import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.services.Print
 import com.foodfacil.services.UploadFile
@@ -17,6 +18,25 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+
+val print = Print()
+
+suspend fun salvaTokenDoDispositivo(tokenDoDispositivoRequestDto: TokenDoDispositivoRequestDto,
+                                    userToken:String){
+    try {
+        val response = httpClient.post("$baseUrl/user/token-dispositivo") {
+            contentType(ContentType.Application.Json)
+            header("Authorization", "Bearer $userToken")
+            setBody(tokenDoDispositivoRequestDto)
+        }
+        print.log("sucesso, token salvo/atualizado---------",response.body())
+        val responseBody = response.body<Map<String,String>>()
+        val message = responseBody["message"]
+        print.log(message)
+    }catch (e:Exception){
+        print.log("erro ao salvar/atualizar token do dispositivo",e.message)
+    }
+}
 
 suspend fun updateAddress(
     addressDto: AddressDto,
