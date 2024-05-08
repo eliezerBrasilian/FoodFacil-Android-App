@@ -42,14 +42,13 @@ import com.simpletext.SimpleText
 fun OnAuthLogin(navController: NavHostController, authViewModel: AuthViewModel) {
     val md = Modifier
 
-    val TAG = "ONAUTHLOGIN"
     val  clientId = "191389897644-f2qqgp4g23jsbu5f4sapr8o9n74f8gb7.apps.googleusercontent.com"
 
     val isLoading by authViewModel.loading.observeAsState(false)
 
     val context = LocalContext.current
     val googleSignInClient = getGoogleLoginAuth(clientId, LocalContext.current)
-    val print = Print(TAG)
+    val print = Print()
 
     val startForResult =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

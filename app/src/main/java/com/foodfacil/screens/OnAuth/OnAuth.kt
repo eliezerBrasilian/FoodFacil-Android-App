@@ -8,7 +8,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,9 +15,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
@@ -26,14 +24,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.carrousel.Carrousel
 import com.foodfacil.R
+import com.foodfacil.components.CustomButton
+import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.ui.theme.MainRed
 import com.foodfacil.ui.theme.MainYellow
 import com.foodfacil.ui.theme.YellowText
-import com.foodfacil.enums.NavigationScreens
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.simpletext.SimpleText
 
@@ -54,15 +56,14 @@ fun OnAuth(
         context.enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.auto(MainRed.toArgb(), MainRed.toArgb())
         )
-
         onDispose {}
     }
 
     val md = Modifier
 
-    Surface(md.fillMaxSize(), color = MainRed) {
+    Surface(md.fillMaxSize(),
+        color = MainRed) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Carrousel(
@@ -72,44 +73,40 @@ fun OnAuth(
                     R.drawable.salgados_img_on_auth
                 ),
                 imageActiveColor = MainYellow,
-                imageInactiveColor = Color.White
-            )
+                imageInactiveColor = Color.White,
+                imageHeight = 320.dp,
+                isCircle = true, dotWidth = 10.dp)
 
             Spacer(md.height(20.dp))
-            SimpleText(
-                "Os salgados mais gostosos",
-                fontSize = 24,
-                fontWeight = "bold",
-                color = Color.White
-            )
+
+            Text(text = "Os salgados mais\n gostosos",
+                fontSize = 30.sp,
+                textAlign = TextAlign.Center,
+                lineHeight = 35.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                modifier = Modifier.clickable { navController.navigate(NavigationScreens.ON_AUTH_LOGIN) })
+            Spacer(md.height(20.dp))
             SimpleText(
                 "Os salgados mais deliciosos e mais baratos\n" + "de Rio Paranaíba. Com o incrível nível de \n" + "excelência que você merece.",
                 fontSize = 16,
                 color = Color.White
             )
+            Spacer(md.height(20.dp))
             Box(
                 md
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
-                Button(
-                    onClick = { navController.navigate(NavigationScreens.ON_AUTH_SIGN_UP) },
-                    colors = ButtonDefaults.buttonColors(MainYellow),
-                    modifier = md.fillMaxWidth()
-                ) {
-                    Box(
-                        md
-                            .padding(vertical = 5.dp)
-                    ) {
-                        SimpleText("Criar uma conta", color = Color.White, fontSize = 17)
-                    }
-                }
+                CustomButton(buttonModifier = md.fillMaxWidth(), text = "Criar uma conta",
+                    textModifier = md.padding(vertical = 4.dp),
+                    onClick = {navController.navigate(NavigationScreens.ON_AUTH_SIGN_UP)})
             }
-            Box(md.clickable { navController.navigate(NavigationScreens.ON_AUTH_LOGIN) }) {
-                SimpleText("Fazer login", fontSize = 17, fontWeight = "bold", color = YellowText)
-            }
-
+            Spacer(md.height(20.dp))
+            Text(text = "Fazer login",
+                fontSize = 17.sp,
+                color = YellowText,
+                modifier = Modifier.clickable { navController.navigate(NavigationScreens.ON_AUTH_LOGIN) })
         }
     }
-
 }

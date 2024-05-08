@@ -79,10 +79,7 @@ class MainActivity : ComponentActivity() {
                                         userToken = userToken.value.toString()
                                     );
                                 }
-
                         })
-
-
                     }
 
                     Scaffold(

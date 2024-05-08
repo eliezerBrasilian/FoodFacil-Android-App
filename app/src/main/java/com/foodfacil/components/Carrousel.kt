@@ -56,7 +56,7 @@ fun Carrousel(imagesResources: List<Int>, imageActiveColor:Color = Color.Green,
                 state = state,
                 md.fillMaxWidth()
             ) { page ->
-                Box(modifier = Modifier.fillMaxWidth().padding(end = 10.dp)) {
+                Box(modifier = Modifier.fillMaxWidth().padding( end = if(state.isScrollInProgress) 15.dp else 0.dp)) {
                       Image(
                       painter = painterResource(id = imagesResources[page]),
                       contentDescription = null,
@@ -102,6 +102,6 @@ fun Dot(dotColor: Color = MainYellow,
         dotBorderRadius: Dp = 10.dp, isCircle:Boolean = true) {
     Box(modifier = Modifier
         .width(dotWidth)
-        .height(dotHeight)
+        .height(if (isCircle)dotWidth else dotHeight)
         .background(color = dotColor, shape = if(!isCircle) RoundedCornerShape(dotBorderRadius) else CircleShape))
 }
