@@ -31,10 +31,11 @@ import androidx.navigation.NavHostController
 import com.foodfacil.R
 import com.foodfacil.datastore.StoreUserData
 import com.foodfacil.enums.NavigationScreens
+import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainRed
 import kotlinx.coroutines.delay
 
-
+val print = Print()
 @Composable
 fun Splash(
     nav: NavHostController,
@@ -58,11 +59,12 @@ fun Splash(
 
         delay(1500L)
 
-         if (userToken != null && userToken!= "") {
-             nav.navigate(NavigationScreens.HOME)
+         if (userToken.isNullOrEmpty()) {
+             onLogin()
         }
          else {
-           onLogin()
+             print.log("userToken_",userToken)
+             nav.navigate(NavigationScreens.HOME)
         }
     })
 

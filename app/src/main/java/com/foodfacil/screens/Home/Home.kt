@@ -34,7 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.carrousel.Carrousel
+import com.foodfacil.components.Carrousel
 import com.foodfacil.R
 import com.foodfacil.components.HomeHeader
 import com.foodfacil.components.RowVerCarrinho

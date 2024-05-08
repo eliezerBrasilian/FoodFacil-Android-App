@@ -1,7 +1,6 @@
-package com.carrousel
+package com.foodfacil.components
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -29,9 +28,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.foodfacil.services.Print
 import com.foodfacil.ui.theme.MainYellow
 
-
+val print = Print()
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -89,7 +89,7 @@ fun Dots(
                         label = ""
                     )
 
-                    Log.e("Pager_", "current dot: $dot, currentPage: $currentPage")
+                    print.log("Pager_", "current dot: $dot, currentPage: $currentPage")
                     Dot(dotColor, dotHeight, dotWidth, dotBorderRadius, isCircle)
                 }
             }

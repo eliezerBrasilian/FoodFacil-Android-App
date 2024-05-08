@@ -1,8 +1,8 @@
+
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
@@ -27,14 +27,14 @@ fun NavigationBarColor(color: Color) {
 
         // Dispose the effect when the composable leaves the composition
         onDispose {
-            systemUiController.setStatusBarColor(
+           /* systemUiController.setStatusBarColor(
                 color = androidx.compose.ui.graphics.Color.Transparent,
                 darkIcons = useDarkIcons,
             )
             systemUiController.setNavigationBarColor(
                 color = androidx.compose.ui.graphics.Color.Transparent,
                 darkIcons = useDarkIcons
-            )
+            )*/
         }
     }
 }

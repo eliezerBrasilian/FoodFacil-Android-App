@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.carrousel.Carrousel
+import com.foodfacil.components.Carrousel
 import com.foodfacil.R
 import com.foodfacil.components.CustomButton
 import com.foodfacil.enums.NavigationScreens

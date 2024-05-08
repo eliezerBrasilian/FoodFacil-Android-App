@@ -1,4 +1,6 @@
+package com.foodfacil.screens.OnAuthLogin
 
+import NavigationBarColor
 import android.app.Activity
 import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.foodfacil.R
+import com.foodfacil.components.ButtonWithLeftIcon
 import com.foodfacil.components.TopBarOnAuth
 import com.foodfacil.enums.NavigationScreens
 import com.foodfacil.services.Print
@@ -49,6 +53,8 @@ fun OnAuthLogin(navController: NavHostController, authViewModel: AuthViewModel) 
     val context = LocalContext.current
     val googleSignInClient = getGoogleLoginAuth(clientId, LocalContext.current)
     val print = Print()
+
+    NavigationBarColor(color = Color.White)
 
     val startForResult =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -81,7 +87,7 @@ fun OnAuthLogin(navController: NavHostController, authViewModel: AuthViewModel) 
         }
         Column(md.fillMaxHeight(),verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
-                painter = painterResource(id = R.drawable.pastel),
+                painter = painterResource(id = R.drawable.lanches),
                 contentDescription = null,
                 modifier = md.size(150.dp),
                 contentScale = ContentScale.Fit
@@ -89,11 +95,17 @@ fun OnAuthLogin(navController: NavHostController, authViewModel: AuthViewModel) 
             Spacer(md.height(20.dp))
             SimpleText("Bem-vindo de volta!", fontSize = 22, fontWeight = "bold")
             Spacer(md.height(20.dp))
-            ButtonWithLeftIcon(imageResource = R.drawable.email_icon, text = "Entrar com E-mail", textColor = Color.White ,
+            ButtonWithLeftIcon(imageResource = R.drawable.email_icon,
+                text = "Entrar com E-mail",
+                textColor = Color.White ,
+                fontStyle = MaterialTheme.typography.h2,
                 padding = 5.dp,  marginHorizontal = 20.dp,
                 onClick = {navController.navigate(NavigationScreens.LOGIN)})
             Spacer(md.height(20.dp))
-            ButtonWithLeftIcon(imageResource = R.drawable.google_icon, text = "Entrar com com Google", textColor = MainRed ,
+            ButtonWithLeftIcon(imageResource = R.drawable.google_icon,
+                text = "Entrar com com Google",
+                textColor = MainRed ,
+                fontStyle = MaterialTheme.typography.h2,
                 padding = 5.dp, isOutline = true, background = Color.White, borderColor = MainRed,  marginHorizontal = 20.dp,
                 onClick = onClickGoogleSignIn, isLoading = isLoading, progressIndicatorColor = MainYellow
                 )

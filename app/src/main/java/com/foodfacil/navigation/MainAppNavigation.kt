@@ -1,7 +1,5 @@
 package com.foodfacil.navigation
 
-import OnAuthLogin
-import OnAuthSignUp
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -34,6 +32,8 @@ import com.foodfacil.screens.FinalizarPedido.FinalizarPedido
 import com.foodfacil.screens.Home.Home
 import com.foodfacil.screens.Login.Login
 import com.foodfacil.screens.OnAuth.OnAuth
+import com.foodfacil.screens.OnAuthLogin.OnAuthLogin
+import com.foodfacil.screens.OnAuthSignUp.OnAuthSignUp
 import com.foodfacil.screens.Pagamento.Pagamento
 import com.foodfacil.screens.Pedidos
 import com.foodfacil.screens.Profile.Profile
@@ -63,8 +63,8 @@ fun MainAppNavigation(
     NavHost(
         navController = navController,
         route = Graph.HOME,
-         startDestination = BottomBarScreen.Home.route,
-        //startDestination = NavigationScreens.SPLASH,
+        // startDestination = BottomBarScreen.Home.route,
+        startDestination = NavigationScreens.SPLASH,
         modifier = Modifier
             .padding(0.dp)
             .background(Color.White),
